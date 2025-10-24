@@ -63,8 +63,8 @@ app/
     │   │       ├── config/              # Configuración de Spring, Beans, Seguridad, CORS, etc.
     │   │       ├── utils/               # Utilidades genéricas (fechas, strings, etc.)
     │   │       ├── presentation/          # Capa de presentación (UI + Controladores)
-    │   │       │   ├── controllers/       # @RestController comunicacion con frontend
-    │   │       │   └── models/        # DTOs y ViewModels que la vista necesita
+    │   │       │   ├── api/            # @RestController comunicacion con frontend
+    │   │       │   └── models/         # DTOs y ViewModels que la vista necesita
     │   │       │
     │   │       ├── services/              # Capa de aplicación (Casos de uso)
     │   │       │   ├── usecases/          # Casos de uso concretos
