@@ -52,6 +52,15 @@ Capa capa haria lo siguiente:
 3. *Capa de Dominio*: Contiene el “corazón” de la aplicación y no depende de ninguna tecnología. Contiene lógica pura y reglas de negocio. Tambien contiene abstracciones e interfaces que establecen contratos con otras capas.
 4. *Capa de Infraestructura*: Implementa repositorios, conectores, clientes externos. Puede depender de ORMs, SDKs, etc.
 
+La interaccion entre las capas seria la siguiente:
+
+| Capa                | Conoce a             | Tipo de Dependencia    | Ejemplo                       |
+| ------------------- | -------------------- | ---------------------- | ----------------------------- |
+| **Presentación**    | Aplicación           | directa                | Controlador llama caso de uso |
+| **Aplicación**      | Dominio (interfaces) | directa                | UseCase usa repositorios      |
+| **Dominio**         | Nadie                | —                      | Core puro                     |
+| **Infraestructura** | Dominio (interfaces) | implementación inversa | Implementa interfaces de core |
+
 ## Consecuencias
 
 ### Positivas

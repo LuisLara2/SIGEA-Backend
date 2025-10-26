@@ -79,6 +79,8 @@ app/
     │   │       └── infrastructure/        # Capa de infraestructura
     │   │           ├── repositories/      # Implementaciones de los repositorios
     │   │           ├── database/          # Configuración y acceso a base de datos
+    │   │           │   ├── entities/          # Entidades JPA (@Entity)
+    │   │           │   └── mappers/           # Mappers entre dominio ↔ infraestructura
     │   │           ├── external-apis/     # Clientes de APIs externas
     │   │           └── config/            # Configuración de infraestructura (env, logger, etc.)
     │   └── resources/
@@ -117,7 +119,7 @@ app/
                 └── modules/              # Agrupación por módulos funcionales
                     ├── ParticipantsRegGest/    # Modulos de Registro y Gestion de Participantes
                     │   ├── presentation/          # Capa de presentación (UI + Controladores)
-                    │   │   ├── controllers/       # @RestController comunicacion con frontend
+                    │   │   ├── api/       # @RestController comunicacion con frontend
                     │   │   └── models/        # DTOs y ViewModels que la vista necesita
                     │   │
                     │   ├── services/              # Capa de aplicación (Casos de uso)
@@ -138,3 +140,83 @@ app/
                     └── Certification/
                         └── ...
 ```
+
+## 1.2. Explicacion Detallada de Cada Capa
+
+### 1.2.1. Capa de Presentacion
+
+```bash
+presentation/
+├── api/          # Controladores REST (MVC - Controller)
+└── models/       # DTOs y ViewModels (MVC - Model)
+```
+- *Contenido*:
+    - Controladores (@RestController): Reciben peticiones HTTP del frontend, validan datos, y delegan la lógica a la capa de aplicación.
+    - Modelos de presentación (DTOs / ViewModels): Estructuras de datos para entrada y salida (request y response).
+- *Anotaciones típicas*
+    - @RestController
+    - @RequestMapping
+    - @GetMapping, @PostMapping, etc.
+    - @Validated, @RequestBody, @PathVariable
+    - @ResponseStatus
+
+### 1.2.2. Capa de Aplicacion
+
+```bash
+services/
+├── usecases/       # Casos de uso concretos
+└── interfaces/     # Interfaces que exponen servicios de aplicación
+```
+
+- *Contenido*:
+    - Casos de uso: Representan acciones del sistema (“registrar usuario”, “crear reserva”, etc.).
+    - Orquestan la interacción entre controladores, servicios del dominio y repositorios.
+    - No contienen lógica de negocio compleja, solo coordinación.
+    - Usan interfaces del dominio (p. ej. UserRepository) para acceder a la persistencia.
+
+- *Anotaciones típicas*:
+    - @Service
+    - (a veces) @Transactional para mantener la consistencia de operaciones.
+
+### 1.2.3. Capa de Dominio
+
+```bash
+core/
+├── entities/         # Entidades del dominio (con lógica de negocio, puras sin @Entity)
+├── value-objects/    # Objetos de valor (inmutables, sin identidad)
+├── repositories/     # Interfaces de repositorios
+└── services/         # Servicios de dominio puros (reglas de negocio)
+```
+
+- *Contenido*:
+    - Entidades: Clases con identidad y reglas de negocio propias.
+    - Objetos de valor: Clases inmutables sin identidad (ej. Email, Money).
+    - Servicios de dominio: Lógica de negocio que involucra múltiples entidades.
+    - Interfaces de repositorio: Contratos que la infraestructura debe implementar.
+- *Anotaciones típicas*:
+    - Generalmente no usan anotaciones de Spring.
+    - Si se usan, que sean neutrales (@Entity si usas JPA, pero se debe evitar con mappers en infraestructura).
+
+### 1.2.4. Capa de Infraestructura
+
+```bash
+infrastructure/
+├── repositories/     # Implementaciones concretas de los repositorios del dominio
+├── database/         # Configuración y entidades JPA, mappers, etc.
+│   ├── entities/          # Entidades JPA (@Entity)
+│   └── mappers/           # Mappers entre dominio ↔ infraestructura
+├── external-apis/    # Clientes HTTP para APIs externas
+└── config/           # Configuración técnica (env, logger, beans, etc.)
+```
+
+- *Contenido*:
+    - Implementaciones concretas de las interfaces definidas en el dominio.
+    - Adaptadores a tecnologías: ORM, REST clients, mensajería, etc.
+    - Mappers entre entidades JPA ↔ entidades del dominio.
+    - Configuración de beans, propiedades, seguridad, etc.
+- *Anotaciones típicas*:
+    - @Repository
+    - @Component
+    - @Configuration
+    - @Bean
+    - @EnableJpaRepositories, @Entity, etc.
