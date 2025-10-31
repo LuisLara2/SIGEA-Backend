@@ -22,8 +22,8 @@ import lombok.Setter;
 )
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class TipoActividadEntity {
     
     @Id

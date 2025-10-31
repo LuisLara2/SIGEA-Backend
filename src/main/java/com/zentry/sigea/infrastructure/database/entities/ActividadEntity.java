@@ -17,6 +17,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 @Entity
 @Table(
@@ -25,6 +26,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class ActividadEntity {
     
     @Id
@@ -74,5 +76,4 @@ public class ActividadEntity {
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     // Constructor vacío requerido por JPA
-    public ActividadEntity() {}
 }

@@ -2,11 +2,14 @@ package com.zentry.sigea.module_actividad.infrastructure.repository.actividad_re
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
+import com.zentry.sigea.infrastructure.database.entities.ActividadEntity;
 import com.zentry.sigea.module_actividad.core.entities.actividad.Actividad;
 import com.zentry.sigea.module_actividad.core.repositories.ActividadRepository;
+import com.zentry.sigea.module_actividad.infrastructure.database.mappers.ActividadMapper;
 
 /**
  * Implementación del repositorio de Actividad siguiendo DDD
@@ -22,51 +25,31 @@ public class ActividadRepositoryImpl implements ActividadRepository {
     }
 
     @Override
+    public List<Actividad> findAll() {
+        List<ActividadEntity> entities = jpaRepository.findAll();
+        return entities.stream()
+                .map(ActividadMapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
     public Actividad save(Actividad actividad) {
-        // Implementación temporal - retorna la misma actividad con ID generado
-        if (actividad.getId() == null) {
-            // Simular ID generado
-            return new Actividad(
-                1L, // ID temporal
-                actividad.getTitle(),
-                actividad.getDescription(),
-                actividad.getStartDate(),
-                actividad.getEndDate(),
-                actividad.getStatusId(),
-                actividad.getOrganizerId(),
-                actividad.getTypeId(),
-                actividad.getLocation(),
-                actividad.getCreatedAt(),
-                actividad.getUpdatedAt()
-            );
-        }
-        return actividad;
+        ActividadEntity entity = ActividadMapper.toEntity(actividad);
+        ActividadEntity savedEntity = jpaRepository.save(entity);
+        return ActividadMapper.toDomain(savedEntity);
     }
 
     @Override
     public Optional<Actividad> findById(Long id) {
-        // Implementación temporal - retorna vacío
-        return Optional.empty();
+
+        Optional<ActividadEntity> entity = jpaRepository.findById(id);
+        return entity.map(ActividadMapper::toDomain);
     }
 
-    @Override
-    public List<Actividad> findAll() {
-        // Implementación temporal - retorna lista vacía
-        return List.of();
-    }
 
     @Override
     public void deleteById(Long id) {
-
-        if (id == null) {
-            throw new IllegalArgumentException("El ID de la actividad no puede ser nulo");
-        }
-
-        // ver si el usuario existe antes de eliminar
-        if (!jpaRepository.existsById(id)) {
-            throw new IllegalArgumentException("La actividad con ID " + id + " no existe");
-        }
-
 
         jpaRepository.deleteById(id);
     }

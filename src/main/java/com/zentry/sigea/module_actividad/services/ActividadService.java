@@ -10,12 +10,14 @@ import com.zentry.sigea.module_actividad.core.services.usecases.crear_actividad.
 import com.zentry.sigea.module_actividad.core.value_objects.EstadoActividad;
 import com.zentry.sigea.module_actividad.infrastructure.repository.actividad_repository.ActividadRepositoryImpl;
 import com.zentry.sigea.module_actividad.presentation.models.ActividadRequest;
+import com.zentry.sigea.module_actividad.presentation.models.ActividadResponse;
+import com.zentry.sigea.module_actividad.services.interfaces.IActividad;
 
 /**
  * Servicio de Spring que coordina las operaciones de actividades
  */
 @Service
-public class ActividadService {
+public class ActividadService implements IActividad {
 
     private final ActividadRepositoryImpl actividadRepository;
     private final CrearActividadUseCase crearActividadUseCase;
@@ -70,5 +72,35 @@ public class ActividadService {
         var actividad = actividadRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Actividad no encontrada"));
         return actividadRepository.save(actividad);
+    }
+
+    @Override
+    public ActividadResponse actualizarActividad(Long id, ActividadRequest request) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'actualizarActividad'");
+    }
+
+    @Override
+    public ActividadResponse obtenerActividadPorId(Long id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'obtenerActividadPorId'");
+    }
+
+    @Override
+    public List<ActividadResponse> obtenerTodasLasActividades() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'obtenerTodasLasActividades'");
+    }
+
+    @Override
+    public List<ActividadResponse> obtenerActividadesPorUsuario(Long usuarioId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'obtenerActividadesPorUsuario'");
+    }
+
+    @Override
+    public List<ActividadResponse> obtenerActividadesPorTipo(Long tipoActividadId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'obtenerActividadesPorTipo'");
     }
 }

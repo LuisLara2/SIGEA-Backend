@@ -6,6 +6,7 @@ import com.zentry.sigea.module_actividad.core.entities.actividad.TipoActividad;
 /**
  * Mapper para convertir entre TipoActividad (dominio) y TipoActividadEntity (JPA)
  */
+
 public class TipoActividadMapper {
     
     /**
@@ -33,13 +34,12 @@ public class TipoActividadMapper {
             return null;
         }
         
-        TipoActividadEntity entity = new TipoActividadEntity();
-        entity.setId(domain.getId());
-        entity.setNombreActividad(domain.getNombreActividad());
-        entity.setDescripcion(domain.getDescripcion());
-        entity.setCreatedAt(domain.getCreatedAt());
-        entity.setUpdatedAt(domain.getUpdatedAt());
-        
-        return entity;
+        return new TipoActividadEntity(
+            domain.getId(),
+            domain.getNombreActividad(),
+            domain.getDescripcion(),
+            domain.getCreatedAt(),
+            domain.getUpdatedAt()
+        );
     }
 }
