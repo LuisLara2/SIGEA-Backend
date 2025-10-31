@@ -1,16 +1,13 @@
 package com.zentry.sigea.infrastructure.database.entities;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,27 +17,25 @@ import lombok.Setter;
 )
 @Getter
 @Setter
-@AllArgsConstructor
 public class RolEntity {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_rol")
-    private Long id;
+    @GeneratedValue
+    @Column(
+        name = "id_rol" , updatable = false , nullable = false , 
+        columnDefinition = "UUID DEFAULT gen_random_uuid()"
+    )
+    private UUID id;
 
-    @NotNull
-    @Size(max = 50 , message = "El nombre del rol no puede tener más de 50 caracteres.")
-    @Column(name = "nombre_rol")
+    @Column(name = "nombre_rol" , nullable = false , length = 50)
     private String nombreRol;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "descripcion" , nullable = true , columnDefinition = "TEXT")
     private String descripcion;
 
-    @NotNull
-    @Column(name = "created_at" , columnDefinition = "TIMESTAMP")
+    @Column(name = "created_at" , nullable = false , columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt = LocalDateTime.now();
     
-    @NotNull
-    @Column(name = "updated_at" , columnDefinition = "TIMESTAMP")
+    @Column(name = "updated_at" , nullable = false , columnDefinition = "TIMESTAMP")
     private LocalDateTime updatedAt = LocalDateTime.now();
 }

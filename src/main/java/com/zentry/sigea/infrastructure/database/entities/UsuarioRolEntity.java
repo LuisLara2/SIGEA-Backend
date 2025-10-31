@@ -13,8 +13,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,25 +25,21 @@ import lombok.Setter;
 )
 @Getter
 @Setter
-@AllArgsConstructor
 public class UsuarioRolEntity {
 
     @EmbeddedId
     private UsuarioRolId id;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("idUsuario")
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "usuario_id" , nullable = false)
     private UsuarioEntity usuario;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY) // carga la entidad relacionada solo cuando se necesita.
     @MapsId("idRol")
-    @JoinColumn(name = "rol_id") // define la FK
+    @JoinColumn(name = "rol_id" , nullable = false) // define la FK
     private RolEntity rol;
 
-    @NotNull
-    @Column(name = "asignado_en" , columnDefinition = "TIMESTAMP")
+    @Column(name = "asignado_en" , nullable = false , columnDefinition = "TIMESTAMP")
     private LocalDateTime asignadoEn = LocalDateTime.now();
 }
