@@ -1,14 +1,19 @@
 ---
-title: "Architecture Decision Record 001 - SGAEU"
+title: "ADR001 - SIGEA"
 author: "Ordoñez Silva, Yonel Jr."
 format: 
     md:
         toc: true
         toc-depth: 3
         number-sections: false
+    pdf:
+        toc: true
+        toc-depth: 3
+        number-sections: false
+        toc-title: "Indice"
 ---
 
-# ADR 001: [Selección de Arquitectura de Microservicios Orientado a Eventos para el SGAEU]
+# ADR 001: [Selección de Arquitectura de Microservicios Orientado a Eventos para el SIGEA]
 
 ## Estado
 [Propuesto]
