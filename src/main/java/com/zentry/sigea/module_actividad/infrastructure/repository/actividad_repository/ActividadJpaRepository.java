@@ -1,4 +1,4 @@
-package com.zentry.sigea.module_actividad.infrastructure.repository;
+package com.zentry.sigea.module_actividad.infrastructure.repository.actividad_repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

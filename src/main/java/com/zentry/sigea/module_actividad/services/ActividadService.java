@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.zentry.sigea.module_actividad.core.entities.actividad.Actividad;
 import com.zentry.sigea.module_actividad.core.services.usecases.crear_actividad.CrearActividadUseCase;
 import com.zentry.sigea.module_actividad.core.value_objects.EstadoActividad;
-import com.zentry.sigea.module_actividad.infrastructure.repository.ActividadRepositoryImpl;
+import com.zentry.sigea.module_actividad.infrastructure.repository.actividad_repository.ActividadRepositoryImpl;
 import com.zentry.sigea.module_actividad.presentation.models.ActividadRequest;
 
 /**

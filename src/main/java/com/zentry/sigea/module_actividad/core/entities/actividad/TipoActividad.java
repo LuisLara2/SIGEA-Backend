@@ -21,6 +21,13 @@ public class TipoActividad {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
+
+    public static TipoActividad create(String nombreActividad, String descripcion, LocalDateTime createdAt,
+            LocalDateTime updatedAt) {
+        return new TipoActividad(null, nombreActividad, descripcion, createdAt, updatedAt);
+    }
+
+    
     public Long getId() {
         return id;
     }

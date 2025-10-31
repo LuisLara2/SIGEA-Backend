@@ -26,7 +26,6 @@ import com.zentry.sigea.module_actividad.services.ActividadService;
 @RequestMapping("/api/v1/actividades")
 @CrossOrigin(origins = "*")
 public class ActividadController {
- 
     private final ActividadService actividadService;
 
     public ActividadController(ActividadService actividadService) {

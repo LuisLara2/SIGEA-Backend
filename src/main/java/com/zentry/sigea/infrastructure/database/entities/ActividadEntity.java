@@ -18,7 +18,6 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-
 @Entity
 @Table(
     name = "actividad"
@@ -73,4 +72,7 @@ public class ActividadEntity {
     
     @Column(name = "updated_at" , columnDefinition = "TIMESTAMP")
     private LocalDateTime updatedAt = LocalDateTime.now();
+
+    // Constructor vacío requerido por JPA
+    public ActividadEntity() {}
 }

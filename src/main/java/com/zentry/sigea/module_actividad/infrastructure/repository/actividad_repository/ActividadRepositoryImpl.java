@@ -1,4 +1,4 @@
-package com.zentry.sigea.module_actividad.infrastructure.repository;
+package com.zentry.sigea.module_actividad.infrastructure.repository.actividad_repository;
 
 import java.util.List;
 import java.util.Optional;
