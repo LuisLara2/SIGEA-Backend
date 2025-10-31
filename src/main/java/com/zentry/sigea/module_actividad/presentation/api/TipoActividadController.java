@@ -1,7 +1,10 @@
 package com.zentry.sigea.module_actividad.presentation.api;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +14,7 @@ import com.zentry.sigea.module_actividad.core.entities.actividad.TipoActividad;
 import com.zentry.sigea.module_actividad.presentation.models.TipoActividadRequest;
 import com.zentry.sigea.module_actividad.presentation.models.TipoActividadResponse;
 import com.zentry.sigea.module_actividad.services.TipoActividadService;
+
 
 
 @RestController
@@ -25,7 +29,11 @@ public class TipoActividadController {
         this.tipoActividadService = tipoActividadService;
     }
 
-    @PostMapping("path")
+    /**
+     * Crear un nuevo tipo de actividad
+     */
+
+    @PostMapping("/create")
     public ResponseEntity<TipoActividadResponse>  createTipoActividad(@RequestBody TipoActividadRequest request) 
     {
         // Lógica para crear el tipo de actividad
@@ -41,5 +49,16 @@ public class TipoActividadController {
             return ResponseEntity.status(500).build();
         }
     }
-
+    /*
+     * Listar todos los tipos de actividad
+    */
+    @GetMapping
+    public ResponseEntity<List<TipoActividadResponse>> listarTiposActividad() {
+        List<TipoActividad> tiposActividad = tipoActividadService.listarTiposActividad();
+        List<TipoActividadResponse> response = tiposActividad.stream()
+            .map(TipoActividadResponse::fromEntity)
+            .toList();
+        return ResponseEntity.ok(response);
+    }
+    
 }

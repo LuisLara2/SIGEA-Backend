@@ -35,7 +35,7 @@ public class ActividadController {
     /**
      * Crear una nueva actividad
      */
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<ActividadResponse> crearActividad(@RequestBody ActividadRequest request) {
         try {
             // Ejecutar el caso de uso a través del servicio pasando directamente el request

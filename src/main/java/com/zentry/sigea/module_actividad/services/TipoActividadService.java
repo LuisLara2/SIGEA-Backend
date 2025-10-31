@@ -1,5 +1,6 @@
 package com.zentry.sigea.module_actividad.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -31,6 +32,10 @@ public class TipoActividadService {
     public Optional<TipoActividad> obtenerPorId(Long id) {
         TipoActividad actividad = tipoactividadRepository.findById(id);
         return Optional.ofNullable(actividad);
+    }
+
+    public List<TipoActividad> listarTiposActividad() {
+        return tipoactividadRepository.findAll();
     }
 
 }
