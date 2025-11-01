@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
-import com.zentry.sigea.infrastructure.database.entities.ActividadEntity;
 import com.zentry.sigea.module_actividad.core.entities.actividad.Actividad;
 import com.zentry.sigea.module_actividad.core.repositories.ActividadRepository;
+import com.zentry.sigea.module_actividad.infrastructure.database.entities.ActividadEntity;
 import com.zentry.sigea.module_actividad.infrastructure.database.mappers.ActividadMapper;
 
 /**

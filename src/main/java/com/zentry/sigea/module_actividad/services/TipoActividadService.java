@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.zentry.sigea.module_actividad.core.entities.actividad.TipoActividad;
-import com.zentry.sigea.module_actividad.core.usecases.tipo_actividad.CrearTipoActividadUseCase;
 import com.zentry.sigea.module_actividad.infrastructure.repository.tipoactividad_repository.TipoActividadRepositoryImpl;
 import com.zentry.sigea.module_actividad.presentation.models.TipoActividadRequest;
 import com.zentry.sigea.module_actividad.services.interfaces.ITipoActividad;
+import com.zentry.sigea.module_actividad.services.usecases.tipo_actividad.CrearTipoActividadUseCase;
 
 @Service
 public class TipoActividadService implements ITipoActividad {
@@ -23,7 +23,6 @@ public class TipoActividadService implements ITipoActividad {
 
     @Override
     public TipoActividad crearTipoActividad(TipoActividadRequest tipoActividad) {
-        // TODO Auto-generated method stub
         return crearTipoActividadUseCase.execute(tipoActividad);
     }
 

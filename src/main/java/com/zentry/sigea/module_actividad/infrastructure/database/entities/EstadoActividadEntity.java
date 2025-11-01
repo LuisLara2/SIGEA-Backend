@@ -1,4 +1,4 @@
-package com.zentry.sigea.infrastructure.database.entities;
+package com.zentry.sigea.module_actividad.infrastructure.database.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

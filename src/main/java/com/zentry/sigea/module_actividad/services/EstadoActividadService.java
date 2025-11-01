@@ -5,28 +5,33 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.zentry.sigea.module_actividad.core.entities.actividad.EstadoActividad;
-import com.zentry.sigea.module_actividad.core.repositories.EstadoActividadRepository;
+import com.zentry.sigea.module_actividad.infrastructure.repository.estadoactividad_repository.EstadoActividadImpl;
+import com.zentry.sigea.module_actividad.presentation.models.EstadoActividadRequest;
 import com.zentry.sigea.module_actividad.services.interfaces.IEstadoActividad;
+import com.zentry.sigea.module_actividad.services.usecases.estado_actividad.CrearEstadoActividadUseCase;
 
 @Service
 public class EstadoActividadService implements IEstadoActividad {
 
-    private final EstadoActividadRepository estadoActividadRepository;
+    private final EstadoActividadImpl estadoActividadRepository;
+    private final CrearEstadoActividadUseCase crearEstadoActividadUseCase;
     
     // Constructor para inyección de dependencias
-    public EstadoActividadService(EstadoActividadRepository estadoActividadRepository) {
+    public EstadoActividadService(EstadoActividadImpl estadoActividadRepository, CrearEstadoActividadUseCase crearEstadoActividadUseCase) {
         this.estadoActividadRepository = estadoActividadRepository;
+        this.crearEstadoActividadUseCase = crearEstadoActividadUseCase;
     }
     @Override
-    public EstadoActividad crearEstadoActividad(EstadoActividad estadoActividad) {
+    public EstadoActividad crearEstadoActividad(EstadoActividadRequest estadoActividad) {
         // Lógica para crear un nuevo estado de actividad
-        return estadoActividadRepository.save(estadoActividad);
+        return crearEstadoActividadUseCase.execute(estadoActividad);
     }
 
     @Override
-    public EstadoActividad actualizarEstadoActividad(EstadoActividad estadoActividad) {
+    public EstadoActividad actualizarEstadoActividad(EstadoActividadRequest estadoActividad) {
         // Lógica para actualizar un estado de actividad existente
-        return estadoActividadRepository.save(estadoActividad);
+
+        return null;
     }
 
     @Override

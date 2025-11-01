@@ -7,14 +7,15 @@ import org.springframework.stereotype.Service;
 
 import com.zentry.sigea.module_actividad.core.entities.actividad.Actividad;
 import com.zentry.sigea.module_actividad.core.entities.actividad.EstadoActividad;
-import com.zentry.sigea.module_actividad.core.usecases.actividad.CrearActividadUseCase;
 import com.zentry.sigea.module_actividad.infrastructure.repository.actividad_repository.ActividadRepositoryImpl;
 import com.zentry.sigea.module_actividad.presentation.models.ActividadRequest;
 import com.zentry.sigea.module_actividad.presentation.models.ActividadResponse;
 import com.zentry.sigea.module_actividad.services.interfaces.IActividad;
+import com.zentry.sigea.module_actividad.services.usecases.actividad.CrearActividadUseCase;
 
 /**
- * Servicio de Spring que coordina las operaciones de actividades
+ * Servicio de aplicación que orquesta casos de uso de actividades
+ * APPLICATION LAYER - Con anotaciones de Spring
  */
 @Service
 public class ActividadService implements IActividad {
@@ -31,6 +32,7 @@ public class ActividadService implements IActividad {
     /**
      * Crea una nueva actividad
      */
+    @Override
     public Actividad crearActividad(ActividadRequest request) {
         return crearActividadUseCase.execute(request);
     }

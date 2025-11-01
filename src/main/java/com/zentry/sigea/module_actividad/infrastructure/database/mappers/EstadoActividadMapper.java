@@ -1,7 +1,7 @@
 package com.zentry.sigea.module_actividad.infrastructure.database.mappers;
 
-import com.zentry.sigea.infrastructure.database.entities.EstadoActividadEntity;
 import com.zentry.sigea.module_actividad.core.entities.actividad.EstadoActividad;
+import com.zentry.sigea.module_actividad.infrastructure.database.entities.EstadoActividadEntity;
 
 /**
  * Mapper para convertir entre EstadoActividad (dominio) y EstadoActividadEntity (JPA)

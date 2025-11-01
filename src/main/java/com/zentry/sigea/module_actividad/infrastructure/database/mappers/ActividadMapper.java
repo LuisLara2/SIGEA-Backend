@@ -1,9 +1,9 @@
 package com.zentry.sigea.module_actividad.infrastructure.database.mappers;
 
-import com.zentry.sigea.infrastructure.database.entities.ActividadEntity;
 import com.zentry.sigea.module_actividad.core.entities.actividad.Actividad;
 import com.zentry.sigea.module_actividad.core.entities.actividad.EstadoActividad;
 import com.zentry.sigea.module_actividad.core.entities.actividad.TipoActividad;
+import com.zentry.sigea.module_actividad.infrastructure.database.entities.ActividadEntity;
 
 /**
  * Mapper para convertir entre Actividad (dominio) y ActividadEntity (JPA)
@@ -39,7 +39,7 @@ public class ActividadMapper {
             entity.getDescripcion(),
             entity.getFechaInicio(),
             entity.getFechaFin(),
-            estadoActividad,           
+            estadoActividad,
             entity.getOrganizador().getId(), // Extraer solo el ID del organizador
             tipoActividad,             
             entity.getLugar(),

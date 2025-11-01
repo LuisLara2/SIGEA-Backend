@@ -1,7 +1,7 @@
 package com.zentry.sigea.module_actividad.infrastructure.database.mappers;
 
-import com.zentry.sigea.infrastructure.database.entities.TipoActividadEntity;
 import com.zentry.sigea.module_actividad.core.entities.actividad.TipoActividad;
+import com.zentry.sigea.module_actividad.infrastructure.database.entities.TipoActividadEntity;
 
 /**
  * Mapper para convertir entre TipoActividad (dominio) y TipoActividadEntity (JPA)

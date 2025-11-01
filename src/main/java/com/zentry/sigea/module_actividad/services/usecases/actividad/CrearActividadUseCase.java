@@ -1,6 +1,8 @@
-package com.zentry.sigea.module_actividad.core.usecases.actividad;
+package com.zentry.sigea.module_actividad.services.usecases.actividad;
 
 import java.time.LocalDate;
+
+import org.springframework.stereotype.Component;
 
 import com.zentry.sigea.module_actividad.core.entities.actividad.Actividad;
 import com.zentry.sigea.module_actividad.core.repositories.ActividadRepository;
@@ -9,7 +11,8 @@ import com.zentry.sigea.module_actividad.presentation.models.ActividadRequest;
 /**
  * Caso de uso para crear una nueva actividad
  * CORE - Sin dependencias de Spring (Clean Architecture)
- */
+*/
+@Component
 public class CrearActividadUseCase {
 
     private final ActividadRepository actividadRepository;

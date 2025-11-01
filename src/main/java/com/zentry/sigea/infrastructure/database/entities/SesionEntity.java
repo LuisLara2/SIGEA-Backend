@@ -2,6 +2,8 @@ package com.zentry.sigea.infrastructure.database.entities;
 
 import java.time.LocalDateTime;
 
+import com.zentry.sigea.module_actividad.infrastructure.database.entities.ActividadEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

@@ -1,4 +1,6 @@
-package com.zentry.sigea.module_actividad.core.usecases.tipo_actividad;
+package com.zentry.sigea.module_actividad.services.usecases.tipo_actividad;
+
+import org.springframework.stereotype.Component;
 
 import com.zentry.sigea.module_actividad.core.entities.actividad.TipoActividad;
 import com.zentry.sigea.module_actividad.core.repositories.TipoActividadRepository;
@@ -8,6 +10,7 @@ import com.zentry.sigea.module_actividad.presentation.models.TipoActividadReques
  * Caso de uso para crear un nuevo tipo de actividad
  * CORE - Sin dependencias de Spring (Clean Architecture)
  */
+@Component
 public class CrearTipoActividadUseCase {
 
     private final TipoActividadRepository tipoActividadRepository;

@@ -3,7 +3,7 @@ package com.zentry.sigea.module_actividad.infrastructure.repository.actividad_re
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-import com.zentry.sigea.infrastructure.database.entities.ActividadEntity;
+import com.zentry.sigea.module_actividad.infrastructure.database.entities.ActividadEntity;
 
 /**
  * Repositorio JPA para la entidad ActividadEntity
