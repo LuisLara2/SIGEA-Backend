@@ -1,4 +1,4 @@
-package com.zentry.sigea.module_actividad.core.services.usecases.obtener_actividad;
+package com.zentry.sigea.module_actividad.core.usecases.actividad;
 
 import java.util.Optional;
 

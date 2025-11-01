@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.zentry.sigea.module_actividad.core.entities.actividad.Actividad;
-import com.zentry.sigea.module_actividad.core.services.usecases.crear_actividad.CrearActividadUseCase;
-import com.zentry.sigea.module_actividad.core.value_objects.EstadoActividad;
+import com.zentry.sigea.module_actividad.core.entities.actividad.EstadoActividad;
+import com.zentry.sigea.module_actividad.core.usecases.actividad.CrearActividadUseCase;
 import com.zentry.sigea.module_actividad.infrastructure.repository.actividad_repository.ActividadRepositoryImpl;
 import com.zentry.sigea.module_actividad.presentation.models.ActividadRequest;
 import com.zentry.sigea.module_actividad.presentation.models.ActividadResponse;
@@ -22,10 +22,10 @@ public class ActividadService implements IActividad {
     private final ActividadRepositoryImpl actividadRepository;
     private final CrearActividadUseCase crearActividadUseCase;
 
-    public ActividadService(ActividadRepositoryImpl actividadRepository) {
+    public ActividadService(ActividadRepositoryImpl actividadRepository, 
+                           CrearActividadUseCase crearActividadUseCase) {
         this.actividadRepository = actividadRepository;
-        this.crearActividadUseCase = new CrearActividadUseCase(actividadRepository);
-
+        this.crearActividadUseCase = crearActividadUseCase;
     }
 
     /**
@@ -70,7 +70,7 @@ public class ActividadService implements IActividad {
     public Actividad publicarActividad(Long id) {
         // TODO: Implementar lógica de cambio de estado
         var actividad = actividadRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Actividad no encontrada"));
+                .orElseThrow(() -> new RuntimeException("Actividad no encontrada con ID: " + id));
         return actividadRepository.save(actividad);
     }
 
@@ -82,8 +82,11 @@ public class ActividadService implements IActividad {
 
     @Override
     public ActividadResponse obtenerActividadPorId(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'obtenerActividadPorId'");
+        var actividad = actividadRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Actividad no encontrada con ID: " + id));
+        
+        // Usar el factory method de ActividadResponse
+        return ActividadResponse.fromEntity(actividad);
     }
 
     @Override
@@ -103,4 +106,5 @@ public class ActividadService implements IActividad {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'obtenerActividadesPorTipo'");
     }
+
 }

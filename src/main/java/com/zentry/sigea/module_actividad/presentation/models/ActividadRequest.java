@@ -2,8 +2,8 @@ package com.zentry.sigea.module_actividad.presentation.models;
 
 import java.time.LocalDate;
 
+import com.zentry.sigea.module_actividad.core.entities.actividad.EstadoActividad;
 import com.zentry.sigea.module_actividad.core.entities.actividad.TipoActividad;
-import com.zentry.sigea.module_actividad.core.value_objects.EstadoActividad;
 
 /**
  * DTO para recibir datos de creación de actividad desde el frontend

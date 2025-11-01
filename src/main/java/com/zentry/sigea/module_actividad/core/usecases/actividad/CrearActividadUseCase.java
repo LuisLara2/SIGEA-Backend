@@ -1,4 +1,4 @@
-package com.zentry.sigea.module_actividad.core.services.usecases.crear_actividad;
+package com.zentry.sigea.module_actividad.core.usecases.actividad;
 
 import java.time.LocalDate;
 
@@ -14,7 +14,7 @@ public class CrearActividadUseCase {
         this.actividadRepository = actividadRepository;
     }
 
-    public Actividad execute(ActividadRequest request) {
+    public Actividad execute (ActividadRequest request) {
         // Validaciones de negocio específicas del caso de uso
         validateBusinessRules(request);
         
@@ -35,9 +35,54 @@ public class CrearActividadUseCase {
     }
 
     private void validateBusinessRules(ActividadRequest request) {
-        // Validar que no haya conflictos de fechas para el organizador
-        var actividadesExistentes = actividadRepository.findByOrganizerId(request.getOrganizadorId());
+        // Validaciones básicas
+        validateBasicFields(request);
         
+        // Validar fechas
+        validateDates(request);
+        
+        // Validar que no haya conflictos de fechas para el organizador
+        validateDateConflicts(request);
+        
+        // Validar que la fecha de inicio no sea muy lejana en el futuro
+        if (request.getFechaInicio().isAfter(LocalDate.now().plusYears(2))) {
+            throw new IllegalArgumentException(
+                "No se pueden crear actividades con más de 2 años de anticipación"
+            );
+        }
+    }
+    
+    private void validateBasicFields(ActividadRequest request) {
+        if (request.getTitulo() == null || request.getTitulo().trim().isEmpty()) {
+            throw new IllegalArgumentException("El título es obligatorio");
+        }
+        
+        if (request.getFechaInicio() == null) {
+            throw new IllegalArgumentException("La fecha de inicio es obligatoria");
+        }
+        
+        if (request.getFechaFin() == null) {
+            throw new IllegalArgumentException("La fecha de fin es obligatoria");
+        }
+        
+        if (request.getOrganizadorId() == null || request.getOrganizadorId() <= 0) {
+            throw new IllegalArgumentException("El ID del organizador debe ser un número positivo");
+        }
+    }
+    
+    private void validateDates(ActividadRequest request) {
+        if (request.getFechaFin().isBefore(request.getFechaInicio())) {
+            throw new IllegalArgumentException("La fecha de fin no puede ser anterior a la fecha de inicio");
+        }
+        
+        if (request.getFechaInicio().isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("No se pueden crear actividades en fechas pasadas");
+        }
+    }
+    
+    private void validateDateConflicts(ActividadRequest request) {
+        var actividadesExistentes = actividadRepository.findByOrganizerId(request.getOrganizadorId());
+
         boolean hasConflict = actividadesExistentes.stream()
             .anyMatch(actividad -> 
                 datesOverlap(
@@ -51,26 +96,10 @@ public class CrearActividadUseCase {
                 "El organizador ya tiene una actividad programada en las fechas seleccionadas"
             );
         }
-        
-        // Validar que la fecha de inicio no sea muy lejana en el futuro
-        if (request.getFechaInicio().isAfter(LocalDate.now().plusYears(2))) {
-            throw new IllegalArgumentException(
-                "No se pueden crear actividades con más de 2 años de anticipación"
-            );
-        }
     }
 
     private boolean datesOverlap(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
         return !end1.isBefore(start2) && !start1.isAfter(end2);
-    }
-    private void validateOrganizerId(Long organizerId) {
-        if (organizerId == null) {
-            throw new IllegalArgumentException("El ID del organizador no puede ser nulo");
-        }
-        // Aquí se implementaría la lógica real para buscar actividades por organizador
-        if (organizerId <= 0) {
-            throw new IllegalArgumentException("El ID del organizador debe ser un número positivo");
-        }
     }
 }
 

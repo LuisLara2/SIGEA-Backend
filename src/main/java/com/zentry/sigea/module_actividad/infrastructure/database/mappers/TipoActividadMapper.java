@@ -34,12 +34,12 @@ public class TipoActividadMapper {
             return null;
         }
         
-        return new TipoActividadEntity(
-            domain.getId(),
-            domain.getNombreActividad(),
-            domain.getDescripcion(),
-            domain.getCreatedAt(),
-            domain.getUpdatedAt()
-        );
+        TipoActividadEntity entity = new TipoActividadEntity();
+        entity.setId(domain.getId());
+        entity.setNombreActividad(domain.getNombreActividad());
+        entity.setDescripcion(domain.getDescripcion());
+        entity.setCreatedAt(domain.getCreatedAt());
+        entity.setUpdatedAt(domain.getUpdatedAt());
+        return entity;
     }
 }

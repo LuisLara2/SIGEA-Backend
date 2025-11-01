@@ -1,17 +1,17 @@
 package com.zentry.sigea.module_actividad.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.zentry.sigea.module_actividad.core.entities.actividad.TipoActividad;
-import com.zentry.sigea.module_actividad.core.services.usecases.crear_tipo_activiadad.CrearTipoActividadUseCase;
+import com.zentry.sigea.module_actividad.core.usecases.tipo_actividad.CrearTipoActividadUseCase;
 import com.zentry.sigea.module_actividad.infrastructure.repository.tipoactividad_repository.TipoActividadRepositoryImpl;
 import com.zentry.sigea.module_actividad.presentation.models.TipoActividadRequest;
+import com.zentry.sigea.module_actividad.services.interfaces.ITipoActividad;
 
 @Service
-public class TipoActividadService {
+public class TipoActividadService implements ITipoActividad {
 
     private final TipoActividadRepositoryImpl tipoactividadRepository;
     private final CrearTipoActividadUseCase crearTipoActividadUseCase;
@@ -21,21 +21,32 @@ public class TipoActividadService {
         this.crearTipoActividadUseCase = crearTipoActividadUseCase;
     }
 
-    /**
-     *  Crea un nuevo tipo de actividad
-     */
-
-    public TipoActividad crearTipoActividad(TipoActividadRequest request) {
-        return crearTipoActividadUseCase.execute(request);
+    @Override
+    public TipoActividad crearTipoActividad(TipoActividadRequest tipoActividad) {
+        // TODO Auto-generated method stub
+        return crearTipoActividadUseCase.execute(tipoActividad);
     }
 
-    public Optional<TipoActividad> obtenerPorId(Long id) {
-        TipoActividad actividad = tipoactividadRepository.findById(id);
-        return Optional.ofNullable(actividad);
+    @Override
+    public TipoActividad actualizarTipoActividad(TipoActividadRequest tipoActividad) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'actualizarTipoActividad'");
     }
 
+    @Override
+    public void eliminarTipoActividad(Long id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'eliminarTipoActividad'");
+    }
+
+    @Override
+    public TipoActividad obtenerTipoActividadPorId(Long id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'obtenerTipoActividadPorId'");
+    }
+
+    @Override
     public List<TipoActividad> listarTiposActividad() {
         return tipoactividadRepository.findAll();
     }
-
 }

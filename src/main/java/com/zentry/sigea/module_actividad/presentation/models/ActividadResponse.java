@@ -4,8 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.zentry.sigea.module_actividad.core.entities.actividad.Actividad;
+import com.zentry.sigea.module_actividad.core.entities.actividad.EstadoActividad;
 import com.zentry.sigea.module_actividad.core.entities.actividad.TipoActividad;
-import com.zentry.sigea.module_actividad.core.value_objects.EstadoActividad;
 
 /**
  * DTO para enviar datos de actividad al frontend

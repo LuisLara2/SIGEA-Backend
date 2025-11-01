@@ -3,8 +3,6 @@ package com.zentry.sigea.module_actividad.core.entities.actividad;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import com.zentry.sigea.module_actividad.core.value_objects.EstadoActividad;
-
 
 public class Actividad {
     private final Long id;
@@ -41,9 +39,6 @@ public class Actividad {
                                  LocalDate startDate, LocalDate endDate,
                                  EstadoActividad statusId, Long organizerId,
                                  TipoActividad typeId, String location) {
-        validateTitle(title);
-        validateDates(startDate, endDate);
-        validateRequiredFields(statusId, organizerId, typeId);
         
         LocalDateTime now = LocalDateTime.now();
         return new Actividad(null, title, description, startDate, endDate,
@@ -53,8 +48,6 @@ public class Actividad {
     // Métodos de negocio
     public void updateInfo(String title, String description, 
                           LocalDate startDate, LocalDate endDate, String location) {
-        validateTitle(title);
-        validateDates(startDate, endDate);
         
         this.title = title;
         this.description = description;
@@ -87,40 +80,6 @@ public class Actividad {
 
     public long getDurationInDays() {
         return java.time.temporal.ChronoUnit.DAYS.between(startDate, endDate) + 1;
-    }
-
-    // Validaciones del dominio
-    private static void validateTitle(String title) {
-        if (title == null || title.trim().isEmpty()) {
-            throw new IllegalArgumentException("El título no puede estar vacío");
-        }
-        if (title.length() > 150) {
-            throw new IllegalArgumentException("El título no puede exceder 150 caracteres");
-        }
-    }
-
-    private static void validateDates(LocalDate startDate, LocalDate endDate) {
-        if (startDate == null) {
-            throw new IllegalArgumentException("La fecha de inicio es requerida");
-        }
-        if (endDate == null) {
-            throw new IllegalArgumentException("La fecha de fin es requerida");
-        }
-        if (endDate.isBefore(startDate)) {
-            throw new IllegalArgumentException("La fecha de fin no puede ser anterior a la fecha de inicio");
-        }
-    }
-
-    private static void validateRequiredFields(EstadoActividad statusId, Long organizerId, TipoActividad typeId) {
-        if (statusId == null) {
-            throw new IllegalArgumentException("El estado es requerido");
-        }
-        if (organizerId == null) {
-            throw new IllegalArgumentException("El organizador es requerido");
-        }
-        if (typeId == null) {
-            throw new IllegalArgumentException("El tipo de actividad es requerido");
-        }
     }
 
     // Getters

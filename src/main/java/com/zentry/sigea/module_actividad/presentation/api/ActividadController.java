@@ -72,7 +72,12 @@ public class ActividadController {
             @RequestParam(required = false) Long tipoId) {
         
         // Implementar lógica de filtros cuando sea necesario
-        var actividades = actividadService.listarActividades(Optional.empty(), Optional.empty());
+        var actividades = actividadService.listarActividades(
+            Optional.empty(), // Por ahora no filtramos por estado
+            Optional.ofNullable(tipoId)
+        );
+
+        
         var response = actividades.stream()
                 .map(ActividadResponse::fromEntity)
                 .toList();

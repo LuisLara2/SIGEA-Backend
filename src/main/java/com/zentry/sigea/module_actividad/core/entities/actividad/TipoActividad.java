@@ -22,9 +22,10 @@ public class TipoActividad {
         this.updatedAt = updatedAt;
     }
 
-    public static TipoActividad create(String nombreActividad, String descripcion, LocalDateTime createdAt,
-            LocalDateTime updatedAt) {
-        return new TipoActividad(null, nombreActividad, descripcion, createdAt, updatedAt);
+    // Factory method mejorado - maneja timestamps automáticamente
+    public static TipoActividad create(String nombreActividad, String descripcion) {
+        LocalDateTime now = LocalDateTime.now();
+        return new TipoActividad(null, nombreActividad, descripcion, now, now);
     }
 
     
