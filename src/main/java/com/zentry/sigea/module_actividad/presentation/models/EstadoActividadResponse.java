@@ -1,14 +1,16 @@
 package com.zentry.sigea.module_actividad.presentation.models;
 
-public class EstadoActividadReponse {
+import com.zentry.sigea.module_actividad.core.entities.actividad.EstadoActividad;
+
+public class EstadoActividadResponse {
     private Long id;
     private String codigo;
     private String etiqueta;
 
-    public EstadoActividadReponse() {
+    public EstadoActividadResponse() {
     }
 
-    public EstadoActividadReponse(Long id, String codigo, String etiqueta) {
+    public EstadoActividadResponse(Long id, String codigo, String etiqueta) {
         this.id = id;
         this.codigo = codigo;
         this.etiqueta = etiqueta;
@@ -16,6 +18,15 @@ public class EstadoActividadReponse {
 
     public Long getId() {
         return id;
+    }
+
+
+    public static EstadoActividadResponse fromEntity(EstadoActividad estadoActividad) {
+        return new EstadoActividadResponse(
+            estadoActividad.getId(),
+            estadoActividad.getCodigo(),
+            estadoActividad.getEtiqueta()
+        );
     }
 
     public void setId(Long id) {

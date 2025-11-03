@@ -5,23 +5,42 @@ import java.time.LocalDate;
 import org.springframework.stereotype.Component;
 
 import com.zentry.sigea.module_actividad.core.entities.actividad.Actividad;
+import com.zentry.sigea.module_actividad.core.entities.actividad.EstadoActividad;
+import com.zentry.sigea.module_actividad.core.entities.actividad.TipoActividad;
 import com.zentry.sigea.module_actividad.core.repositories.ActividadRepository;
-import com.zentry.sigea.module_actividad.presentation.models.ActividadRequest;
+import com.zentry.sigea.module_actividad.core.repositories.EstadoActividadRepository;
+import com.zentry.sigea.module_actividad.core.repositories.TipoActividadRepository;
+import com.zentry.sigea.module_actividad.presentation.models.CrearActividadRequest;
 
 /**
  * Caso de uso para crear una nueva actividad
- * CORE - Sin dependencias de Spring (Clean Architecture)
 */
 @Component
 public class CrearActividadUseCase {
 
     private final ActividadRepository actividadRepository;
+    private final EstadoActividadRepository estadoActividadRepository;
+    private final TipoActividadRepository tipoActividadRepository;
 
-    public CrearActividadUseCase(ActividadRepository actividadRepository) {
+    public CrearActividadUseCase(ActividadRepository actividadRepository,
+                               EstadoActividadRepository estadoActividadRepository,
+                               TipoActividadRepository tipoActividadRepository) {
         this.actividadRepository = actividadRepository;
+        this.estadoActividadRepository = estadoActividadRepository;
+        this.tipoActividadRepository = tipoActividadRepository;
     }
 
-    public Actividad execute(ActividadRequest request) {
+    /**
+     * Ejecuta la creación de actividad recibiendo IDs y convirtiéndolos a objetos completos
+     */
+    public Actividad execute(CrearActividadRequest request) {
+        // Validaciones básicas de entrada
+        validateBasicFields(request);
+        
+        // Obtener objetos por ID y validar que existan
+        EstadoActividad estado = getEstadoActividadById(request.getEstadoId());
+        TipoActividad tipoActividad = getTipoActividadById(request.getTipoActividadId());
+        
         // Validaciones de negocio específicas del caso de uso
         validateBusinessRules(request);
         
@@ -31,9 +50,9 @@ public class CrearActividadUseCase {
             request.getDescripcion(),
             request.getFechaInicio(),
             request.getFechaFin(),
-            request.getEstado(),
+            estado,
             request.getOrganizadorId(),
-            request.getTipoActividad(),
+            tipoActividad,
             request.getUbicacion()
         );
         
@@ -41,10 +60,43 @@ public class CrearActividadUseCase {
         return actividadRepository.save(nuevaActividad);
     }
 
-    private void validateBusinessRules(ActividadRequest request) {
-        // Validaciones básicas
-        validateBasicFields(request);
-        
+    /**
+     * Obtiene un EstadoActividad por su ID
+     */
+    private EstadoActividad getEstadoActividadById(Long estadoId) {
+        if (estadoId == null || estadoId <= 0) {
+            throw new IllegalArgumentException("El ID del estado de actividad debe ser un número positivo");
+        }
+
+        EstadoActividad estado = estadoActividadRepository.findById(estadoId);
+        if (estado == null) {
+            throw new IllegalArgumentException(
+                "No se encontró un estado de actividad con ID: " + estadoId
+            );
+        }
+
+        return estado;
+    }
+
+    /**
+     * Obtiene un TipoActividad por su ID
+     */
+    private TipoActividad getTipoActividadById(Long tipoActividadId) {
+        if (tipoActividadId == null || tipoActividadId <= 0) {
+            throw new IllegalArgumentException("El ID del tipo de actividad debe ser un número positivo");
+        }
+
+        TipoActividad tipoActividad = tipoActividadRepository.findById(tipoActividadId);
+        if (tipoActividad == null) {
+            throw new IllegalArgumentException(
+                "No se encontró un tipo de actividad con ID: " + tipoActividadId
+            );
+        }
+
+        return tipoActividad;
+    }
+
+    private void validateBusinessRules(CrearActividadRequest request) {
         // Validar fechas
         validateDates(request);
         
@@ -59,7 +111,7 @@ public class CrearActividadUseCase {
         }
     }
     
-    private void validateBasicFields(ActividadRequest request) {
+    private void validateBasicFields(CrearActividadRequest request) {
         if (request.getTitulo() == null || request.getTitulo().trim().isEmpty()) {
             throw new IllegalArgumentException("El título es obligatorio");
         }
@@ -75,9 +127,17 @@ public class CrearActividadUseCase {
         if (request.getOrganizadorId() == null || request.getOrganizadorId() <= 0) {
             throw new IllegalArgumentException("El ID del organizador debe ser un número positivo");
         }
+        
+        if (request.getEstadoId() == null || request.getEstadoId() <= 0) {
+            throw new IllegalArgumentException("El ID del estado debe ser un número positivo");
+        }
+        
+        if (request.getTipoActividadId() == null || request.getTipoActividadId() <= 0) {
+            throw new IllegalArgumentException("El ID del tipo de actividad debe ser un número positivo");
+        }
     }
     
-    private void validateDates(ActividadRequest request) {
+    private void validateDates(CrearActividadRequest request) {
         if (request.getFechaFin().isBefore(request.getFechaInicio())) {
             throw new IllegalArgumentException("La fecha de fin no puede ser anterior a la fecha de inicio");
         }
@@ -87,7 +147,7 @@ public class CrearActividadUseCase {
         }
     }
     
-    private void validateDateConflicts(ActividadRequest request) {
+    private void validateDateConflicts(CrearActividadRequest request) {
         var actividadesExistentes = actividadRepository.findByOrganizerId(request.getOrganizadorId());
 
         boolean hasConflict = actividadesExistentes.stream()

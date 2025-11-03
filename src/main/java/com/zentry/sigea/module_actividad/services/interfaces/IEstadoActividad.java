@@ -11,4 +11,5 @@ public  interface IEstadoActividad {
     void eliminarEstadoActividad(Long id);
     EstadoActividad obtenerEstadoActividadPorId(Long id);
     List<EstadoActividad> obtenerTodosLosEstadosActividad();
+    List<EstadoActividad> listarEstadosActividad();
 }

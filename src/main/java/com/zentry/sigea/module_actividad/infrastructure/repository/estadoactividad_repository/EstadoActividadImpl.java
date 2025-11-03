@@ -1,5 +1,6 @@
 package com.zentry.sigea.module_actividad.infrastructure.repository.estadoactividad_repository;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
@@ -47,8 +48,8 @@ public class EstadoActividadImpl implements  EstadoActividadRepository {
 
     @Override
     public EstadoActividad findById(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        Optional<EstadoActividadEntity> entity = jpaRepository.findById(id);
+        return entity.map(EstadoActividadMapper::toDomain).orElse(null);
     }
 
 

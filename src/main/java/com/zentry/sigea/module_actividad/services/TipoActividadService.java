@@ -34,8 +34,7 @@ public class TipoActividadService implements ITipoActividad {
 
     @Override
     public void eliminarTipoActividad(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eliminarTipoActividad'");
+        tipoactividadRepository.deleteById(id);
     }
 
     @Override

@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +34,6 @@ public class TipoActividadController {
     /**
      * Crear un nuevo tipo de actividad
      */
-
     @PostMapping("/create")
     public ResponseEntity<TipoActividadResponse>  createTipoActividad(@RequestBody TipoActividadRequest request) 
     {
@@ -59,6 +60,18 @@ public class TipoActividadController {
             .map(TipoActividadResponse::fromEntity)
             .toList();
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarTipoActividad(@PathVariable Long id) {
+        try {
+            tipoActividadService.eliminarTipoActividad(id);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
     }
     
 }

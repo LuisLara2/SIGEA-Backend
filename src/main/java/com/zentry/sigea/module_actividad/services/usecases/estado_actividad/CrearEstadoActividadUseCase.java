@@ -6,6 +6,11 @@ import com.zentry.sigea.module_actividad.core.entities.actividad.EstadoActividad
 import com.zentry.sigea.module_actividad.core.repositories.EstadoActividadRepository;
 import com.zentry.sigea.module_actividad.presentation.models.EstadoActividadRequest;
 
+
+/**
+ * Caso de uso para crear un nuevo estado de actividad
+ */
+
 @Component
 public class CrearEstadoActividadUseCase {
 

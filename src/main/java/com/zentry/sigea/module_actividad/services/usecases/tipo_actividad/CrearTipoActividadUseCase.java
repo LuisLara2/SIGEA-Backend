@@ -8,7 +8,6 @@ import com.zentry.sigea.module_actividad.presentation.models.TipoActividadReques
 
 /**
  * Caso de uso para crear un nuevo tipo de actividad
- * CORE - Sin dependencias de Spring (Clean Architecture)
  */
 @Component
 public class CrearTipoActividadUseCase {
@@ -38,7 +37,6 @@ public class CrearTipoActividadUseCase {
             throw new IllegalArgumentException("El nombre de la actividad es obligatorio");
         }
         
-        // TODO: Implementar findByNombre en el repositorio
         // var tiposExistentes = tipoActividadRepository.findByNombre(request.getNombreActividad());
         // if (!tiposExistentes.isEmpty()) {
         //     throw new IllegalArgumentException(

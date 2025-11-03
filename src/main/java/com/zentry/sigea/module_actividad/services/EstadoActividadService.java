@@ -51,4 +51,8 @@ public class EstadoActividadService implements IEstadoActividad {
         // Lógica para obtener todos los estados de actividad
         return estadoActividadRepository.findAll();
     }
+    @Override
+    public List<EstadoActividad> listarEstadosActividad() {
+        return estadoActividadRepository.findAll();
+    }
 }
