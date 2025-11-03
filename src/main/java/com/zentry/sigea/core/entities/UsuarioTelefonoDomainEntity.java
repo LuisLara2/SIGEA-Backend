@@ -1,8 +1,8 @@
 package com.zentry.sigea.core.entities;
 
 public class UsuarioTelefonoDomainEntity {
-    public String telefono;
-    public String tipo;
+    private String telefono;
+    private String tipo;
 
     public String getTelefono() {
         return telefono;

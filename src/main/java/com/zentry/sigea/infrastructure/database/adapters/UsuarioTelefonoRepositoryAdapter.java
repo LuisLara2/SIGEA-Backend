@@ -4,11 +4,14 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Repository;
+
 import com.zentry.sigea.core.entities.UsuarioTelefonoDomainEntity;
 import com.zentry.sigea.core.repositories.IUsuarioTelefonoRepository;
 import com.zentry.sigea.infrastructure.database.mappers.UsuarioTelefonoMapper;
 import com.zentry.sigea.infrastructure.repositories.UsuarioTelefonoJPARepository;
 
+@Repository
 public class UsuarioTelefonoRepositoryAdapter implements IUsuarioTelefonoRepository {
     
     private final UsuarioTelefonoJPARepository usuarioTelefonoJPARepository;

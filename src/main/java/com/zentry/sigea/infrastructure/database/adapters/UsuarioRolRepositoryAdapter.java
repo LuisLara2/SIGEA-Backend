@@ -4,12 +4,15 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Repository;
+
 import com.zentry.sigea.core.entities.RolDomainEntity;
 import com.zentry.sigea.core.repositories.IUsuarioRolRepository;
 import com.zentry.sigea.infrastructure.database.entities.UsuarioRolEntity;
 import com.zentry.sigea.infrastructure.database.mappers.RolMapper;
 import com.zentry.sigea.infrastructure.repositories.UsuarioRolJPARepository;
 
+@Repository
 public class UsuarioRolRepositoryAdapter implements IUsuarioRolRepository {
     
     private final UsuarioRolJPARepository usuarioRolJPARepository;
