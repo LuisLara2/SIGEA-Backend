@@ -1,0 +1,71 @@
+package com.zentry.sigea.module_actividad.presentation.api;
+
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.zentry.sigea.module_actividad.core.entities.actividad.EstadoActividad;
+import com.zentry.sigea.module_actividad.presentation.models.EstadoActividadRequest;
+import com.zentry.sigea.module_actividad.presentation.models.EstadoActividadResponse;
+import com.zentry.sigea.module_actividad.services.EstadoActividadService;
+
+
+/*
+ * Controlador para gestionar los estados de las actividades
+ * 
+ */
+
+@RestController
+@RequestMapping("/api/v1/estados-actividad")
+@CrossOrigin(origins = "*")
+public class EstadoActividadController {
+    private final EstadoActividadService estadoActividadService;
+    public EstadoActividadController(EstadoActividadService estadoActividadService) {
+        this.estadoActividadService = estadoActividadService;
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<EstadoActividadResponse> createEstadoActividad(@RequestBody EstadoActividadRequest request) {
+        try {
+            EstadoActividad estadoActividadCreada = estadoActividadService.crearEstadoActividad(request);
+            EstadoActividadResponse response = EstadoActividadResponse.fromEntity(estadoActividadCreada);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<List<EstadoActividadResponse>> listarEstadoActividad() {
+        List<EstadoActividad> estadosActividad = estadoActividadService.listarEstadosActividad();
+
+        List<EstadoActividadResponse> response = estadosActividad.stream()
+            .map(EstadoActividadResponse::fromEntity)
+            .toList();
+
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarEstadoActividad(@PathVariable Long id) {
+        try {
+            estadoActividadService.eliminarEstadoActividad(id);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
+    
+}
