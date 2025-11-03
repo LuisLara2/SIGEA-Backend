@@ -1,17 +1,22 @@
 ---
-title: "Architecture Decision Record 002 - SGAEU"
-author: "Ordoñez Silva, Yonel Jr."
+title: "ADR002 - SIGEA"
+author: "Developement Team"
 format: 
     md:
         toc: true
         toc-depth: 3
         number-sections: false
+    pdf:
+        toc: true
+        toc-depth: 3
+        number-sections: false
+        toc-title: "Indice"
 ---
 
-# ADR 002: [Modificacion de Arquitectura de Microservicios Orientado a Eventos por Arquitectura en Capas + Clean Architecture + MVC SGAEU]
+# ADR 002: [Modificacion de Arquitectura de Microservicios Orientado a Eventos por Arquitectura en Capas + Clean Architecture + MVC SIGEA]
 
 ## Estado
-[Propuesto]
+[Aceptado]
 
 ## Contexto
 

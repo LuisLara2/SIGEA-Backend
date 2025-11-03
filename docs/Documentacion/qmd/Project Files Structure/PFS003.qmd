@@ -1,6 +1,6 @@
 ---
-title: "Project Files Structure - SIGEA"
-author: "Ordoñez Silva, Yonel Jr."
+title: "PFS003 - SIGEA"
+author: "Developement Team"
 format: 
     pdf: 
         toc: true
@@ -18,6 +18,10 @@ format:
         number-sections: false
         toc-depth: 5
 ---
+
+# Estado
+
+[Aceptado]
 
 # I. Propuesta de Estructura de Archivos del Proyecto
 
@@ -105,40 +109,6 @@ app/
     │           ├── infrastructure/
     │           └── ...
     └── docs/
-```
-
-Una posible mejora que se podria implementar, con el fin de mejorar la organizacion y modularizacion, es añadir en una carpeta `modules/` que contenga cada modulo de requisitos del proyecto; luego dentro de cada modulo estructurar las capas.
-
-```bash
-app/
-└── src/
-    └── main/
-        └── java/
-            └── com/zentry/sigea/
-                │   # Podemos usar modulos para estructurar cada modulo de requisitos
-                └── modules/              # Agrupación por módulos funcionales
-                    ├── ParticipantsRegGest/    # Modulos de Registro y Gestion de Participantes
-                    │   ├── presentation/          # Capa de presentación (UI + Controladores)
-                    │   │   ├── api/       # @RestController comunicacion con frontend
-                    │   │   └── models/        # DTOs y ViewModels que la vista necesita
-                    │   │
-                    │   ├── services/              # Capa de aplicación (Casos de uso)
-                    │   │   ├── usecases/          # Casos de uso concretos
-                    │   │   └── interfaces/        # Interfaces para los servicios del dominio
-                    │   │
-                    │   ├── core/                  # Capa de dominio
-                    │   │   ├── entities/          # Entidades de dominio
-                    │   │   ├── value-objects/     # Objetos de valor (si aplica)
-                    │   │   ├── repositories/      # Interfaces de los repositorios
-                    │   │   └── services/          # Servicios de dominio puros
-                    │   │
-                    │   └── infrastructure/        # Capa de infraestructura
-                    │       ├── repositories/      # Implementaciones de los repositorios
-                    │       ├── database/          # Configuración y acceso a base de datos
-                    │       ├── external-apis/     # Clientes de APIs externas
-                    │       └── config/            # Configuración de infraestructura (env, logger, etc.)
-                    └── Certification/
-                        └── ...
 ```
 
 ## 1.2. Explicacion Detallada de Cada Capa

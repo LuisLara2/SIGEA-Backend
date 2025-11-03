@@ -1,16 +1,13 @@
-package com.zentry.sigea.module_actividad.infrastructure.database.entities;
+package com.zentry.sigea.infrastructure.database.entities;
+
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -19,19 +16,19 @@ import lombok.Setter;
 )
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class EstadoActividadEntity {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_estado_actividad")
-    private Long id;
+    @GeneratedValue
+    @Column(
+        name = "id_estado_actividad" , updatable = false , nullable = false , 
+        columnDefinition = "UUID DEFAULT gen_random_uuid()"
+    )
+    private UUID id;
 
-    @NotNull
-    @Size(max = 30 , message = "El código no debe tener más de 30 caracteres.")
+    @Column(name = "codigo" , nullable = false , length = 30)
     private String codigo;
 
-    @Size(max = 60 , message = "La etiqueta no debe tener más de 60 caracteres.")
+    @Column(name = "etiqueta" , nullable = true , length = 60)
     private String etiqueta;
 }

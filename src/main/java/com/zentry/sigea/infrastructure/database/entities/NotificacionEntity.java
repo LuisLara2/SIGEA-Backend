@@ -1,6 +1,7 @@
 package com.zentry.sigea.infrastructure.database.entities;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import com.zentry.sigea.module_actividad.infrastructure.database.entities.ActividadEntity;
 
@@ -8,15 +9,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,39 +27,36 @@ import lombok.Setter;
 )
 @Getter
 @Setter
-@AllArgsConstructor
 public class NotificacionEntity {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_notificacion")
-    private Long id;
+    @GeneratedValue
+    @Column(
+        name = "id_notificacion" , updatable = false , nullable = false , 
+        columnDefinition = "UUID DEFAULT gen_random_uuid()"
+    )
+    private UUID id;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "usuario_id" , nullable = false)
     private UsuarioEntity usuario;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "actividad_id")
+    @JoinColumn(name = "actividad_id" , nullable = true)
     private ActividadEntity actividad;
     
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tipo_notificacion_id")
+    @JoinColumn(name = "tipo_notificacion_id" , nullable = false)
     private TipoNotificacionEntity tipoNotificacion;
 
-    @NotNull(message = "El mansaje no puede estar vacio.")
     @Lob
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "mensaje" , nullable = false , columnDefinition = "TEXT")
     private String mensaje;
 
-    @NotNull
-    @Column(name = "fecha_envio" , columnDefinition = "TIMESTAMP")
+    @Column(name = "fecha_envio" , nullable = false , columnDefinition = "TIMESTAMP")
     private LocalDateTime fechaEnvio = LocalDateTime.now();
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "estado_notificacion_id")
+    @JoinColumn(name = "estado_notificacion_id" , nullable = false)
     private EstadoNotificacionEntity estadoNotificacion;
 }

@@ -1,21 +1,18 @@
 package com.zentry.sigea.infrastructure.database.entities;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,33 +25,31 @@ import lombok.Setter;
 )
 @Getter
 @Setter
-@AllArgsConstructor
 public class ValidacionEntity {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_validacion")
-    private Long id;
+    @GeneratedValue
+    @Column(
+        name = "id_validacion" , updatable = false , nullable = false , 
+        columnDefinition = "UUID DEFAULT gen_random_uuid()"
+    )
+    private UUID id;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "certificado_id")
+    @JoinColumn(name = "certificado_id" , nullable = false)
     private CertificadoEntity certificado;
     
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tipo_validador_id")
+    @JoinColumn(name = "tipo_validador_id" , nullable = false)
     private TipoValidadorEntity tipoValidador;
 
-    @NotNull
-    @Column(name = "fecha_validacion" , columnDefinition = "DATE")
+    @Column(name = "fecha_validacion" , nullable = false , columnDefinition = "DATE")
     private LocalDate fechaValidacion = LocalDate.now();
 
-    @NotNull
-    @Size(max = 20 , message = "El resultado no puede tener más de 20 caracteres.")
+    @Column(name = "resultado" , nullable = false , length = 20)
     private String resultado = "APROBADO";
 
     @Lob
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "detalle" , nullable = true , columnDefinition = "TEXT")
     private String detalle;
 }
