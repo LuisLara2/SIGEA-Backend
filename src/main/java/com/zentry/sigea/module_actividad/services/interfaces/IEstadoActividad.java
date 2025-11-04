@@ -2,14 +2,14 @@ package com.zentry.sigea.module_actividad.services.interfaces;
 
 import java.util.List;
 
-import com.zentry.sigea.module_actividad.core.entities.actividad.EstadoActividad;
+import com.zentry.sigea.module_actividad.core.entities.EstadoActividadDomainEntity;
 import com.zentry.sigea.module_actividad.presentation.models.EstadoActividadRequest;
 
 public  interface IEstadoActividad {
-    EstadoActividad crearEstadoActividad(EstadoActividadRequest estadoActividad);
-    EstadoActividad actualizarEstadoActividad(EstadoActividadRequest estadoActividad);
+    EstadoActividadDomainEntity crearEstadoActividad(EstadoActividadRequest estadoActividad);
+    EstadoActividadDomainEntity actualizarEstadoActividad(EstadoActividadRequest estadoActividad);
     void eliminarEstadoActividad(Long id);
-    EstadoActividad obtenerEstadoActividadPorId(Long id);
-    List<EstadoActividad> obtenerTodosLosEstadosActividad();
-    List<EstadoActividad> listarEstadosActividad();
+    EstadoActividadDomainEntity obtenerEstadoActividadPorId(Long id);
+    List<EstadoActividadDomainEntity> obtenerTodosLosEstadosActividad();
+    List<EstadoActividadDomainEntity> listarEstadosActividad();
 }

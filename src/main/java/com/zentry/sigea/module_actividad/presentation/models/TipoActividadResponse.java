@@ -1,6 +1,6 @@
 package com.zentry.sigea.module_actividad.presentation.models;
 
-import com.zentry.sigea.module_actividad.core.entities.actividad.TipoActividad;
+import com.zentry.sigea.module_actividad.core.entities.TipoActividadDomainEntity;
 
 public class TipoActividadResponse {
 
@@ -23,7 +23,7 @@ public class TipoActividadResponse {
      * Factory method para crear un TipoActividadResponse desde una entidad TipoActividad
      */
 
-    public static TipoActividadResponse fromEntity(TipoActividad tipoActividad) {
+    public static TipoActividadResponse fromEntity(TipoActividadDomainEntity tipoActividad) {
         
         return new TipoActividadResponse(
             tipoActividad.getId(),

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.zentry.sigea.module_actividad.core.entities.actividad.EstadoActividad;
+import com.zentry.sigea.module_actividad.core.entities.EstadoActividadDomainEntity;
 import com.zentry.sigea.module_actividad.presentation.models.EstadoActividadRequest;
 import com.zentry.sigea.module_actividad.presentation.models.EstadoActividadResponse;
 import com.zentry.sigea.module_actividad.services.EstadoActividadService;
@@ -35,7 +35,7 @@ public class EstadoActividadController {
     @PostMapping("/create")
     public ResponseEntity<EstadoActividadResponse> createEstadoActividad(@RequestBody EstadoActividadRequest request) {
         try {
-            EstadoActividad estadoActividadCreada = estadoActividadService.crearEstadoActividad(request);
+            EstadoActividadDomainEntity estadoActividadCreada = estadoActividadService.crearEstadoActividad(request);
             EstadoActividadResponse response = EstadoActividadResponse.fromEntity(estadoActividadCreada);
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
@@ -47,7 +47,7 @@ public class EstadoActividadController {
 
     @GetMapping
     public ResponseEntity<List<EstadoActividadResponse>> listarEstadoActividad() {
-        List<EstadoActividad> estadosActividad = estadoActividadService.listarEstadosActividad();
+        List<EstadoActividadDomainEntity> estadosActividad = estadoActividadService.listarEstadosActividad();
 
         List<EstadoActividadResponse> response = estadosActividad.stream()
             .map(EstadoActividadResponse::fromEntity)

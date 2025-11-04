@@ -3,10 +3,10 @@ package com.zentry.sigea.module_actividad.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.zentry.sigea.module_actividad.core.entities.actividad.EstadoActividad;
-import com.zentry.sigea.module_actividad.core.entities.actividad.TipoActividad;
-import com.zentry.sigea.module_actividad.core.repositories.EstadoActividadRepository;
-import com.zentry.sigea.module_actividad.core.repositories.TipoActividadRepository;
+import com.zentry.sigea.module_actividad.core.entities.EstadoActividadDomainEntity;
+import com.zentry.sigea.module_actividad.core.entities.TipoActividadDomainEntity;
+import com.zentry.sigea.module_actividad.core.repositories.IEstadoActividadRepository;
+import com.zentry.sigea.module_actividad.core.repositories.ITipoActividadRepository;
 import com.zentry.sigea.module_actividad.presentation.models.ActividadRequest;
 import com.zentry.sigea.module_actividad.presentation.models.CrearActividadRequest;
 
@@ -17,11 +17,11 @@ import com.zentry.sigea.module_actividad.presentation.models.CrearActividadReque
 @Configuration
 public class ActividadMappingConfig {
 
-    private final EstadoActividadRepository estadoActividadRepository;
-    private final TipoActividadRepository tipoActividadRepository;
+    private final IEstadoActividadRepository estadoActividadRepository;
+    private final ITipoActividadRepository tipoActividadRepository;
 
-    public ActividadMappingConfig(EstadoActividadRepository estadoActividadRepository,
-                                TipoActividadRepository tipoActividadRepository) {
+    public ActividadMappingConfig(IEstadoActividadRepository estadoActividadRepository,
+                                ITipoActividadRepository tipoActividadRepository) {
         this.estadoActividadRepository = estadoActividadRepository;
         this.tipoActividadRepository = tipoActividadRepository;
     }
@@ -51,8 +51,8 @@ public class ActividadMappingConfig {
             validateRequiredIds(request);
 
             // Obtener los objetos por ID
-            EstadoActividad estado = getEstadoActividadById(request.getEstadoId());
-            TipoActividad tipoActividad = getTipoActividadById(request.getTipoActividadId());
+            EstadoActividadDomainEntity estado = getEstadoActividadById(request.getEstadoId());
+            TipoActividadDomainEntity tipoActividad = getTipoActividadById(request.getTipoActividadId());
 
             // Crear el ActividadRequest con los objetos completos
             return new ActividadRequest(
@@ -70,12 +70,12 @@ public class ActividadMappingConfig {
         /**
          * Obtiene un EstadoActividad por su ID
          */
-        public EstadoActividad getEstadoActividadById(Long estadoId) {
-            if (estadoId == null || estadoId <= 0) {
+        public EstadoActividadDomainEntity getEstadoActividadById(String estadoId) {
+            if (estadoId == null) {
                 throw new IllegalArgumentException("El ID del estado de actividad debe ser un número positivo");
             }
 
-            EstadoActividad estado = estadoActividadRepository.findById(estadoId);
+            EstadoActividadDomainEntity estado = estadoActividadRepository.findById(estadoId).orElse(null);
             if (estado == null) {
                 throw new IllegalArgumentException(
                     "No se encontró un estado de actividad con ID: " + estadoId
@@ -88,12 +88,12 @@ public class ActividadMappingConfig {
         /**
          * Obtiene un TipoActividad por su ID
          */
-        public TipoActividad getTipoActividadById(Long tipoActividadId) {
-            if (tipoActividadId == null || tipoActividadId <= 0) {
+        public TipoActividadDomainEntity getTipoActividadById(String tipoActividadId) {
+            if (tipoActividadId == null) {
                 throw new IllegalArgumentException("El ID del tipo de actividad debe ser un número positivo");
             }
 
-            TipoActividad tipoActividad = tipoActividadRepository.findById(tipoActividadId);
+            TipoActividadDomainEntity tipoActividad = tipoActividadRepository.findById(tipoActividadId).orElse(null);
             if (tipoActividad == null) {
                 throw new IllegalArgumentException(
                     "No se encontró un tipo de actividad con ID: " + tipoActividadId

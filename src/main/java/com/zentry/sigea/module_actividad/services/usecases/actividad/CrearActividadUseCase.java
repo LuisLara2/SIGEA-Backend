@@ -4,11 +4,11 @@ import java.time.LocalDate;
 
 import org.springframework.stereotype.Component;
 
-import com.zentry.sigea.module_actividad.core.entities.actividad.Actividad;
-import com.zentry.sigea.module_actividad.core.entities.actividad.EstadoActividad;
-import com.zentry.sigea.module_actividad.core.entities.actividad.TipoActividad;
+import com.zentry.sigea.module_actividad.core.entities.EstadoActividadDomainEntity;
+import com.zentry.sigea.module_actividad.core.entities.TipoActividadDomainEntity;
+import com.zentry.sigea.module_actividad.core.entities.actividad.ActividadDomainEntity;
 import com.zentry.sigea.module_actividad.core.repositories.ActividadRepository;
-import com.zentry.sigea.module_actividad.core.repositories.EstadoActividadRepository;
+import com.zentry.sigea.module_actividad.core.repositories.IEstadoActividadRepository;
 import com.zentry.sigea.module_actividad.core.repositories.TipoActividadRepository;
 import com.zentry.sigea.module_actividad.presentation.models.CrearActividadRequest;
 
@@ -19,11 +19,11 @@ import com.zentry.sigea.module_actividad.presentation.models.CrearActividadReque
 public class CrearActividadUseCase {
 
     private final ActividadRepository actividadRepository;
-    private final EstadoActividadRepository estadoActividadRepository;
+    private final IEstadoActividadRepository estadoActividadRepository;
     private final TipoActividadRepository tipoActividadRepository;
 
     public CrearActividadUseCase(ActividadRepository actividadRepository,
-                               EstadoActividadRepository estadoActividadRepository,
+                               IEstadoActividadRepository estadoActividadRepository,
                                TipoActividadRepository tipoActividadRepository) {
         this.actividadRepository = actividadRepository;
         this.estadoActividadRepository = estadoActividadRepository;
@@ -33,19 +33,19 @@ public class CrearActividadUseCase {
     /**
      * Ejecuta la creación de actividad recibiendo IDs y convirtiéndolos a objetos completos
      */
-    public Actividad execute(CrearActividadRequest request) {
+    public ActividadDomainEntity execute(CrearActividadRequest request) {
         // Validaciones básicas de entrada
         validateBasicFields(request);
         
         // Obtener objetos por ID y validar que existan
-        EstadoActividad estado = getEstadoActividadById(request.getEstadoId());
-        TipoActividad tipoActividad = getTipoActividadById(request.getTipoActividadId());
+        EstadoActividadDomainEntity estado = getEstadoActividadById(request.getEstadoId());
+        TipoActividadDomainEntity tipoActividad = getTipoActividadById(request.getTipoActividadId());
         
         // Validaciones de negocio específicas del caso de uso
         validateBusinessRules(request);
         
         // Crear la entidad usando el factory method del dominio
-        Actividad nuevaActividad = Actividad.create(
+        ActividadDomainEntity nuevaActividad = ActividadDomainEntity.create(
             request.getTitulo(),
             request.getDescripcion(),
             request.getFechaInicio(),
@@ -63,12 +63,12 @@ public class CrearActividadUseCase {
     /**
      * Obtiene un EstadoActividad por su ID
      */
-    private EstadoActividad getEstadoActividadById(Long estadoId) {
+    private EstadoActividadDomainEntity getEstadoActividadById(Long estadoId) {
         if (estadoId == null || estadoId <= 0) {
             throw new IllegalArgumentException("El ID del estado de actividad debe ser un número positivo");
         }
 
-        EstadoActividad estado = estadoActividadRepository.findById(estadoId);
+        EstadoActividadDomainEntity estado = estadoActividadRepository.findById(estadoId);
         if (estado == null) {
             throw new IllegalArgumentException(
                 "No se encontró un estado de actividad con ID: " + estadoId
@@ -81,12 +81,12 @@ public class CrearActividadUseCase {
     /**
      * Obtiene un TipoActividad por su ID
      */
-    private TipoActividad getTipoActividadById(Long tipoActividadId) {
+    private TipoActividadDomainEntity getTipoActividadById(Long tipoActividadId) {
         if (tipoActividadId == null || tipoActividadId <= 0) {
             throw new IllegalArgumentException("El ID del tipo de actividad debe ser un número positivo");
         }
 
-        TipoActividad tipoActividad = tipoActividadRepository.findById(tipoActividadId);
+        TipoActividadDomainEntity tipoActividad = tipoActividadRepository.findById(tipoActividadId);
         if (tipoActividad == null) {
             throw new IllegalArgumentException(
                 "No se encontró un tipo de actividad con ID: " + tipoActividadId

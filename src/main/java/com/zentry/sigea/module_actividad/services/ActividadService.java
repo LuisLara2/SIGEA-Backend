@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.zentry.sigea.module_actividad.core.entities.actividad.Actividad;
+import com.zentry.sigea.module_actividad.core.entities.actividad.ActividadDomainEntity;
 import com.zentry.sigea.module_actividad.infrastructure.repository.actividad_repository.ActividadRepositoryImpl;
 import com.zentry.sigea.module_actividad.presentation.models.ActividadRequest;
 import com.zentry.sigea.module_actividad.presentation.models.ActividadResponse;
@@ -34,7 +34,7 @@ public class ActividadService implements IActividad {
      * Crea una nueva actividad usando el request con IDs
      */
     @Override
-    public Actividad crearActividad(CrearActividadRequest request) {
+    public ActividadDomainEntity crearActividad(CrearActividadRequest request) {
         return crearActividadUseCase.execute(request);
     }
 
@@ -60,7 +60,7 @@ public class ActividadService implements IActividad {
 
     @Override
     public ActividadResponse obtenerActividadPorId(Long id) {
-        Optional<Actividad> actividad = actividadRepository.findById(id);
+        Optional<ActividadDomainEntity> actividad = actividadRepository.findById(id);
         if (actividad.isEmpty()) {
             throw new IllegalArgumentException("Actividad no encontrada con ID: " + id);
         }

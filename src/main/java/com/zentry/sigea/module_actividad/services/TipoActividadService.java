@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.zentry.sigea.module_actividad.core.entities.actividad.TipoActividad;
+import com.zentry.sigea.module_actividad.core.entities.TipoActividadDomainEntity;
 import com.zentry.sigea.module_actividad.infrastructure.repository.tipoactividad_repository.TipoActividadRepositoryImpl;
 import com.zentry.sigea.module_actividad.presentation.models.TipoActividadRequest;
 import com.zentry.sigea.module_actividad.services.interfaces.ITipoActividad;
@@ -22,12 +22,12 @@ public class TipoActividadService implements ITipoActividad {
     }
 
     @Override
-    public TipoActividad crearTipoActividad(TipoActividadRequest tipoActividad) {
+    public TipoActividadDomainEntity crearTipoActividad(TipoActividadRequest tipoActividad) {
         return crearTipoActividadUseCase.execute(tipoActividad);
     }
 
     @Override
-    public TipoActividad actualizarTipoActividad(TipoActividadRequest tipoActividad) {
+    public TipoActividadDomainEntity actualizarTipoActividad(TipoActividadRequest tipoActividad) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'actualizarTipoActividad'");
     }
@@ -38,13 +38,13 @@ public class TipoActividadService implements ITipoActividad {
     }
 
     @Override
-    public TipoActividad obtenerTipoActividadPorId(Long id) {
+    public TipoActividadDomainEntity obtenerTipoActividadPorId(Long id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'obtenerTipoActividadPorId'");
     }
 
     @Override
-    public List<TipoActividad> listarTiposActividad() {
+    public List<TipoActividadDomainEntity> listarTiposActividad() {
         return tipoactividadRepository.findAll();
     }
 }

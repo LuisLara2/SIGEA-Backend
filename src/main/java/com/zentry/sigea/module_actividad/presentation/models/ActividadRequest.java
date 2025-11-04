@@ -2,8 +2,8 @@ package com.zentry.sigea.module_actividad.presentation.models;
 
 import java.time.LocalDate;
 
-import com.zentry.sigea.module_actividad.core.entities.actividad.EstadoActividad;
-import com.zentry.sigea.module_actividad.core.entities.actividad.TipoActividad;
+import com.zentry.sigea.module_actividad.core.entities.EstadoActividadDomainEntity;
+import com.zentry.sigea.module_actividad.core.entities.TipoActividadDomainEntity;
 
 /**
  * DTO para recibir datos de creación de actividad desde el frontend
@@ -13,17 +13,17 @@ public class ActividadRequest {
     private String descripcion;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
-    private EstadoActividad estado;
+    private EstadoActividadDomainEntity estado;
     private Long organizadorId;
-    private TipoActividad tipoActividad;
+    private TipoActividadDomainEntity tipoActividad;
     private String ubicacion;
 
     // Constructor vacío para Jackson
     public ActividadRequest() {}
 
     public ActividadRequest(String titulo, String descripcion, LocalDate fechaInicio, 
-                          LocalDate fechaFin, EstadoActividad estado, Long organizadorId, 
-                          TipoActividad tipoActividad, String ubicacion) {
+                          LocalDate fechaFin, EstadoActividadDomainEntity estado, Long organizadorId, 
+                          TipoActividadDomainEntity tipoActividad, String ubicacion) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.fechaInicio = fechaInicio;
@@ -67,11 +67,11 @@ public class ActividadRequest {
         this.fechaFin = fechaFin;
     }
 
-    public EstadoActividad getEstado() {
+    public EstadoActividadDomainEntity getEstado() {
         return estado;
     }
 
-    public void setEstado(EstadoActividad estado) {
+    public void setEstado(EstadoActividadDomainEntity estado) {
         this.estado = estado;
     }
 
@@ -83,11 +83,11 @@ public class ActividadRequest {
         this.organizadorId = organizadorId;
     }
 
-    public TipoActividad getTipoActividad() {
+    public TipoActividadDomainEntity getTipoActividad() {
         return tipoActividad;
     }
 
-    public void setTipoActividad(TipoActividad tipoActividad) {
+    public void setTipoActividad(TipoActividadDomainEntity tipoActividad) {
         this.tipoActividad = tipoActividad;
     }
 

@@ -3,9 +3,9 @@ package com.zentry.sigea.module_actividad.presentation.models;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import com.zentry.sigea.module_actividad.core.entities.actividad.Actividad;
-import com.zentry.sigea.module_actividad.core.entities.actividad.EstadoActividad;
-import com.zentry.sigea.module_actividad.core.entities.actividad.TipoActividad;
+import com.zentry.sigea.module_actividad.core.entities.EstadoActividadDomainEntity;
+import com.zentry.sigea.module_actividad.core.entities.TipoActividadDomainEntity;
+import com.zentry.sigea.module_actividad.core.entities.actividad.ActividadDomainEntity;
 
 /**
  * DTO para enviar datos de actividad al frontend
@@ -16,9 +16,9 @@ public class ActividadResponse {
     private String descripcion;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
-    private EstadoActividad estado;
+    private EstadoActividadDomainEntity estado;
     private Long organizadorId;
-    private TipoActividad tipoActividad;
+    private TipoActividadDomainEntity tipoActividad;
     private String ubicacion;
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaActualizacion;
@@ -33,8 +33,8 @@ public class ActividadResponse {
     public ActividadResponse() {}
 
     public ActividadResponse(Long id, String titulo, String descripcion, LocalDate fechaInicio, 
-                           LocalDate fechaFin, EstadoActividad estado, Long organizadorId, 
-                           TipoActividad tipoActividad, String ubicacion, LocalDateTime fechaCreacion, 
+                           LocalDate fechaFin, EstadoActividadDomainEntity estado, Long organizadorId, 
+                           TipoActividadDomainEntity tipoActividad, String ubicacion, LocalDateTime fechaCreacion, 
                            LocalDateTime fechaActualizacion, boolean activa, boolean finalizada, 
                            boolean pendiente, long duracionEnDias) {
         this.id = id;
@@ -57,7 +57,7 @@ public class ActividadResponse {
     /**
      * Factory method para crear un ActividadResponse desde una entidad Actividad
      */
-    public static ActividadResponse fromEntity(Actividad actividad) {
+    public static ActividadResponse fromEntity(ActividadDomainEntity actividad) {
         return new ActividadResponse(
             actividad.getId(),
             actividad.getTitle(),
@@ -118,11 +118,11 @@ public class ActividadResponse {
         this.fechaFin = fechaFin;
     }
 
-    public EstadoActividad getEstado() {
+    public EstadoActividadDomainEntity getEstado() {
         return estado;
     }
 
-    public void setEstado(EstadoActividad estado) {
+    public void setEstado(EstadoActividadDomainEntity estado) {
         this.estado = estado;
     }
 
@@ -134,11 +134,11 @@ public class ActividadResponse {
         this.organizadorId = organizadorId;
     }
 
-    public TipoActividad getTipoActividad() {
+    public TipoActividadDomainEntity getTipoActividad() {
         return tipoActividad;
     }
 
-    public void setTipoActividad(TipoActividad tipoActividad) {
+    public void setTipoActividad(TipoActividadDomainEntity tipoActividad) {
         this.tipoActividad = tipoActividad;
     }
 

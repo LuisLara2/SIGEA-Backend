@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.zentry.sigea.module_actividad.core.entities.actividad.EstadoActividad;
+import com.zentry.sigea.module_actividad.core.entities.EstadoActividadDomainEntity;
 import com.zentry.sigea.module_actividad.infrastructure.repository.estadoactividad_repository.EstadoActividadImpl;
 import com.zentry.sigea.module_actividad.presentation.models.EstadoActividadRequest;
 import com.zentry.sigea.module_actividad.services.interfaces.IEstadoActividad;
@@ -22,13 +22,13 @@ public class EstadoActividadService implements IEstadoActividad {
         this.crearEstadoActividadUseCase = crearEstadoActividadUseCase;
     }
     @Override
-    public EstadoActividad crearEstadoActividad(EstadoActividadRequest estadoActividad) {
+    public EstadoActividadDomainEntity crearEstadoActividad(EstadoActividadRequest estadoActividad) {
         // Lógica para crear un nuevo estado de actividad
         return crearEstadoActividadUseCase.execute(estadoActividad);
     }
 
     @Override
-    public EstadoActividad actualizarEstadoActividad(EstadoActividadRequest estadoActividad) {
+    public EstadoActividadDomainEntity actualizarEstadoActividad(EstadoActividadRequest estadoActividad) {
         // Lógica para actualizar un estado de actividad existente
 
         return null;
@@ -41,18 +41,18 @@ public class EstadoActividadService implements IEstadoActividad {
     }
 
     @Override
-    public EstadoActividad obtenerEstadoActividadPorId(Long id) {
+    public EstadoActividadDomainEntity obtenerEstadoActividadPorId(Long id) {
         // Lógica para obtener un estado de actividad por su ID
         return estadoActividadRepository.findById(id);
     }
 
     @Override
-    public List<EstadoActividad> obtenerTodosLosEstadosActividad() {
+    public List<EstadoActividadDomainEntity> obtenerTodosLosEstadosActividad() {
         // Lógica para obtener todos los estados de actividad
         return estadoActividadRepository.findAll();
     }
     @Override
-    public List<EstadoActividad> listarEstadosActividad() {
+    public List<EstadoActividadDomainEntity> listarEstadosActividad() {
         return estadoActividadRepository.findAll();
     }
 }

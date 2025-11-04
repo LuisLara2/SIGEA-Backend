@@ -1,6 +1,6 @@
 package com.zentry.sigea.module_actividad.infrastructure.database.mappers;
 
-import com.zentry.sigea.module_actividad.core.entities.actividad.EstadoActividad;
+import com.zentry.sigea.module_actividad.core.entities.EstadoActividadDomainEntity;
 import com.zentry.sigea.module_actividad.infrastructure.database.entities.EstadoActividadEntity;
 
 /**
@@ -9,32 +9,34 @@ import com.zentry.sigea.module_actividad.infrastructure.database.entities.Estado
 public class EstadoActividadMapper {
     
     /**
-     * Convierte de entidad JPA a entidad de dominio
-     */
-    public static EstadoActividad toDomain(EstadoActividadEntity entity) {
-        if (entity == null) {
-            return null;
-        }
-        
-        return new EstadoActividad(
-            entity.getId(),
-            entity.getCodigo(),
-            entity.getEtiqueta()
-        );
-    }
-    
-    /**
      * Convierte de entidad de dominio a entidad JPA
      */
-    public static EstadoActividadEntity toEntity(EstadoActividad domain) {
-        if (domain == null) {
+    public static EstadoActividadEntity toEntity(EstadoActividadDomainEntity estadoActividadDomainEntity) {
+        if (estadoActividadDomainEntity == null) {
             return null;
         }
         
-        EstadoActividadEntity entity = new EstadoActividadEntity();
-        entity.setId(domain.getId());
-        entity.setCodigo(domain.getCodigo());
-        entity.setEtiqueta(domain.getEtiqueta());
-        return entity;
+        EstadoActividadEntity estadoActividadEntity = new EstadoActividadEntity();
+
+        estadoActividadEntity.setCodigo(estadoActividadDomainEntity.getCodigo());
+        estadoActividadEntity.setEtiqueta(estadoActividadDomainEntity.getEtiqueta());
+        
+        return estadoActividadEntity;
+    }
+
+    /**
+     * Convierte de entidad JPA a entidad de dominio
+     */
+    public static EstadoActividadDomainEntity toDomain(EstadoActividadEntity estadoActividadEntity) {
+        if (estadoActividadEntity == null) {
+            return null;
+        }
+
+        EstadoActividadDomainEntity estadoActividadDomainEntity = new EstadoActividadDomainEntity();
+
+        estadoActividadDomainEntity.setCodigo(estadoActividadEntity.getCodigo());
+        estadoActividadDomainEntity.setEtiqueta(estadoActividadEntity.getCodigo());
+        
+        return estadoActividadDomainEntity;
     }
 }

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.zentry.sigea.module_actividad.core.entities.actividad.TipoActividad;
+import com.zentry.sigea.module_actividad.core.entities.TipoActividadDomainEntity;
 import com.zentry.sigea.module_actividad.presentation.models.TipoActividadRequest;
 import com.zentry.sigea.module_actividad.presentation.models.TipoActividadResponse;
 import com.zentry.sigea.module_actividad.services.TipoActividadService;
@@ -41,7 +41,7 @@ public class TipoActividadController {
 
         try {
 
-            TipoActividad tipoActividadCreada = tipoActividadService.crearTipoActividad(request);
+            TipoActividadDomainEntity tipoActividadCreada = tipoActividadService.crearTipoActividad(request);
             TipoActividadResponse response = TipoActividadResponse.fromEntity(tipoActividadCreada);
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
@@ -55,7 +55,7 @@ public class TipoActividadController {
     */
     @GetMapping
     public ResponseEntity<List<TipoActividadResponse>> listarTiposActividad() {
-        List<TipoActividad> tiposActividad = tipoActividadService.listarTiposActividad();
+        List<TipoActividadDomainEntity> tiposActividad = tipoActividadService.listarTiposActividad();
         List<TipoActividadResponse> response = tiposActividad.stream()
             .map(TipoActividadResponse::fromEntity)
             .toList();

@@ -2,7 +2,7 @@ package com.zentry.sigea.module_actividad.services.usecases.tipo_actividad;
 
 import org.springframework.stereotype.Component;
 
-import com.zentry.sigea.module_actividad.core.entities.actividad.TipoActividad;
+import com.zentry.sigea.module_actividad.core.entities.TipoActividadDomainEntity;
 import com.zentry.sigea.module_actividad.core.repositories.TipoActividadRepository;
 import com.zentry.sigea.module_actividad.presentation.models.TipoActividadRequest;
 
@@ -18,12 +18,12 @@ public class CrearTipoActividadUseCase {
         this.tipoActividadRepository = tipoActividadRepository;
     }
 
-    public TipoActividad execute(TipoActividadRequest request) {
+    public TipoActividadDomainEntity execute(TipoActividadRequest request) {
         // Validaciones de negocio específicas del caso de uso
         validateBusinessRules(request);
         
         // Crear la entidad usando el factory method del dominio
-        TipoActividad nuevoTipoActividad = TipoActividad.create(
+        TipoActividadDomainEntity nuevoTipoActividad = TipoActividadDomainEntity.create(
             request.getNombreActividad(),
             request.getDescripcion()
         );

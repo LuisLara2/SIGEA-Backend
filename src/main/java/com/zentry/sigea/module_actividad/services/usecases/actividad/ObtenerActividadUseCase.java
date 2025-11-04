@@ -2,7 +2,7 @@ package com.zentry.sigea.module_actividad.services.usecases.actividad;
 
 import java.util.Optional;
 
-import com.zentry.sigea.module_actividad.core.entities.actividad.Actividad;
+import com.zentry.sigea.module_actividad.core.entities.actividad.ActividadDomainEntity;
 import com.zentry.sigea.module_actividad.core.repositories.ActividadRepository;
 
 /**
@@ -17,7 +17,7 @@ public class ObtenerActividadUseCase {
         this.actividadRepository = actividadRepository;
     }
 
-    public Optional<Actividad> execute(Long actividadId) {
+    public Optional<ActividadDomainEntity> execute(Long actividadId) {
         if (actividadId == null) {
             throw new IllegalArgumentException("El ID de la actividad no puede ser nulo");
         }

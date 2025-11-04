@@ -1,6 +1,6 @@
 package com.zentry.sigea.module_actividad.infrastructure.database.mappers;
 
-import com.zentry.sigea.module_actividad.core.entities.actividad.TipoActividad;
+import com.zentry.sigea.module_actividad.core.entities.TipoActividadDomainEntity;
 import com.zentry.sigea.module_actividad.infrastructure.database.entities.TipoActividadEntity;
 
 /**
@@ -12,34 +12,36 @@ public class TipoActividadMapper {
     /**
      * Convierte de entidad JPA a entidad de dominio
      */
-    public static TipoActividad toDomain(TipoActividadEntity entity) {
-        if (entity == null) {
+    public static TipoActividadDomainEntity toDomain(TipoActividadEntity tipoActividadEntity) {
+        if (tipoActividadEntity == null) {
             return null;
         }
         
-        return new TipoActividad(
-            entity.getId(),
-            entity.getNombreActividad(),
-            entity.getDescripcion(),
-            entity.getCreatedAt(),
-            entity.getUpdatedAt()
-        );
+        TipoActividadDomainEntity tipoActividadDomainEntity = new TipoActividadDomainEntity();
+
+        tipoActividadDomainEntity.setNombreActividad(tipoActividadEntity.getNombreActividad());
+        tipoActividadDomainEntity.setDescripcion(tipoActividadEntity.getDescripcion());
+        tipoActividadDomainEntity.setCreatedAt(tipoActividadDomainEntity.getCreatedAt());
+        tipoActividadDomainEntity.setUpdatedAt(tipoActividadEntity.getUpdatedAt());
+
+        return tipoActividadDomainEntity;
     }
     
     /**
      * Convierte de entidad de dominio a entidad JPA
      */
-    public static TipoActividadEntity toEntity(TipoActividad domain) {
-        if (domain == null) {
+    public static TipoActividadEntity toEntity(TipoActividadDomainEntity tipoActividadDomainEntity) {
+        if (tipoActividadDomainEntity == null) {
             return null;
         }
         
-        TipoActividadEntity entity = new TipoActividadEntity();
-        entity.setId(domain.getId());
-        entity.setNombreActividad(domain.getNombreActividad());
-        entity.setDescripcion(domain.getDescripcion());
-        entity.setCreatedAt(domain.getCreatedAt());
-        entity.setUpdatedAt(domain.getUpdatedAt());
-        return entity;
+        TipoActividadEntity tipoActividadEntity = new TipoActividadEntity();
+        
+        tipoActividadEntity.setNombreActividad(tipoActividadDomainEntity.getNombreActividad());
+        tipoActividadEntity.setDescripcion(tipoActividadDomainEntity.getDescripcion());
+        tipoActividadEntity.setCreatedAt(tipoActividadDomainEntity.getCreatedAt());
+        tipoActividadEntity.setUpdatedAt(tipoActividadDomainEntity.getUpdatedAt());
+        
+        return tipoActividadEntity;
     }
 }

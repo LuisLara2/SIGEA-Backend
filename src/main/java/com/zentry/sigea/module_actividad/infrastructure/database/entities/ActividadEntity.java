@@ -4,8 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import com.zentry.sigea.infrastructure.database.entities.UsuarioEntity;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,6 +15,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+
+import com.zentry.sigea.module_usuarios.infrastructure.database.entities.UsuarioEntity;
+
 @Entity
 @Table(
     name = "actividad"
@@ -66,6 +67,4 @@ public class ActividadEntity {
     
     @Column(name = "updated_at" , nullable = true , columnDefinition = "TIMESTAMP")
     private LocalDateTime updatedAt = LocalDateTime.now();
-
-    // Constructor vacío requerido por JPA
 }

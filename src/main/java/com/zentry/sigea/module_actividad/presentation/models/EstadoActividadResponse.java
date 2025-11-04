@@ -1,6 +1,6 @@
 package com.zentry.sigea.module_actividad.presentation.models;
 
-import com.zentry.sigea.module_actividad.core.entities.actividad.EstadoActividad;
+import com.zentry.sigea.module_actividad.core.entities.EstadoActividadDomainEntity;
 
 public class EstadoActividadResponse {
     private Long id;
@@ -21,7 +21,7 @@ public class EstadoActividadResponse {
     }
 
 
-    public static EstadoActividadResponse fromEntity(EstadoActividad estadoActividad) {
+    public static EstadoActividadResponse fromEntity(EstadoActividadDomainEntity estadoActividad) {
         return new EstadoActividadResponse(
             estadoActividad.getId(),
             estadoActividad.getCodigo(),
