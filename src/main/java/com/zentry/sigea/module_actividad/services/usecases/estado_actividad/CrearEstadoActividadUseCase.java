@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 import com.zentry.sigea.module_actividad.core.entities.EstadoActividadDomainEntity;
 import com.zentry.sigea.module_actividad.core.repositories.IEstadoActividadRepository;
-import com.zentry.sigea.module_actividad.presentation.models.EstadoActividadRequest;
+import com.zentry.sigea.module_actividad.presentation.models.requestDTO.EstadoActividadRequest;
 
 
 /**
@@ -20,12 +20,12 @@ public class CrearEstadoActividadUseCase {
         this.estadoActividadRepository = estadoActividadRepository;
     }
 
-    public EstadoActividadDomainEntity execute(EstadoActividadRequest estadoActividadRequest) {
+    public String execute(EstadoActividadRequest estadoActividadRequest) {
         EstadoActividadDomainEntity nuevaEstadoActividad = EstadoActividadDomainEntity.create(
 
             estadoActividadRequest.getCodigo(),
             estadoActividadRequest.getEtiqueta()
         );
-        return estadoActividadRepository.save(nuevaEstadoActividad);
+        return estadoActividadRepository.save(nuevaEstadoActividad) ? String.format("El estado de actividad %s se registro correctamente", estadoActividadRequest.getEtiqueta()) : "Ocurrio un problema al registrar el estado de actividad";
     }
 }

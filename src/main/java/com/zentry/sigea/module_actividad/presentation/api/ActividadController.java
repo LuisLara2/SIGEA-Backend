@@ -12,9 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.zentry.sigea.module_actividad.core.entities.actividad.ActividadDomainEntity;
-import com.zentry.sigea.module_actividad.presentation.models.ActividadResponse;
-import com.zentry.sigea.module_actividad.presentation.models.CrearActividadRequest;
+import com.zentry.sigea.module_actividad.presentation.models.requestDTO.CrearActividadRequest;
+import com.zentry.sigea.module_actividad.presentation.models.responseDTO.ActividadResponse;
 import com.zentry.sigea.module_actividad.services.ActividadService;
 
 /**
@@ -35,15 +34,12 @@ public class ActividadController {
      * Crear una nueva actividad
      */
     @PostMapping("/create")
-    public ResponseEntity<ActividadResponse> crearActividad(@RequestBody CrearActividadRequest request) {
+    public ResponseEntity<String> crearActividad(@RequestBody CrearActividadRequest request) {
         try {
             // Ejecutar el caso de uso a través del servicio pasando el request con IDs
-            ActividadDomainEntity actividadCreada = actividadService.crearActividad(request);
+            String responseMessage = actividadService.crearActividad(request);
 
-            // Convertir entidad a response
-            ActividadResponse response = ActividadResponse.fromEntity(actividadCreada);
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
 
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
@@ -56,11 +52,10 @@ public class ActividadController {
      * Obtener una actividad por ID
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ActividadResponse> obtenerActividad(@PathVariable Long id) {
-        return actividadService.obtenerActividadPorId(id)
-                .getId() != null ?
-                ResponseEntity.ok(actividadService.obtenerActividadPorId(id)) :
-                ResponseEntity.notFound().build();
+    public ResponseEntity<ActividadResponse> obtenerActividad(@PathVariable String id) {
+        return actividadService.obtenerActividadPorId(id) != null ? 
+                    ResponseEntity.ok(actividadService.obtenerActividadPorId(id)) : 
+                    ResponseEntity.notFound().build();
     }
 
     /**
@@ -85,7 +80,7 @@ public class ActividadController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarActividad(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminarActividad(@PathVariable String id) {
         try {
             actividadService.eliminarActividad(id);
             return ResponseEntity.noContent().build();

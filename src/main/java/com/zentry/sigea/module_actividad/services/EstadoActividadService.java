@@ -5,24 +5,28 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.zentry.sigea.module_actividad.core.entities.EstadoActividadDomainEntity;
-import com.zentry.sigea.module_actividad.infrastructure.repository.estadoactividad_repository.EstadoActividadImpl;
-import com.zentry.sigea.module_actividad.presentation.models.EstadoActividadRequest;
+import com.zentry.sigea.module_actividad.core.repositories.IEstadoActividadRepository;
+import com.zentry.sigea.module_actividad.presentation.models.requestDTO.EstadoActividadRequest;
 import com.zentry.sigea.module_actividad.services.interfaces.IEstadoActividad;
 import com.zentry.sigea.module_actividad.services.usecases.estado_actividad.CrearEstadoActividadUseCase;
 
 @Service
 public class EstadoActividadService implements IEstadoActividad {
 
-    private final EstadoActividadImpl estadoActividadRepository;
+    private final IEstadoActividadRepository estadoActividadRepository;
     private final CrearEstadoActividadUseCase crearEstadoActividadUseCase;
     
     // Constructor para inyección de dependencias
-    public EstadoActividadService(EstadoActividadImpl estadoActividadRepository, CrearEstadoActividadUseCase crearEstadoActividadUseCase) {
+    public EstadoActividadService(
+        IEstadoActividadRepository estadoActividadRepository, 
+        CrearEstadoActividadUseCase crearEstadoActividadUseCase
+    ) {
         this.estadoActividadRepository = estadoActividadRepository;
         this.crearEstadoActividadUseCase = crearEstadoActividadUseCase;
     }
+
     @Override
-    public EstadoActividadDomainEntity crearEstadoActividad(EstadoActividadRequest estadoActividad) {
+    public String crearEstadoActividad(EstadoActividadRequest estadoActividad) {
         // Lógica para crear un nuevo estado de actividad
         return crearEstadoActividadUseCase.execute(estadoActividad);
     }
@@ -35,15 +39,15 @@ public class EstadoActividadService implements IEstadoActividad {
     }
 
     @Override
-    public void eliminarEstadoActividad(Long id) {
+    public void eliminarEstadoActividad(String id) {
         // Lógica para eliminar un estado de actividad por su ID
         estadoActividadRepository.deleteById(id);
     }
 
     @Override
-    public EstadoActividadDomainEntity obtenerEstadoActividadPorId(Long id) {
+    public EstadoActividadDomainEntity obtenerEstadoActividadPorId(String id) {
         // Lógica para obtener un estado de actividad por su ID
-        return estadoActividadRepository.findById(id);
+        return estadoActividadRepository.findById(id).orElse(null);
     }
 
     @Override

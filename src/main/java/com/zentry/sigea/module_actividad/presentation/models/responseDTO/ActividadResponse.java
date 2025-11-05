@@ -1,23 +1,22 @@
-package com.zentry.sigea.module_actividad.presentation.models;
+package com.zentry.sigea.module_actividad.presentation.models.responseDTO;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.zentry.sigea.module_actividad.core.entities.ActividadDomainEntity;
 import com.zentry.sigea.module_actividad.core.entities.EstadoActividadDomainEntity;
 import com.zentry.sigea.module_actividad.core.entities.TipoActividadDomainEntity;
-import com.zentry.sigea.module_actividad.core.entities.actividad.ActividadDomainEntity;
 
 /**
  * DTO para enviar datos de actividad al frontend
  */
 public class ActividadResponse {
-    private Long id;
     private String titulo;
     private String descripcion;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
     private EstadoActividadDomainEntity estado;
-    private Long organizadorId;
+    private String organizadorId;
     private TipoActividadDomainEntity tipoActividad;
     private String ubicacion;
     private LocalDateTime fechaCreacion;
@@ -27,17 +26,27 @@ public class ActividadResponse {
     private boolean activa;
     private boolean finalizada;
     private boolean pendiente;
-    private long duracionEnDias;
+    private Long duracionEnDias;
 
     // Constructor vacío para Jackson
     public ActividadResponse() {}
 
-    public ActividadResponse(Long id, String titulo, String descripcion, LocalDate fechaInicio, 
-                           LocalDate fechaFin, EstadoActividadDomainEntity estado, Long organizadorId, 
-                           TipoActividadDomainEntity tipoActividad, String ubicacion, LocalDateTime fechaCreacion, 
-                           LocalDateTime fechaActualizacion, boolean activa, boolean finalizada, 
-                           boolean pendiente, long duracionEnDias) {
-        this.id = id;
+    public ActividadResponse(
+        String titulo, 
+        String descripcion, 
+        LocalDate fechaInicio, 
+        LocalDate fechaFin, 
+        EstadoActividadDomainEntity estado, 
+        String organizadorId, 
+        TipoActividadDomainEntity tipoActividad, 
+        String ubicacion, 
+        LocalDateTime fechaCreacion, 
+        LocalDateTime fechaActualizacion, 
+        boolean activa, 
+        boolean finalizada, 
+        boolean pendiente, 
+        Long duracionEnDias
+    ) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.fechaInicio = fechaInicio;
@@ -57,33 +66,23 @@ public class ActividadResponse {
     /**
      * Factory method para crear un ActividadResponse desde una entidad Actividad
      */
-    public static ActividadResponse fromEntity(ActividadDomainEntity actividad) {
+    public static ActividadResponse fromEntity(ActividadDomainEntity actividadDomainEntity) {
         return new ActividadResponse(
-            actividad.getId(),
-            actividad.getTitle(),
-            actividad.getDescription(),
-            actividad.getStartDate(),
-            actividad.getEndDate(),
-            actividad.getStatusId(),
-            actividad.getOrganizerId(),
-            actividad.getTypeId(),
-            actividad.getLocation(),
-            actividad.getCreatedAt(),
-            actividad.getUpdatedAt(),
-            actividad.isActive(),
-            actividad.isFinished(),
-            actividad.isPending(),
-            actividad.getDurationInDays()
+            actividadDomainEntity.getTitulo(),
+            actividadDomainEntity.getDescripcion(),
+            actividadDomainEntity.getFechaInicio(),
+            actividadDomainEntity.getFechaFin(),
+            actividadDomainEntity.getEstadoActividadDomainEntity(),
+            actividadDomainEntity.getOrganizadorId(),
+            actividadDomainEntity.getTipoActividadDomainEntity(),
+            actividadDomainEntity.getLugar(),
+            actividadDomainEntity.getCreatedAt(),
+            actividadDomainEntity.getUpdatedAt(),
+            actividadDomainEntity.isActive(),
+            actividadDomainEntity.isFinished(),
+            actividadDomainEntity.isPending(),
+            actividadDomainEntity.getDurationInDays()
         );
-    }
-
-    // Getters y Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getTitulo() {
@@ -126,11 +125,10 @@ public class ActividadResponse {
         this.estado = estado;
     }
 
-    public Long getOrganizadorId() {
+    public String getOrganizadorId() {
         return organizadorId;
     }
-
-    public void setOrganizadorId(Long organizadorId) {
+    public void setOrganizadorId(String organizadorId) {
         this.organizadorId = organizadorId;
     }
 

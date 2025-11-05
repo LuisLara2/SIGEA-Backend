@@ -1,4 +1,4 @@
-package com.zentry.sigea.module_actividad.presentation.models;
+package com.zentry.sigea.module_actividad.presentation.models.requestDTO;
 
 public class TipoActividadRequest {
 

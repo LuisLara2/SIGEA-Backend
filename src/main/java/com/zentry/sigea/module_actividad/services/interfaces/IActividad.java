@@ -2,17 +2,15 @@ package com.zentry.sigea.module_actividad.services.interfaces;
 
 import java.util.List;
 
-import com.zentry.sigea.module_actividad.core.entities.actividad.ActividadDomainEntity;
-import com.zentry.sigea.module_actividad.presentation.models.ActividadRequest;
-import com.zentry.sigea.module_actividad.presentation.models.ActividadResponse;
-import com.zentry.sigea.module_actividad.presentation.models.CrearActividadRequest;
+import com.zentry.sigea.module_actividad.presentation.models.requestDTO.ActividadRequest;
+import com.zentry.sigea.module_actividad.presentation.models.requestDTO.CrearActividadRequest;
+import com.zentry.sigea.module_actividad.presentation.models.responseDTO.ActividadResponse;
 
 public interface IActividad {
-    ActividadDomainEntity crearActividad(CrearActividadRequest request);
-    ActividadResponse actualizarActividad(Long id, ActividadRequest request);
-    void eliminarActividad(Long id);
-    ActividadResponse obtenerActividadPorId(Long id);
-    List<ActividadResponse> obtenerActividadesPorTipo(Long tipoActividadId);
-    List<ActividadResponse> listarActividades();
-
+    public String crearActividad(CrearActividadRequest request);
+    public ActividadResponse actualizarActividad(String id, ActividadRequest request);
+    public void eliminarActividad(String id);
+    public ActividadResponse obtenerActividadPorId(String id);
+    public List<ActividadResponse> obtenerActividadesPorTipo(String tipoActividadId);
+    public List<ActividadResponse> listarActividades();
 }

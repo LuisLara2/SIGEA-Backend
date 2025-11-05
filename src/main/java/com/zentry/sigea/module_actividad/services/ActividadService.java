@@ -6,11 +6,11 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.zentry.sigea.module_actividad.core.entities.actividad.ActividadDomainEntity;
-import com.zentry.sigea.module_actividad.infrastructure.repository.actividad_repository.ActividadRepositoryImpl;
-import com.zentry.sigea.module_actividad.presentation.models.ActividadRequest;
-import com.zentry.sigea.module_actividad.presentation.models.ActividadResponse;
-import com.zentry.sigea.module_actividad.presentation.models.CrearActividadRequest;
+import com.zentry.sigea.module_actividad.core.entities.ActividadDomainEntity;
+import com.zentry.sigea.module_actividad.core.repositories.IActividadRespository;
+import com.zentry.sigea.module_actividad.presentation.models.requestDTO.ActividadRequest;
+import com.zentry.sigea.module_actividad.presentation.models.requestDTO.CrearActividadRequest;
+import com.zentry.sigea.module_actividad.presentation.models.responseDTO.ActividadResponse;
 import com.zentry.sigea.module_actividad.services.interfaces.IActividad;
 import com.zentry.sigea.module_actividad.services.usecases.actividad.CrearActividadUseCase;
 
@@ -21,12 +21,14 @@ import com.zentry.sigea.module_actividad.services.usecases.actividad.CrearActivi
 @Service
 public class ActividadService implements IActividad {
 
-    private final ActividadRepositoryImpl actividadRepository;
+    private final IActividadRespository actividadRespository;
     private final CrearActividadUseCase crearActividadUseCase;
 
-    public ActividadService(ActividadRepositoryImpl actividadRepository, 
-                           CrearActividadUseCase crearActividadUseCase) {
-        this.actividadRepository = actividadRepository;
+    public ActividadService(
+        IActividadRespository actividadRepository, 
+        CrearActividadUseCase crearActividadUseCase
+    ) {
+        this.actividadRespository = actividadRepository;
         this.crearActividadUseCase = crearActividadUseCase;
     }
 
@@ -34,7 +36,7 @@ public class ActividadService implements IActividad {
      * Crea una nueva actividad usando el request con IDs
      */
     @Override
-    public ActividadDomainEntity crearActividad(CrearActividadRequest request) {
+    public String crearActividad(CrearActividadRequest request) {
         return crearActividadUseCase.execute(request);
     }
 
@@ -46,21 +48,21 @@ public class ActividadService implements IActividad {
     @Transactional(readOnly = true)  // ← AGREGAR ESTO
     public List<ActividadResponse> listarActividades() {
         // Por ahora devolvemos todas, luego implementaremos filtros
-        return actividadRepository.findAll().stream()
+        return actividadRespository.findAll().stream()
                 .map(ActividadResponse::fromEntity)
                 .toList();
     }
 
 
     @Override
-    public ActividadResponse actualizarActividad(Long id, ActividadRequest request) {
+    public ActividadResponse actualizarActividad(String id, ActividadRequest request) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'actualizarActividad'");
     }
 
     @Override
-    public ActividadResponse obtenerActividadPorId(Long id) {
-        Optional<ActividadDomainEntity> actividad = actividadRepository.findById(id);
+    public ActividadResponse obtenerActividadPorId(String id) {
+        Optional<ActividadDomainEntity> actividad = actividadRespository.findById(id);
         if (actividad.isEmpty()) {
             throw new IllegalArgumentException("Actividad no encontrada con ID: " + id);
         }
@@ -71,13 +73,13 @@ public class ActividadService implements IActividad {
 
 
     @Override
-    public List<ActividadResponse> obtenerActividadesPorTipo(Long tipoActividadId) {
+    public List<ActividadResponse> obtenerActividadesPorTipo(String tipoActividadId) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'obtenerActividadesPorTipo'");
     }
 
     @Override
-    public void eliminarActividad(Long id) {
+    public void eliminarActividad(String id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'eliminarActividad'");
     }

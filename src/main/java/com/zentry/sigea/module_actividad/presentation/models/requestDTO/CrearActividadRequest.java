@@ -1,36 +1,41 @@
-package com.zentry.sigea.module_actividad.presentation.models;
+package com.zentry.sigea.module_actividad.presentation.models.requestDTO;
 
 import java.time.LocalDate;
 
-import com.zentry.sigea.module_actividad.core.entities.EstadoActividadDomainEntity;
-import com.zentry.sigea.module_actividad.core.entities.TipoActividadDomainEntity;
-
 /**
  * DTO para recibir datos de creación de actividad desde el frontend
+ * Recibe solo los IDs de estado y tipo de actividad
  */
-public class ActividadRequest {
+public class CrearActividadRequest {
     private String titulo;
     private String descripcion;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
-    private EstadoActividadDomainEntity estado;
-    private Long organizadorId;
-    private TipoActividadDomainEntity tipoActividad;
+    private String estadoId;
+    private String organizadorId;
+    private String tipoActividadId;
     private String ubicacion;
 
     // Constructor vacío para Jackson
-    public ActividadRequest() {}
+    public CrearActividadRequest() {}
 
-    public ActividadRequest(String titulo, String descripcion, LocalDate fechaInicio, 
-                          LocalDate fechaFin, EstadoActividadDomainEntity estado, Long organizadorId, 
-                          TipoActividadDomainEntity tipoActividad, String ubicacion) {
+    public CrearActividadRequest(
+        String titulo, 
+        String descripcion, 
+        LocalDate fechaInicio, 
+        LocalDate fechaFin, 
+        String estadoId, 
+        String organizadorId, 
+        String tipoActividadId, 
+        String ubicacion
+    ) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
-        this.estado = estado;
+        this.estadoId = estadoId;
         this.organizadorId = organizadorId;
-        this.tipoActividad = tipoActividad;
+        this.tipoActividadId = tipoActividadId;
         this.ubicacion = ubicacion;
     }
 
@@ -67,28 +72,25 @@ public class ActividadRequest {
         this.fechaFin = fechaFin;
     }
 
-    public EstadoActividadDomainEntity getEstado() {
-        return estado;
+    public String getEstadoId() {
+        return estadoId;
+    }
+    public void setEstadoId(String estadoId) {
+        this.estadoId = estadoId;
     }
 
-    public void setEstado(EstadoActividadDomainEntity estado) {
-        this.estado = estado;
-    }
-
-    public Long getOrganizadorId() {
+    public String getOrganizadorId() {
         return organizadorId;
     }
-
-    public void setOrganizadorId(Long organizadorId) {
+    public void setOrganizadorId(String organizadorId) {
         this.organizadorId = organizadorId;
     }
 
-    public TipoActividadDomainEntity getTipoActividad() {
-        return tipoActividad;
+    public String getTipoActividadId() {
+        return tipoActividadId;
     }
-
-    public void setTipoActividad(TipoActividadDomainEntity tipoActividad) {
-        this.tipoActividad = tipoActividad;
+    public void setTipoActividadId(String tipoActividadId) {
+        this.tipoActividadId = tipoActividadId;
     }
 
     public String getUbicacion() {

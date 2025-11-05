@@ -1,36 +1,25 @@
-package com.zentry.sigea.module_actividad.presentation.models;
+package com.zentry.sigea.module_actividad.presentation.models.responseDTO;
 
 import com.zentry.sigea.module_actividad.core.entities.EstadoActividadDomainEntity;
 
 public class EstadoActividadResponse {
-    private Long id;
     private String codigo;
     private String etiqueta;
 
     public EstadoActividadResponse() {
     }
 
-    public EstadoActividadResponse(Long id, String codigo, String etiqueta) {
-        this.id = id;
+    public EstadoActividadResponse(String codigo, String etiqueta) {
         this.codigo = codigo;
         this.etiqueta = etiqueta;
-    }
-
-    public Long getId() {
-        return id;
     }
 
 
     public static EstadoActividadResponse fromEntity(EstadoActividadDomainEntity estadoActividad) {
         return new EstadoActividadResponse(
-            estadoActividad.getId(),
             estadoActividad.getCodigo(),
             estadoActividad.getEtiqueta()
         );
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getCodigo() {

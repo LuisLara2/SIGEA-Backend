@@ -1,13 +1,14 @@
-package com.zentry.sigea.infrastructure.database.embedded;
+package com.zentry.sigea.module_usuarios.infrastructure.database.embedded;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class UsuarioRolId implements Serializable {
-    private Long idUsuario;
-    private Long idRol;
+    private UUID idUsuario;
+    private UUID idRol;
 
     @Override
     public boolean equals(Object o) {
@@ -19,5 +20,19 @@ public class UsuarioRolId implements Serializable {
     @Override
     public int hashCode(){
         return java.util.Objects.hash(idUsuario , idRol);
+    }
+
+    public UUID getIdRol() {
+        return idRol;
+    }
+    public void setIdRol(UUID idRol) {
+        this.idRol = idRol;
+    }
+
+    public UUID getIdUsuario() {
+        return idUsuario;
+    }
+    public void setIdUsuario(UUID idUsuario) {
+        this.idUsuario = idUsuario;
     }
 }

@@ -7,8 +7,8 @@ import com.zentry.sigea.module_actividad.core.entities.EstadoActividadDomainEnti
 import com.zentry.sigea.module_actividad.core.entities.TipoActividadDomainEntity;
 import com.zentry.sigea.module_actividad.core.repositories.IEstadoActividadRepository;
 import com.zentry.sigea.module_actividad.core.repositories.ITipoActividadRepository;
-import com.zentry.sigea.module_actividad.presentation.models.ActividadRequest;
-import com.zentry.sigea.module_actividad.presentation.models.CrearActividadRequest;
+import com.zentry.sigea.module_actividad.presentation.models.requestDTO.ActividadRequest;
+import com.zentry.sigea.module_actividad.presentation.models.requestDTO.CrearActividadRequest;
 
 /**
  * Configuración de beans para la conversión de IDs a objetos de dominio

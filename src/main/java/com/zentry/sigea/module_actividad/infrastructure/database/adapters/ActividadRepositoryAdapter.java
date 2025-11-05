@@ -30,17 +30,23 @@ public class ActividadRepositoryAdapter implements IActividadRespository {
         this.usuarioJPARepository = usuarioJPARepository;
     }
 
-    public void save(ActividadDomainEntity actividadDomainEntity){
-        UsuarioEntity usuarioEntity = usuarioJPARepository.findById(
-            UUID.fromString(actividadDomainEntity.getOrganizadorId())
-        ).orElse(null);
+    public boolean save(ActividadDomainEntity actividadDomainEntity){
+        try{
+            UsuarioEntity usuarioEntity = usuarioJPARepository.findById(
+                UUID.fromString(actividadDomainEntity.getOrganizadorId())
+            ).orElse(null);
+    
+            actividadJPARepository.save(
+                ActividadMapper.toEntity(
+                    actividadDomainEntity, 
+                    usuarioEntity
+                )
+            );
 
-        actividadJPARepository.save(
-            ActividadMapper.toEntity(
-                actividadDomainEntity, 
-                usuarioEntity
-            )
-        );
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public Optional<ActividadDomainEntity> findById(String id){

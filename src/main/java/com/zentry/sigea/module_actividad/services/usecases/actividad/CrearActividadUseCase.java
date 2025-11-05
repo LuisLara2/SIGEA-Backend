@@ -4,13 +4,13 @@ import java.time.LocalDate;
 
 import org.springframework.stereotype.Component;
 
+import com.zentry.sigea.module_actividad.core.entities.ActividadDomainEntity;
 import com.zentry.sigea.module_actividad.core.entities.EstadoActividadDomainEntity;
 import com.zentry.sigea.module_actividad.core.entities.TipoActividadDomainEntity;
-import com.zentry.sigea.module_actividad.core.entities.actividad.ActividadDomainEntity;
-import com.zentry.sigea.module_actividad.core.repositories.ActividadRepository;
+import com.zentry.sigea.module_actividad.core.repositories.IActividadRespository;
 import com.zentry.sigea.module_actividad.core.repositories.IEstadoActividadRepository;
-import com.zentry.sigea.module_actividad.core.repositories.TipoActividadRepository;
-import com.zentry.sigea.module_actividad.presentation.models.CrearActividadRequest;
+import com.zentry.sigea.module_actividad.core.repositories.ITipoActividadRepository;
+import com.zentry.sigea.module_actividad.presentation.models.requestDTO.CrearActividadRequest;
 
 /**
  * Caso de uso para crear una nueva actividad
@@ -18,13 +18,15 @@ import com.zentry.sigea.module_actividad.presentation.models.CrearActividadReque
 @Component
 public class CrearActividadUseCase {
 
-    private final ActividadRepository actividadRepository;
+    private final IActividadRespository actividadRepository;
     private final IEstadoActividadRepository estadoActividadRepository;
-    private final TipoActividadRepository tipoActividadRepository;
+    private final ITipoActividadRepository tipoActividadRepository;
 
-    public CrearActividadUseCase(ActividadRepository actividadRepository,
-                               IEstadoActividadRepository estadoActividadRepository,
-                               TipoActividadRepository tipoActividadRepository) {
+    public CrearActividadUseCase(
+        IActividadRespository actividadRepository,
+        IEstadoActividadRepository estadoActividadRepository,
+        ITipoActividadRepository tipoActividadRepository
+    ) {
         this.actividadRepository = actividadRepository;
         this.estadoActividadRepository = estadoActividadRepository;
         this.tipoActividadRepository = tipoActividadRepository;
@@ -33,7 +35,7 @@ public class CrearActividadUseCase {
     /**
      * Ejecuta la creación de actividad recibiendo IDs y convirtiéndolos a objetos completos
      */
-    public ActividadDomainEntity execute(CrearActividadRequest request) {
+    public String execute(CrearActividadRequest request) {
         // Validaciones básicas de entrada
         validateBasicFields(request);
         
@@ -57,18 +59,19 @@ public class CrearActividadUseCase {
         );
         
         // Guardar usando el repositorio directamente
-        return actividadRepository.save(nuevaActividad);
+        
+        return  actividadRepository.save(nuevaActividad) ? "Actividad Registrada con exito" : "Algo salio mal al guardar la Actividad";
     }
 
     /**
      * Obtiene un EstadoActividad por su ID
      */
-    private EstadoActividadDomainEntity getEstadoActividadById(Long estadoId) {
-        if (estadoId == null || estadoId <= 0) {
+    private EstadoActividadDomainEntity getEstadoActividadById(String estadoId) {
+        if (estadoId == null) {
             throw new IllegalArgumentException("El ID del estado de actividad debe ser un número positivo");
         }
 
-        EstadoActividadDomainEntity estado = estadoActividadRepository.findById(estadoId);
+        EstadoActividadDomainEntity estado = estadoActividadRepository.findById(estadoId).orElse(null);
         if (estado == null) {
             throw new IllegalArgumentException(
                 "No se encontró un estado de actividad con ID: " + estadoId
@@ -81,12 +84,12 @@ public class CrearActividadUseCase {
     /**
      * Obtiene un TipoActividad por su ID
      */
-    private TipoActividadDomainEntity getTipoActividadById(Long tipoActividadId) {
-        if (tipoActividadId == null || tipoActividadId <= 0) {
+    private TipoActividadDomainEntity getTipoActividadById(String tipoActividadId) {
+        if (tipoActividadId == null) {
             throw new IllegalArgumentException("El ID del tipo de actividad debe ser un número positivo");
         }
 
-        TipoActividadDomainEntity tipoActividad = tipoActividadRepository.findById(tipoActividadId);
+        TipoActividadDomainEntity tipoActividad = tipoActividadRepository.findById(tipoActividadId).orElse(null);
         if (tipoActividad == null) {
             throw new IllegalArgumentException(
                 "No se encontró un tipo de actividad con ID: " + tipoActividadId
@@ -124,15 +127,15 @@ public class CrearActividadUseCase {
             throw new IllegalArgumentException("La fecha de fin es obligatoria");
         }
         
-        if (request.getOrganizadorId() == null || request.getOrganizadorId() <= 0) {
+        if (request.getOrganizadorId() == null) {
             throw new IllegalArgumentException("El ID del organizador debe ser un número positivo");
         }
         
-        if (request.getEstadoId() == null || request.getEstadoId() <= 0) {
+        if (request.getEstadoId() == null) {
             throw new IllegalArgumentException("El ID del estado debe ser un número positivo");
         }
         
-        if (request.getTipoActividadId() == null || request.getTipoActividadId() <= 0) {
+        if (request.getTipoActividadId() == null) {
             throw new IllegalArgumentException("El ID del tipo de actividad debe ser un número positivo");
         }
     }
@@ -148,12 +151,12 @@ public class CrearActividadUseCase {
     }
     
     private void validateDateConflicts(CrearActividadRequest request) {
-        var actividadesExistentes = actividadRepository.findByOrganizerId(request.getOrganizadorId());
+        var actividadesExistentes = actividadRepository.findByOrganizadorId(request.getOrganizadorId());
 
         boolean hasConflict = actividadesExistentes.stream()
             .anyMatch(actividad -> 
                 datesOverlap(
-                    actividad.getStartDate(), actividad.getEndDate(),
+                    actividad.getFechaInicio(), actividad.getFechaFin(),
                     request.getFechaInicio(), request.getFechaFin()
                 )
             );

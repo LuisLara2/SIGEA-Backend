@@ -3,8 +3,8 @@ package com.zentry.sigea.module_actividad.services.usecases.tipo_actividad;
 import org.springframework.stereotype.Component;
 
 import com.zentry.sigea.module_actividad.core.entities.TipoActividadDomainEntity;
-import com.zentry.sigea.module_actividad.core.repositories.TipoActividadRepository;
-import com.zentry.sigea.module_actividad.presentation.models.TipoActividadRequest;
+import com.zentry.sigea.module_actividad.core.repositories.ITipoActividadRepository;
+import com.zentry.sigea.module_actividad.presentation.models.requestDTO.TipoActividadRequest;
 
 /**
  * Caso de uso para crear un nuevo tipo de actividad
@@ -12,13 +12,13 @@ import com.zentry.sigea.module_actividad.presentation.models.TipoActividadReques
 @Component
 public class CrearTipoActividadUseCase {
 
-    private final TipoActividadRepository tipoActividadRepository;
+    private final ITipoActividadRepository tipoActividadRepository;
 
-    public CrearTipoActividadUseCase(TipoActividadRepository tipoActividadRepository) {
+    public CrearTipoActividadUseCase(ITipoActividadRepository tipoActividadRepository) {
         this.tipoActividadRepository = tipoActividadRepository;
     }
 
-    public TipoActividadDomainEntity execute(TipoActividadRequest request) {
+    public String execute(TipoActividadRequest request) {
         // Validaciones de negocio específicas del caso de uso
         validateBusinessRules(request);
         
@@ -29,7 +29,8 @@ public class CrearTipoActividadUseCase {
         );
         
         // Guardar usando el repositorio directamente
-        return tipoActividadRepository.save(nuevoTipoActividad);
+        
+        return tipoActividadRepository.save(nuevoTipoActividad) ? String.format("El tipo de actividad %s se registro correctamente.", request.getNombreActividad()) : "Ocurrio un error al registrar el tipo de actividad.";
     }
 
     private void validateBusinessRules(TipoActividadRequest request) {

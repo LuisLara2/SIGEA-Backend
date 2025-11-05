@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zentry.sigea.module_actividad.core.entities.EstadoActividadDomainEntity;
-import com.zentry.sigea.module_actividad.presentation.models.EstadoActividadRequest;
-import com.zentry.sigea.module_actividad.presentation.models.EstadoActividadResponse;
+import com.zentry.sigea.module_actividad.presentation.models.requestDTO.EstadoActividadRequest;
+import com.zentry.sigea.module_actividad.presentation.models.responseDTO.EstadoActividadResponse;
 import com.zentry.sigea.module_actividad.services.EstadoActividadService;
 
 
@@ -33,11 +33,11 @@ public class EstadoActividadController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<EstadoActividadResponse> createEstadoActividad(@RequestBody EstadoActividadRequest request) {
+    public ResponseEntity<String> createEstadoActividad(@RequestBody EstadoActividadRequest request) {
         try {
-            EstadoActividadDomainEntity estadoActividadCreada = estadoActividadService.crearEstadoActividad(request);
-            EstadoActividadResponse response = EstadoActividadResponse.fromEntity(estadoActividadCreada);
-            return ResponseEntity.ok(response);
+            String responseMessage = estadoActividadService.crearEstadoActividad(request);
+            return ResponseEntity.ok(responseMessage);
+
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         } catch (Exception e) {
@@ -57,7 +57,7 @@ public class EstadoActividadController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarEstadoActividad(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminarEstadoActividad(@PathVariable String id) {
         try {
             estadoActividadService.eliminarEstadoActividad(id);
             return ResponseEntity.noContent().build();

@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zentry.sigea.module_actividad.core.entities.TipoActividadDomainEntity;
-import com.zentry.sigea.module_actividad.presentation.models.TipoActividadRequest;
-import com.zentry.sigea.module_actividad.presentation.models.TipoActividadResponse;
+import com.zentry.sigea.module_actividad.presentation.models.requestDTO.TipoActividadRequest;
+import com.zentry.sigea.module_actividad.presentation.models.responseDTO.TipoActividadResponse;
 import com.zentry.sigea.module_actividad.services.TipoActividadService;
 
 
@@ -35,15 +35,14 @@ public class TipoActividadController {
      * Crear un nuevo tipo de actividad
      */
     @PostMapping("/create")
-    public ResponseEntity<TipoActividadResponse>  createTipoActividad(@RequestBody TipoActividadRequest request) 
+    public ResponseEntity<String>  createTipoActividad(@RequestBody TipoActividadRequest request) 
     {
         // Lógica para crear el tipo de actividad
 
         try {
 
-            TipoActividadDomainEntity tipoActividadCreada = tipoActividadService.crearTipoActividad(request);
-            TipoActividadResponse response = TipoActividadResponse.fromEntity(tipoActividadCreada);
-            return ResponseEntity.ok(response);
+            String responseMessage = tipoActividadService.crearTipoActividad(request);
+            return ResponseEntity.ok(responseMessage);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         } catch (Exception e) {
@@ -63,7 +62,7 @@ public class TipoActividadController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarTipoActividad(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminarTipoActividad(@PathVariable String id) {
         try {
             tipoActividadService.eliminarTipoActividad(id);
             return ResponseEntity.noContent().build();

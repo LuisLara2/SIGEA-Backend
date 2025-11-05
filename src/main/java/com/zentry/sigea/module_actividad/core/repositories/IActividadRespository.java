@@ -7,7 +7,7 @@ import java.util.Optional;
 import com.zentry.sigea.module_actividad.core.entities.ActividadDomainEntity;
 
 public interface IActividadRespository {
-    public void save(ActividadDomainEntity actividadDomainEntity);
+    public boolean save(ActividadDomainEntity actividadDomainEntity);
     public Optional<ActividadDomainEntity> findById(String id);
     public List<ActividadDomainEntity> findByOrganizadorId(String organizadorId);
     public List<ActividadDomainEntity> findAll();

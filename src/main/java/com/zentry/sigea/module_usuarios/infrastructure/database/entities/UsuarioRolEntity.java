@@ -2,7 +2,7 @@ package com.zentry.sigea.module_usuarios.infrastructure.database.entities;
 
 import java.time.LocalDateTime;
 
-import com.zentry.sigea.infrastructure.database.embedded.UsuarioRolId;
+import com.zentry.sigea.module_usuarios.infrastructure.database.embedded.UsuarioRolId;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;

@@ -5,24 +5,27 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.zentry.sigea.module_actividad.core.entities.TipoActividadDomainEntity;
-import com.zentry.sigea.module_actividad.infrastructure.repository.tipoactividad_repository.TipoActividadRepositoryImpl;
-import com.zentry.sigea.module_actividad.presentation.models.TipoActividadRequest;
+import com.zentry.sigea.module_actividad.core.repositories.ITipoActividadRepository;
+import com.zentry.sigea.module_actividad.presentation.models.requestDTO.TipoActividadRequest;
 import com.zentry.sigea.module_actividad.services.interfaces.ITipoActividad;
 import com.zentry.sigea.module_actividad.services.usecases.tipo_actividad.CrearTipoActividadUseCase;
 
 @Service
 public class TipoActividadService implements ITipoActividad {
 
-    private final TipoActividadRepositoryImpl tipoactividadRepository;
+    private final ITipoActividadRepository tipoactividadRepository;
     private final CrearTipoActividadUseCase crearTipoActividadUseCase;
 
-    public TipoActividadService(TipoActividadRepositoryImpl tipoactividadRepository, CrearTipoActividadUseCase crearTipoActividadUseCase) {
+    public TipoActividadService(
+        ITipoActividadRepository tipoactividadRepository, 
+        CrearTipoActividadUseCase crearTipoActividadUseCase
+    ) {
         this.tipoactividadRepository = tipoactividadRepository;
         this.crearTipoActividadUseCase = crearTipoActividadUseCase;
     }
 
     @Override
-    public TipoActividadDomainEntity crearTipoActividad(TipoActividadRequest tipoActividad) {
+    public String crearTipoActividad(TipoActividadRequest tipoActividad) {
         return crearTipoActividadUseCase.execute(tipoActividad);
     }
 
@@ -33,14 +36,14 @@ public class TipoActividadService implements ITipoActividad {
     }
 
     @Override
-    public void eliminarTipoActividad(Long id) {
+    public void eliminarTipoActividad(String id) {
         tipoactividadRepository.deleteById(id);
     }
 
     @Override
-    public TipoActividadDomainEntity obtenerTipoActividadPorId(Long id) {
+    public TipoActividadDomainEntity obtenerTipoActividadPorId(String id) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'obtenerTipoActividadPorId'");
+        return tipoactividadRepository.findById(id).orElse(null);
     }
 
     @Override
