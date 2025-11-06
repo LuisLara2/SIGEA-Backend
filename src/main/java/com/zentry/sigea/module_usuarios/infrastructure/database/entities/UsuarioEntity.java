@@ -44,4 +44,10 @@ public class UsuarioEntity {
 
     @Column(name = "updated_at" , nullable = false , columnDefinition = "TIMESTAMP")
     private LocalDateTime updatedAt = LocalDateTime.now();
+
+    @Column(name = "telefono" , nullable = false , length = 25)
+    private String telefono;
+
+    @Column(name = "extension_telefonica" , nullable = false , length = 8)
+    private String extensionTelefonica;
 }

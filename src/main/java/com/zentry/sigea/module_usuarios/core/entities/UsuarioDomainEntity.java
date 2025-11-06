@@ -10,8 +10,9 @@ public class UsuarioDomainEntity {
     private String passwordHash;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    // private String telefono;
-    // private String extensionTelefonica;
+    
+    private String telefono;
+    private String extensionTelefonica;
 
     public String getNombres() {
         return nombres;
@@ -55,8 +56,51 @@ public class UsuarioDomainEntity {
         this.updatedAt = updatedAt;
     }
 
+    public String getTelefono() {
+        return telefono;
+    }
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getExtensionTelefonica() {
+        return extensionTelefonica;
+    }
+    public void setExtensionTelefonica(String extensionTelefonica) {
+        this.extensionTelefonica = extensionTelefonica;
+    }
+
     private Long calcDaysFromLastUpdate(){
         // Ejepmlo de algo que dbe ir aqui
         return ChronoUnit.DAYS.between(this.createdAt , this.updatedAt);
+    }
+
+    private String getFullPhoneNumber(){
+        // Devolver algo como +51 900 700 897
+        return this.telefono + this.extensionTelefonica;
+    }
+
+    public static UsuarioDomainEntity create(
+        String nombres,
+        String apellidos,
+        String correo,
+        String passwordHash,
+        String telefono,
+        String extensionTelefonica
+    ) {
+        LocalDateTime nowDateTime = LocalDateTime.now();
+
+        UsuarioDomainEntity usuarioDomainEntity = new UsuarioDomainEntity();
+
+        usuarioDomainEntity.setNombres(nombres);
+        usuarioDomainEntity.setApellidos(apellidos);
+        usuarioDomainEntity.setCorreo(correo); 
+        usuarioDomainEntity.setPasswordHash(passwordHash);
+        usuarioDomainEntity.setCreatedAt(nowDateTime);
+        usuarioDomainEntity.setUpdatedAt(nowDateTime);
+        usuarioDomainEntity.setTelefono(telefono);
+        usuarioDomainEntity.setExtensionTelefonica(extensionTelefonica);
+
+        return usuarioDomainEntity;
     }
 }
