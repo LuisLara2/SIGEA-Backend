@@ -35,4 +35,23 @@ public class InscripcionDomainEntity {
     public void setEstadoInscripcionId(String estadoInscripcionId) {
         this.estadoInscripcionId = estadoInscripcionId;
     }
+
+    public static InscripcionDomainEntity create(
+        String usuarioId , 
+        String actividadId , 
+        String estadoInscripcionId
+    ){
+        LocalDate nowLocalDate = LocalDate.now();
+
+        InscripcionDomainEntity inscripcionDomainEntity = new InscripcionDomainEntity();
+
+        inscripcionDomainEntity.setUsuarioId(usuarioId);
+        inscripcionDomainEntity.setActividadId(actividadId);
+        inscripcionDomainEntity.setEstadoInscripcionId(estadoInscripcionId);
+        inscripcionDomainEntity.setFechaInscripcion(nowLocalDate);
+
+        return inscripcionDomainEntity;
+
+    }
+
 }

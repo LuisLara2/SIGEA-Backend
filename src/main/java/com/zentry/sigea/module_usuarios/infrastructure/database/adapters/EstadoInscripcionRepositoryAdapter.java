@@ -3,11 +3,14 @@ package com.zentry.sigea.module_usuarios.infrastructure.database.adapters;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.stereotype.Repository;
+
 import com.zentry.sigea.module_usuarios.core.entities.EstadoInscripcionDomainEntity;
 import com.zentry.sigea.module_usuarios.core.repositories.IEstadoInscripcionRepository;
 import com.zentry.sigea.module_usuarios.infrastructure.database.mappers.EstadoInscripcionMapper;
 import com.zentry.sigea.module_usuarios.infrastructure.repositories.EstadoInscripcionJPARepository;
 
+@Repository
 public class EstadoInscripcionRepositoryAdapter implements IEstadoInscripcionRepository {
     
     private final EstadoInscripcionJPARepository estadoInscripcionJPARepository;

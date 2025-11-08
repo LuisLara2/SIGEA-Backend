@@ -3,7 +3,7 @@ package com.zentry.sigea.module_usuarios.infrastructure.database.entities;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import com.zentry.sigea.module_sesiones.infrastructure.entities.SesionEntity;
+import com.zentry.sigea.module_sesiones.infrastructure.database.entities.SesionEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

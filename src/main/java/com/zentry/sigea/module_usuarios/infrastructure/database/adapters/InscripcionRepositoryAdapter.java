@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Repository;
+
 import com.zentry.sigea.module_actividad.infrastructure.database.entities.ActividadEntity;
 import com.zentry.sigea.module_actividad.infrastructure.repository.ActividadJPARepository;
 import com.zentry.sigea.module_usuarios.core.entities.InscripcionDomainEntity;
@@ -16,6 +18,7 @@ import com.zentry.sigea.module_usuarios.infrastructure.repositories.EstadoInscri
 import com.zentry.sigea.module_usuarios.infrastructure.repositories.InscripcionJPARepository;
 import com.zentry.sigea.module_usuarios.infrastructure.repositories.UsuarioJPARepository;
 
+@Repository
 public class InscripcionRepositoryAdapter implements IInscripcionRepository {
     
     private final InscripcionJPARepository inscripcionJPARepository;
@@ -37,7 +40,6 @@ public class InscripcionRepositoryAdapter implements IInscripcionRepository {
     }
 
     public void save(InscripcionDomainEntity inscripcionDomainEntity){
-
         UsuarioEntity usuarioEntity = usuarioJPARepository.findById(
             UUID.fromString(inscripcionDomainEntity.getUsuarioId())
         ).orElse(null);

@@ -1,4 +1,4 @@
-package com.zentry.sigea.module_sesiones.infrastructure.entities;
+package com.zentry.sigea.module_sesiones.infrastructure.database.entities;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
