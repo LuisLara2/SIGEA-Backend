@@ -33,7 +33,7 @@ public class UsuarioEntity {
     @Column(name = "apellidos" , nullable = false , length = 100)
     private String apellidos;
     
-    @Column(name = "correo" , nullable = false , length = 100)
+    @Column(name = "correo" , nullable = false , length = 100 , unique = true)
     private String correo;
     
     @Column(name = "password_hash" , nullable = false , length = 255)

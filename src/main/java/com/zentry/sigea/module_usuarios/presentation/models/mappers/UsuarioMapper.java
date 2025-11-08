@@ -1,7 +1,7 @@
 package com.zentry.sigea.module_usuarios.presentation.models.mappers;
 
 import com.zentry.sigea.module_usuarios.core.entities.UsuarioDomainEntity;
-import com.zentry.sigea.module_usuarios.presentation.models.requestDTO.UsuarioRequestDTO;
+import com.zentry.sigea.module_usuarios.presentation.models.requestDTO.RegistrarUsuarioRequestDTO;
 import com.zentry.sigea.module_usuarios.presentation.models.responseDTO.UsuarioResponseDTO;
 
 public class UsuarioMapper {
@@ -9,7 +9,7 @@ public class UsuarioMapper {
     // Cuando el usuario hace una solicitud:    request -> domain
     // Cuando se responde a la colucitud:       domain -> response
     
-    public static UsuarioDomainEntity requestToDomain(UsuarioRequestDTO usuarioRequestDTO , String passwordHash){
+    public static UsuarioDomainEntity requestToDomain(RegistrarUsuarioRequestDTO usuarioRequestDTO , String passwordHash){
         UsuarioDomainEntity usuarioDomainEntity = new UsuarioDomainEntity();
         
         usuarioDomainEntity.setNombres(usuarioRequestDTO.getNombres());

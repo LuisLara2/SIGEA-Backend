@@ -1,10 +1,12 @@
 package com.zentry.sigea.module_usuarios.presentation.models.requestDTO;
 
+import java.util.List;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public class UsuarioRequestDTO {
+public class RegistrarUsuarioRequestDTO {
     
     @NotNull(message = "Debe proporcionar sus nombres.")
     @Size(message = "Sus nombres no deben tener más de 100 caracteres.")
@@ -22,6 +24,17 @@ public class UsuarioRequestDTO {
     @NotNull(message = "Debe colocar una contraseña.")
     @Size(min = 8 , max = 100 , message = "La contraseña debe tener entre 8 y 100 caracteres de longitud.")
     private String password;
+
+    @NotNull(message = "Debe proporcionar un numero de telefono.")
+    @Size(min = 7 , max = 25 , message = "El numero de telefono debe tener entre 7 y 25 digitos.")
+    private String telefono;
+
+    @NotNull(message = "Debe proporcionar una extension telefonica.")
+    @Size(min = 2 , max = 8 , message = "La extension telefonica debe tener entre 2 y 8 caracteres.")
+    private String extensionTelefonica;
+
+    @NotNull(message = "Debe proporcionar al menos un rol al usuario.")
+    private List<String> rolId;
 
     public String getNombres() {
         return nombres;
@@ -49,5 +62,26 @@ public class UsuarioRequestDTO {
     }
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getExtensionTelefonica() {
+        return extensionTelefonica;
+    }
+    public void setExtensionTelefonica(String extensionTelefonica) {
+        this.extensionTelefonica = extensionTelefonica;
+    }
+
+    public List<String> getRolId() {
+        return rolId;
+    }
+    public void setRolId(List<String> rolId) {
+        this.rolId = rolId;
     }
 }

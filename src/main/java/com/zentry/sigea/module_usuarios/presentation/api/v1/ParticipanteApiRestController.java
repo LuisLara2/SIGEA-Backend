@@ -2,6 +2,7 @@ package com.zentry.sigea.module_usuarios.presentation.api.v1;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +24,7 @@ public class ParticipanteApiRestController {
     }
 
     @PostMapping("/inscripcion")
+    @PreAuthorize("hasRole('PARTICIPANTE')")
     public ResponseEntity<String> registrarInscripcion(@RequestBody RegistrarInscripcionRequestDTO registrarInscripcionRequestDTO) {
         try {
             inscripcionService.registrarInscripcion(registrarInscripcionRequestDTO);

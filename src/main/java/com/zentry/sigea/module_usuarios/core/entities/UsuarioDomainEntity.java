@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 public class UsuarioDomainEntity {
+    private String id;
     private String nombres;
     private String apellidos;
     private String correo;
@@ -13,6 +14,13 @@ public class UsuarioDomainEntity {
     
     private String telefono;
     private String extensionTelefonica;
+
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getNombres() {
         return nombres;

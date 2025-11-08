@@ -31,6 +31,7 @@ public class UsuarioMapper{
         usuarioDomainEntity.setUpdatedAt(usuarioEntity.getUpdatedAt());
         usuarioDomainEntity.setTelefono(usuarioEntity.getTelefono());
         usuarioDomainEntity.setExtensionTelefonica(usuarioEntity.getExtensionTelefonica());
+        usuarioDomainEntity.setId(usuarioEntity.getId().toString());
 
         return usuarioDomainEntity;
     }

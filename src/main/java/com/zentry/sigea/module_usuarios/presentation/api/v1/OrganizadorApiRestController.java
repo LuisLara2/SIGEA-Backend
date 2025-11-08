@@ -8,6 +8,7 @@ import com.zentry.sigea.module_usuarios.services.AsistenciaService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -23,6 +24,7 @@ public class OrganizadorApiRestController {
     }
 
     @PostMapping("/registrar-asistencia")
+    @PreAuthorize("hasRole('ORGANIZADOR')")
     public ResponseEntity<String> postMethodName(@RequestBody RegistrarAsistenciaRequestDTO registrarAsistenciaRequestDTO) {
 
         try {
@@ -33,6 +35,4 @@ public class OrganizadorApiRestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }        
     }
-    
-
 }

@@ -11,15 +11,27 @@ import com.zentry.sigea.module_usuarios.core.entities.RolDomainEntity;
 import com.zentry.sigea.module_usuarios.core.repositories.IUsuarioRolRepository;
 import com.zentry.sigea.module_usuarios.infrastructure.database.entities.UsuarioRolEntity;
 import com.zentry.sigea.module_usuarios.infrastructure.database.mappers.RolMapper;
+import com.zentry.sigea.module_usuarios.infrastructure.repositories.RolJPARepository;
+import com.zentry.sigea.module_usuarios.infrastructure.repositories.UsuarioJPARepository;
 import com.zentry.sigea.module_usuarios.infrastructure.repositories.UsuarioRolJPARepository;
 
 @Repository
 public class UsuarioRolRepositoryAdapter implements IUsuarioRolRepository {
     
     private final UsuarioRolJPARepository usuarioRolJPARepository;
+    
+    private final UsuarioJPARepository usuarioJPARepository;
+    private final RolJPARepository rolJPARepository;
 
-    public UsuarioRolRepositoryAdapter(UsuarioRolJPARepository usuarioRolJPARepository){
+
+    public UsuarioRolRepositoryAdapter(
+        UsuarioRolJPARepository usuarioRolJPARepository , 
+        UsuarioJPARepository usuarioJPARepository , 
+        RolJPARepository rolJPARepository
+    ){
         this.usuarioRolJPARepository = usuarioRolJPARepository;
+        this.usuarioJPARepository = usuarioJPARepository;
+        this.rolJPARepository = rolJPARepository;
     }
 
     public List<RolDomainEntity> findRolesByUsuarioId(String usuarioId){
@@ -35,5 +47,23 @@ public class UsuarioRolRepositoryAdapter implements IUsuarioRolRepository {
             UUID.fromString(usuarioId) , 
             UUID.fromString(rolId)
         );
+    }
+
+    public void save(String usuarioId , String rolId){
+        LocalDateTime nowLocalDateTime = LocalDateTime.now();
+
+        UsuarioRolEntity usuarioRolEntity = new UsuarioRolEntity();
+
+        usuarioRolEntity.setRol(
+            rolJPARepository.findById(UUID.fromString(rolId)).orElse(null)
+        );
+
+        usuarioRolEntity.setUsuario(
+            usuarioJPARepository.findById(UUID.fromString(usuarioId)).orElse(null)
+        );
+
+        usuarioRolEntity.setAsignadoEn(nowLocalDateTime);
+
+        usuarioRolJPARepository.save(usuarioRolEntity);
     }
 }
