@@ -1,9 +1,9 @@
 package com.zentry.sigea.module_usuarios.infrastructure.database.mappers;
 
+import com.zentry.sigea.module_inscripciones.infrastructure.database.entities.InscripcionEntity;
 import com.zentry.sigea.module_sesiones.infrastructure.database.entities.SesionEntity;
 import com.zentry.sigea.module_usuarios.core.entities.AsistenciaDomainEntity;
 import com.zentry.sigea.module_usuarios.infrastructure.database.entities.AsistenciaEntity;
-import com.zentry.sigea.module_usuarios.infrastructure.database.entities.InscripcionEntity;
 
 public class AsistenciaMapper {
     public static AsistenciaEntity toEntity(

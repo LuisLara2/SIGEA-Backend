@@ -3,6 +3,7 @@ package com.zentry.sigea.module_usuarios.infrastructure.database.entities;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.zentry.sigea.module_inscripciones.infrastructure.database.entities.InscripcionEntity;
 import com.zentry.sigea.module_sesiones.infrastructure.database.entities.SesionEntity;
 
 import jakarta.persistence.Column;
@@ -10,18 +11,21 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Table(
     name = "asistencia" , 
-    indexes = {
-        @Index(name = "idx_asistencia" , columnList = "sesion_id,inscripcion_id" , unique = true)
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "ux_asistencia_por_sesion" , 
+            columnNames = {"sesion_id" , "inscripcion_id"}
+        )
     }
 )
 @Getter

@@ -7,14 +7,14 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
+import com.zentry.sigea.module_inscripciones.infrastructure.database.entities.InscripcionEntity;
+import com.zentry.sigea.module_inscripciones.infrastructure.repository.InscripcionJPARepository;
 import com.zentry.sigea.module_sesiones.infrastructure.database.entities.SesionEntity;
 import com.zentry.sigea.module_sesiones.infrastructure.repositories.SesionJPARepository;
 import com.zentry.sigea.module_usuarios.core.entities.AsistenciaDomainEntity;
 import com.zentry.sigea.module_usuarios.core.repositories.IAsistenciaRepository;
-import com.zentry.sigea.module_usuarios.infrastructure.database.entities.InscripcionEntity;
 import com.zentry.sigea.module_usuarios.infrastructure.database.mappers.AsistenciaMapper;
 import com.zentry.sigea.module_usuarios.infrastructure.repositories.AsistenciaJPARepository;
-import com.zentry.sigea.module_usuarios.infrastructure.repositories.InscripcionJPARepository;
 
 @Repository
 public class AsistenciaRepositoryAdapter implements IAsistenciaRepository{

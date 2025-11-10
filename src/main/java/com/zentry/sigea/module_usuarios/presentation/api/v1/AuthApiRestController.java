@@ -1,7 +1,6 @@
 package com.zentry.sigea.module_usuarios.presentation.api.v1;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zentry.sigea.module_usuarios.presentation.models.requestDTO.LoginUsuarioRequestDTO;

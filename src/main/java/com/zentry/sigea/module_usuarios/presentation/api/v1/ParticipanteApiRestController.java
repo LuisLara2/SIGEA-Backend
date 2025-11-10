@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.zentry.sigea.module_usuarios.presentation.models.requestDTO.RegistrarInscripcionRequestDTO;
-import com.zentry.sigea.module_usuarios.services.InscripcionService;
+import com.zentry.sigea.module_inscripciones.presentation.models.requestDTO.CrearInscripcionRequest;
+import com.zentry.sigea.module_inscripciones.services.InscripcionService;
 
 @RestController
 @RequestMapping("/api/v1/usuarios/participante")
@@ -25,9 +25,9 @@ public class ParticipanteApiRestController {
 
     @PostMapping("/inscripcion")
     @PreAuthorize("hasRole('PARTICIPANTE')")
-    public ResponseEntity<String> registrarInscripcion(@RequestBody RegistrarInscripcionRequestDTO registrarInscripcionRequestDTO) {
+    public ResponseEntity<String> registrarInscripcion(@RequestBody CrearInscripcionRequest crearInscripcionRequest) {
         try {
-            inscripcionService.registrarInscripcion(registrarInscripcionRequestDTO);
+            inscripcionService.crearInscripcion(crearInscripcionRequest);
             return ResponseEntity.status(HttpStatus.OK).body("Inscripcion realizada con exito!.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

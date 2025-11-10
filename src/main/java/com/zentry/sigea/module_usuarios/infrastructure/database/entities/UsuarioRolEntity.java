@@ -13,14 +13,18 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Table(
     name = "usuario_rol",
-    indexes = {
-        @Index(name = "idx_usuario_rol" , columnList = "usuario_id,rol_id" , unique = true)
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "ux_usuario_rol" , 
+            columnNames =  {"usuario_id" , "rol_id"}
+        )
     }
 )
 @Getter
