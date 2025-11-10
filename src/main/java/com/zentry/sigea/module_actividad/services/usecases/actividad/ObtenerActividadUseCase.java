@@ -2,6 +2,8 @@ package com.zentry.sigea.module_actividad.services.usecases.actividad;
 
 import java.util.Optional;
 
+import org.springframework.stereotype.Component;
+
 import com.zentry.sigea.module_actividad.core.entities.ActividadDomainEntity;
 import com.zentry.sigea.module_actividad.core.repositories.IActividadRespository;
 
@@ -9,6 +11,7 @@ import com.zentry.sigea.module_actividad.core.repositories.IActividadRespository
  * Caso de uso para obtener una actividad por su ID
  * Implementa el patrón Query siguiendo principios CQRS
  */
+@Component
 public class ObtenerActividadUseCase {
     
     private final IActividadRespository actividadRepository;
