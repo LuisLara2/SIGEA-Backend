@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Controlador REST para gestionar sesiones
@@ -46,7 +45,7 @@ public class SesionController {
 
     @GetMapping
     public ResponseEntity<List<SesionResponse>> listarSesiones(
-        @RequestParam(required = false) UUID actividadId
+        @RequestParam(required = false) String actividadId
     ) {
         try {
             List<SesionResponse> sesiones;
@@ -64,7 +63,7 @@ public class SesionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SesionResponse> obtenerSesion(@PathVariable Long id) {
+    public ResponseEntity<SesionResponse> obtenerSesion(@PathVariable String id) {
         try {
             SesionResponse sesion = sesionService.obtenerSesionPorId(id);
             return ResponseEntity.ok(sesion);
@@ -78,7 +77,7 @@ public class SesionController {
 
     @PutMapping("/{id}")
     public ResponseEntity<SesionResponse> actualizarSesion(
-        @PathVariable Long id,
+        @PathVariable String id,
         @Valid @RequestBody SesionRequest request
     ) {
         try {
@@ -93,7 +92,7 @@ public class SesionController {
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarSesion(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminarSesion(@PathVariable String id) {
         try {
             sesionService.eliminarSesion(id);
             return ResponseEntity.noContent().build();

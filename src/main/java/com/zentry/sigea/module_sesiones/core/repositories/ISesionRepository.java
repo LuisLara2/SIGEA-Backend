@@ -5,7 +5,6 @@ import com.zentry.sigea.module_sesiones.core.entities.SesionDomainEntity;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 /**
  * Interfaz del repositorio de sesiones
@@ -14,11 +13,11 @@ import java.util.UUID;
 public interface ISesionRepository {
     
     SesionDomainEntity save(SesionDomainEntity sesion);
-    Optional<SesionDomainEntity> findById(Long id);
+    Optional<SesionDomainEntity> findById(String id);
     List<SesionDomainEntity> findAll();
-    List<SesionDomainEntity> findByActividadId(UUID actividadId);
+    List<SesionDomainEntity> findByActividadId(String actividadId);
     List<SesionDomainEntity> findByFechaRange(LocalDateTime inicio, LocalDateTime fin);
-    boolean existsById(Long id);
-    void deleteById(Long id);
-    long countByActividadId(UUID actividadId);
+    boolean existsById(String id);
+    void deleteById(String id);
+    long countByActividadId(String actividadId);
 }

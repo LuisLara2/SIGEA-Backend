@@ -14,7 +14,7 @@ import java.util.UUID;
  * Repositorio JPA de Spring Data para SesionEntity
  */
 @Repository
-public interface SesionJpaRepository extends JpaRepository<SesionEntity, Long> {
+public interface SesionJpaRepository extends JpaRepository<SesionEntity, UUID> {
     
     List<SesionEntity> findByActividadId(UUID actividadId);
     List<SesionEntity> findByFechaSesionBetween(LocalDateTime inicio, LocalDateTime fin);

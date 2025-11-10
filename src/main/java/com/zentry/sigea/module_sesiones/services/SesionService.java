@@ -2,7 +2,6 @@ package com.zentry.sigea.module_sesiones.services;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,7 +60,7 @@ public class SesionService implements ISesionService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<SesionResponse> listarSesionesPorActividad(UUID actividadId) {
+    public List<SesionResponse> listarSesionesPorActividad(String actividadId) {
         return listarSesionesUseCase.executeByActividad(actividadId)
             .stream()
             .map(SesionResponse::fromDomain)
@@ -70,8 +69,8 @@ public class SesionService implements ISesionService {
 
     @Override
     @Transactional(readOnly = true)
-    public SesionResponse obtenerSesionPorId(Long id) {
-        if (id == null || id <= 0) {
+    public SesionResponse obtenerSesionPorId(String id) {
+        if (id == null) {
             throw new IllegalArgumentException("El ID debe ser un número positivo");
         }
 
@@ -84,7 +83,7 @@ public class SesionService implements ISesionService {
     }
 
     @Override
-    public SesionResponse actualizarSesion(Long id, SesionRequest request) {
+    public SesionResponse actualizarSesion(String id, SesionRequest request) {
         // Crear entidad de dominio temporal con los datos a actualizar
         SesionDomainEntity datosActualizados = SesionDomainEntity.create(
             null,
@@ -98,7 +97,7 @@ public class SesionService implements ISesionService {
     }
 
     @Override
-    public void eliminarSesion(Long id) {
+    public void eliminarSesion(String id) {
         eliminarSesionUseCase.execute(id);
     }
 }

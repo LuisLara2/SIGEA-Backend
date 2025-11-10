@@ -36,7 +36,7 @@ public class SesionRepositoryAdapter implements ISesionRepository {
     @Override
     public SesionDomainEntity save(SesionDomainEntity sesion) {
         ActividadEntity actividadEntity = actividadJpaRepository
-            .findById(sesion.getActividadId())
+            .findById(UUID.fromString(sesion.getActividadId()))
             .orElseThrow(() -> new IllegalArgumentException(
                 "No se encontró actividad con ID: " + sesion.getActividadId()
             ));
@@ -48,9 +48,9 @@ public class SesionRepositoryAdapter implements ISesionRepository {
     }
 
     @Override
-    public Optional<SesionDomainEntity> findById(Long id) {
+    public Optional<SesionDomainEntity> findById(String id) {
         return sesionJpaRepository
-            .findById(id)
+            .findById(UUID.fromString(id))
             .map(SesionMapper::toDomain);
     }
 
@@ -63,8 +63,8 @@ public class SesionRepositoryAdapter implements ISesionRepository {
     }
 
     @Override
-    public List<SesionDomainEntity> findByActividadId(UUID actividadId) {
-        return sesionJpaRepository.findByActividadId(actividadId)
+    public List<SesionDomainEntity> findByActividadId(String actividadId) {
+        return sesionJpaRepository.findByActividadId(UUID.fromString(actividadId))
             .stream()
             .map(SesionMapper::toDomain)
             .collect(Collectors.toList());
@@ -79,17 +79,17 @@ public class SesionRepositoryAdapter implements ISesionRepository {
     }
 
     @Override
-    public boolean existsById(Long id) {
-        return sesionJpaRepository.existsById(id);
+    public boolean existsById(String id) {
+        return sesionJpaRepository.existsById(UUID.fromString(id));
     }
 
     @Override
-    public void deleteById(Long id) {
-        sesionJpaRepository.deleteById(id);
+    public void deleteById(String id) {
+        sesionJpaRepository.deleteById(UUID.fromString(id));
     }
 
     @Override
-    public long countByActividadId(UUID actividadId) {
-        return sesionJpaRepository.countByActividadId(actividadId);
+    public long countByActividadId(String actividadId) {
+        return sesionJpaRepository.countByActividadId(UUID.fromString(actividadId));
     }
 }

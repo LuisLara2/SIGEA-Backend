@@ -10,18 +10,21 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Table(
     name = "sesion" , 
-    indexes = {
-        @Index(name = "idx_sesion" , columnList = "actividad_id,fecha_sesion" , unique = true)
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "ux_sesion" , 
+            columnNames = {"actividad_id" , "fecha_sesion"}
+        )
     }
 )
 @Getter

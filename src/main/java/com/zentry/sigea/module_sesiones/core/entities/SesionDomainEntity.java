@@ -1,15 +1,14 @@
 package com.zentry.sigea.module_sesiones.core.entities;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 /**
  * Entidad de dominio para Sesión
  * Representa una sesión dentro de una actividad
  */
 public class SesionDomainEntity {
-    private Long id;
-    private UUID actividadId;
+    private String id;
+    private String actividadId;
     private LocalDateTime fechaSesion;
     private String titulo;
     private LocalDateTime createdAt;
@@ -19,18 +18,18 @@ public class SesionDomainEntity {
     private SesionDomainEntity() {}
 
     // Getters y Setters
-    public Long getId() { 
-        return id; 
+    public String getId() {
+        return id;
     }
-    public void setId(Long id) { 
-        this.id = id; 
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public UUID getActividadId() { 
-        return actividadId; 
+    public String getActividadId() {
+        return actividadId;
     }
-    public void setActividadId(UUID actividadId) { 
-        this.actividadId = actividadId; 
+    public void setActividadId(String actividadId) {
+        this.actividadId = actividadId;
     }
 
     public LocalDateTime getFechaSesion() { 
@@ -67,7 +66,7 @@ public class SesionDomainEntity {
      * Factory method para crear una nueva sesión
      */
     public static SesionDomainEntity create(
-        UUID actividadId,  
+        String actividadId,  
         LocalDateTime fechaSesion,
         String titulo
     ) {
@@ -89,8 +88,8 @@ public class SesionDomainEntity {
      * Factory method para reconstruir una sesión existente (desde DB)
      */
     public static SesionDomainEntity reconstruct(
-        Long id,
-        UUID actividadId,
+        String id,
+        String actividadId,
         LocalDateTime fechaSesion,
         String titulo,
         LocalDateTime createdAt,
@@ -163,7 +162,7 @@ public class SesionDomainEntity {
 
     /* VALIDACIONES PRIVADAS */
 
-    private static void validateCreationParams(UUID actividadId, LocalDateTime fechaSesion, String titulo) {
+    private static void validateCreationParams(String actividadId, LocalDateTime fechaSesion, String titulo) {
         if (actividadId == null) {
             throw new IllegalArgumentException("El ID de actividad debe ser un número positivo");
         }

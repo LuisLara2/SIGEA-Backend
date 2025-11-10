@@ -15,8 +15,8 @@ public class EliminarSesionUseCase {
         this.sesionRepository = sesionRepository;
     }
 
-    public void execute(Long id) {
-        if (id == null || id <= 0) {
+    public void execute(String id) {
+        if (id == null) {
             throw new IllegalArgumentException("El ID debe ser un número positivo");
         }
         

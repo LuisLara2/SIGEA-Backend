@@ -5,7 +5,6 @@ import com.zentry.sigea.module_sesiones.presentacion.models.SesionRequest;
 import com.zentry.sigea.module_sesiones.presentacion.models.SesionResponse;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Interfaz del servicio de sesiones
@@ -16,11 +15,11 @@ public interface ISesionService {
     
     List<SesionResponse> listarSesiones();
     
-    List<SesionResponse> listarSesionesPorActividad(UUID actividadId);
+    List<SesionResponse> listarSesionesPorActividad(String actividadId);
     
-    SesionResponse obtenerSesionPorId(Long id);
+    SesionResponse obtenerSesionPorId(String id);
     
-    SesionResponse actualizarSesion(Long id, SesionRequest request);
+    SesionResponse actualizarSesion(String id, SesionRequest request);
     
-    void eliminarSesion(Long id);
+    void eliminarSesion(String id);
 }

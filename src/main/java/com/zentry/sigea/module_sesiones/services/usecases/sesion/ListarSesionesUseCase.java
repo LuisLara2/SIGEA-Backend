@@ -5,7 +5,6 @@ import com.zentry.sigea.module_sesiones.core.repositories.ISesionRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Caso de uso para listar todas las sesiones
@@ -23,7 +22,7 @@ public class ListarSesionesUseCase {
         return sesionRepository.findAll();
     }
     
-    public List<SesionDomainEntity> executeByActividad(UUID actividadId) {
+    public List<SesionDomainEntity> executeByActividad(String actividadId) {
         if (actividadId == null || actividadId.toString().isEmpty()) {
             throw new IllegalArgumentException("El ID de actividad debe ser un número positivo");
         }

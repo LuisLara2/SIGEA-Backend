@@ -13,24 +13,24 @@ import java.util.UUID;
 public class SesionMapper {
 
     public static SesionEntity toEntity(
-        SesionDomainEntity domain, 
+        SesionDomainEntity sesionDomainEntity, 
         ActividadEntity actividadEntity
     ) {
-        if (domain == null) {
+        if (sesionDomainEntity == null) {
             return null;
         }
 
-        SesionEntity entity = new SesionEntity();
+        SesionEntity sesionEntity = new SesionEntity();
         
-        if (domain.getId() != null) {
-            entity.setId(domain.getId());
+        if (sesionDomainEntity.getId() != null) {
+            sesionEntity.setId(UUID.fromString(sesionDomainEntity.getId()));
         }
         
-        entity.setActividad(actividadEntity);
-        entity.setFechaSesion(domain.getFechaSesion());
-        entity.setTitulo(domain.getTitulo());
+        sesionEntity.setActividad(actividadEntity);
+        sesionEntity.setFechaSesion(sesionDomainEntity.getFechaSesion());
+        sesionEntity.setTitulo(sesionDomainEntity.getTitulo());
         
-        return entity;
+        return sesionEntity;
     }
 
     public static SesionDomainEntity toDomain(SesionEntity entity) {
@@ -38,13 +38,13 @@ public class SesionMapper {
             return null;
         }
 
-        UUID actividadId = null;
+        String actividadId = null;
         if (entity.getActividad() != null) {
-            actividadId = entity.getActividad().getId();
+            actividadId = entity.getActividad().getId().toString();
         }
 
         return SesionDomainEntity.reconstruct(
-            entity.getId(),
+            entity.getId().toString(),
             actividadId,
             entity.getFechaSesion(),
             entity.getTitulo(),

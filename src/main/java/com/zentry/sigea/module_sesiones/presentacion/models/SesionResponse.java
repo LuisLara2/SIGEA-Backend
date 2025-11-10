@@ -3,14 +3,13 @@ package com.zentry.sigea.module_sesiones.presentacion.models;
 import java.time.LocalDateTime;
 
 import com.zentry.sigea.module_sesiones.core.entities.SesionDomainEntity;
-import java.util.UUID; 
 
 /**
  * DTO de respuesta para sesiones
  */
 public class SesionResponse {
-    private Long id;
-    private UUID actividadId;
+    private String id;
+    private String actividadId;
     private LocalDateTime fechaSesion;
     private String titulo;
     private LocalDateTime createdAt;
@@ -18,8 +17,14 @@ public class SesionResponse {
 
     public SesionResponse() {}
 
-    public SesionResponse(Long id, UUID actividadId, LocalDateTime fechaSesion, String titulo,
-                         LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public SesionResponse(
+        String id, 
+        String actividadId, 
+        LocalDateTime fechaSesion, 
+        String titulo,
+        LocalDateTime createdAt, 
+        LocalDateTime updatedAt
+    ) {
         this.id = id;
         this.actividadId = actividadId;
         this.fechaSesion = fechaSesion;
@@ -42,19 +47,17 @@ public class SesionResponse {
         );
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
-
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public UUID getActividadId() {
+    public String getActividadId() {
         return actividadId;
     }
-
-    public void setActividadId(UUID actividadId) {
+    public void setActividadId(String actividadId) {
         this.actividadId = actividadId;
     }
 

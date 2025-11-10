@@ -18,8 +18,8 @@ public class ActualizarSesionUseCase {
         this.sesionRepository = sesionRepository;
     }
 
-    public Optional<SesionDomainEntity> execute(Long id, SesionDomainEntity datosActualizados) {
-        if (id == null || id <= 0) {
+    public Optional<SesionDomainEntity> execute(String id, SesionDomainEntity datosActualizados) {
+        if (id == null) {
             throw new IllegalArgumentException("El ID debe ser un número positivo");
         }
         
