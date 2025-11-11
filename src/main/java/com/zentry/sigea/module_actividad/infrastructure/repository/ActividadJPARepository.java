@@ -14,6 +14,7 @@ public interface ActividadJPARepository extends JpaRepository<ActividadEntity , 
     public List<ActividadEntity> findAll();
     public List<ActividadEntity> findByOrganizadorId(UUID organizadorId);
     public List<ActividadEntity> findByEstadoActividadId(UUID estadoActividadId);
+    public List<ActividadEntity> findByTipoActividadId(UUID tipoActividadId);
     public List<ActividadEntity> findByFechaInicioBetween(LocalDate fechaInicio , LocalDate fechaFin);
     public List<ActividadEntity> findByEstadoActividad_Codigo(String codigo);
 }
