@@ -13,6 +13,8 @@ import com.zentry.sigea.module_actividad.presentation.models.requestDTO.CrearAct
 import com.zentry.sigea.module_actividad.presentation.models.responseDTO.ActividadResponse;
 import com.zentry.sigea.module_actividad.services.interfaces.IActividad;
 import com.zentry.sigea.module_actividad.services.usecases.actividad.CrearActividadUseCase;
+import com.zentry.sigea.module_actividad.services.usecases.actividad.ActualizarActividadUseCase;
+import com.zentry.sigea.module_actividad.services.usecases.actividad.EliminarActividadUseCase;
 
 /**
  * Servicio de aplicación que orquesta casos de uso de actividades
@@ -23,13 +25,19 @@ public class ActividadService implements IActividad {
 
     private final IActividadRespository actividadRespository;
     private final CrearActividadUseCase crearActividadUseCase;
+    private final ActualizarActividadUseCase actualizarActividadUseCase;
+    private final EliminarActividadUseCase eliminarActividadUseCase;
 
     public ActividadService(
         IActividadRespository actividadRepository, 
-        CrearActividadUseCase crearActividadUseCase
+        CrearActividadUseCase crearActividadUseCase,
+        ActualizarActividadUseCase actualizarActividadUseCase,
+        EliminarActividadUseCase eliminarActividadUseCase
     ) {
         this.actividadRespository = actividadRepository;
         this.crearActividadUseCase = crearActividadUseCase;
+        this.actualizarActividadUseCase = actualizarActividadUseCase;
+        this.eliminarActividadUseCase = eliminarActividadUseCase;
     }
 
     /**
@@ -45,7 +53,7 @@ public class ActividadService implements IActividad {
      * Lista actividades con filtros opcionales
      */
     @Override
-    @Transactional(readOnly = true)  // ← AGREGAR ESTO
+    @Transactional(readOnly = true)
     public List<ActividadResponse> listarActividades() {
         // Por ahora devolvemos todas, luego implementaremos filtros
         return actividadRespository.findAll().stream()
@@ -55,9 +63,10 @@ public class ActividadService implements IActividad {
 
 
     @Override
+    @Transactional
     public ActividadResponse actualizarActividad(String id, ActividadRequest request) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'actualizarActividad'");
+        ActividadDomainEntity actividad = actualizarActividadUseCase.execute(id, request);
+        return ActividadResponse.fromEntity(actividad);
     }
 
     @Override
@@ -74,14 +83,15 @@ public class ActividadService implements IActividad {
 
     @Override
     public List<ActividadResponse> obtenerActividadesPorTipo(String tipoActividadId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'obtenerActividadesPorTipo'");
+        return actividadRespository.findByTipoActividadId(tipoActividadId).stream()
+                .map(ActividadResponse::fromEntity)
+                .toList();
     }
 
     @Override
+    @Transactional
     public void eliminarActividad(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eliminarActividad'");
+        eliminarActividadUseCase.execute(id);
     }
 
 }

@@ -28,7 +28,7 @@ public class TipoActividadEntity {
     )
     private UUID id;
 
-    @Column(name = "nombre_actividad" , nullable = false , length = 50)
+    @Column(name = "nombre_actividad" , nullable = false , length = 50 , unique = true)
     private String nombreActividad;
 
     @Lob

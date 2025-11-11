@@ -9,4 +9,5 @@ public interface IUsuarioRepository {
     public void save(UsuarioDomainEntity usuario);
     public Optional<UsuarioDomainEntity> findById(String id);
     public List<UsuarioDomainEntity> findAll();
+    public Optional<UsuarioDomainEntity> findByCorreo(String correo);
 }

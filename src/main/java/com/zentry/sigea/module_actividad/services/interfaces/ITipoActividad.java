@@ -7,7 +7,7 @@ import com.zentry.sigea.module_actividad.presentation.models.requestDTO.TipoActi
 
 public interface ITipoActividad {
     public String crearTipoActividad(TipoActividadRequest tipoActividad);
-    public TipoActividadDomainEntity actualizarTipoActividad(TipoActividadRequest tipoActividad);
+    public TipoActividadDomainEntity actualizarTipoActividad(String id, TipoActividadRequest tipoActividad);
     public void eliminarTipoActividad(String id);
     public List<TipoActividadDomainEntity> listarTiposActividad();
     public TipoActividadDomainEntity obtenerTipoActividadPorId(String id);

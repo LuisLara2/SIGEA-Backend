@@ -33,7 +33,7 @@ public class UsuarioEntity {
     @Column(name = "apellidos" , nullable = false , length = 100)
     private String apellidos;
     
-    @Column(name = "correo" , nullable = false , length = 100)
+    @Column(name = "correo" , nullable = false , length = 100 , unique = true)
     private String correo;
     
     @Column(name = "password_hash" , nullable = false , length = 255)
@@ -44,4 +44,10 @@ public class UsuarioEntity {
 
     @Column(name = "updated_at" , nullable = false , columnDefinition = "TIMESTAMP")
     private LocalDateTime updatedAt = LocalDateTime.now();
+
+    @Column(name = "telefono" , nullable = false , length = 25)
+    private String telefono;
+
+    @Column(name = "extension_telefonica" , nullable = false , length = 8)
+    private String extensionTelefonica;
 }

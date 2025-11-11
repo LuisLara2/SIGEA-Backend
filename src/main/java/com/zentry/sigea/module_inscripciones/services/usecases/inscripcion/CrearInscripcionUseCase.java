@@ -31,9 +31,6 @@ public class CrearInscripcionUseCase {
      * Ejecuta la creación de inscripción recibiendo IDs y convirtiéndolos a objetos completos
      */
     public String execute(CrearInscripcionRequest request) {
-        // Validaciones básicas de entrada
-        validateBasicFields(request);
-        
         // Validar que no exista ya una inscripción para este usuario y actividad
         if (inscripcionRepository.existsByUsuarioIdAndActividadId(
             request.getUsuarioId(), 
@@ -84,25 +81,10 @@ public class CrearInscripcionUseCase {
 
         return estado;
     }
-
-    private void validateBasicFields(CrearInscripcionRequest request) {
-        if (request.getUsuarioId() == null || request.getUsuarioId().trim().isEmpty()) {
-            throw new IllegalArgumentException("El ID del usuario es obligatorio");
-        }
-        
-        if (request.getActividadId() == null || request.getActividadId().trim().isEmpty()) {
-            throw new IllegalArgumentException("El ID de la actividad es obligatorio");
-        }
-        
-        if (request.getEstadoId() == null || request.getEstadoId().trim().isEmpty()) {
-            throw new IllegalArgumentException("El ID del estado es obligatorio");
-        }
-    }
     
     private void validateBusinessRules(CrearInscripcionRequest request) {
         // Validar que la fecha de inscripción no sea en el pasado (si se proporciona)
-        if (request.getFechaInscripcion() != null && 
-            request.getFechaInscripcion().isBefore(LocalDate.now())) {
+        if (request.getFechaInscripcion().isBefore(LocalDate.now())) {
             throw new IllegalArgumentException(
                 "La fecha de inscripción no puede ser en el pasado"
             );

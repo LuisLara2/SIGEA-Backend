@@ -27,7 +27,7 @@ public class RolEntity {
     )
     private UUID id;
 
-    @Column(name = "nombre_rol" , nullable = false , length = 50)
+    @Column(name = "nombre_rol" , nullable = false , length = 50 , unique = true)
     private String nombreRol;
 
     @Column(name = "descripcion" , nullable = true , columnDefinition = "TEXT")

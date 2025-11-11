@@ -2,11 +2,18 @@ package com.zentry.sigea.module_inscripciones.presentation.models.requestDTO;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 /**
  * DTO para actualizar una inscripción
  */
 public class InscripcionRequest {
+
+    @NotNull(message = "Debe especificar una fecha de inscripcion.")
     private LocalDate fechaInscripcion;
+
+    @NotBlank(message = "Debe especificar el estado de la actividad.")
     private String estadoId;
 
     // Constructor vacío para Jackson
@@ -22,16 +29,8 @@ public class InscripcionRequest {
         return fechaInscripcion;
     }
 
-    public void setFechaInscripcion(LocalDate fechaInscripcion) {
-        this.fechaInscripcion = fechaInscripcion;
-    }
-
     public String getEstadoId() {
         return estadoId;
-    }
-
-    public void setEstadoId(String estadoId) {
-        this.estadoId = estadoId;
     }
 }
 

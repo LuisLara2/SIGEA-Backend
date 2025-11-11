@@ -38,4 +38,9 @@ public class UsuarioRepositoryAdapter implements IUsuarioRepository {
             .map(UsuarioMapper::toDomain)
             .collect(Collectors.toList());
     }
+
+    public Optional<UsuarioDomainEntity> findByCorreo(String correo){
+        return usuarioJPARepository.findByCorreo(correo)
+            .map(u -> UsuarioMapper.toDomain(u));
+    }
 }
