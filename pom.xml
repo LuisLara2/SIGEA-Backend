@@ -109,6 +109,25 @@
             <version>3.0.0</version>
         </dependency>
         <!-- dotenv-java -->
+        
+        <!-- MercadoPago SDK (incluye Yape) -->
+        <dependency>
+            <groupId>com.mercadopago</groupId>
+            <artifactId>sdk-java</artifactId>
+            <version>2.1.21</version>
+        </dependency>
+        
+        <!-- HTTP Client para integraciones -->
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+        </dependency>
+        
+        <!-- Jackson para JSON -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
