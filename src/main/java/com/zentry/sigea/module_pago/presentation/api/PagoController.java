@@ -1,158 +1,94 @@
 package com.zentry.sigea.module_pago.presentation.api;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mercadopago.MercadoPagoConfig;
-import com.mercadopago.client.payment.PaymentClient;
-import com.mercadopago.client.payment.PaymentCreateRequest;
-import com.mercadopago.client.payment.PaymentPayerRequest;
-import com.mercadopago.exceptions.MPApiException;
-import com.mercadopago.exceptions.MPException;
-import com.mercadopago.resources.payment.Payment;
-import com.zentry.sigea.module_pago.presentation.model.requestDTO.ConsultPagoRequest;
-import com.zentry.sigea.module_pago.presentation.model.requestDTO.YapePaymentRequest;
-import com.zentry.sigea.module_pago.presentation.model.responseDTO.ErrorResponse;
-import com.zentry.sigea.module_pago.presentation.model.responseDTO.YapePaymentResponse;
+import com.zentry.sigea.module_pago.presentation.dto.ConsultPagoRequest;
+import com.zentry.sigea.module_pago.presentation.dto.YapePaymentRequest;
+import com.zentry.sigea.module_pago.services.PagoService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1/pagos")
+@Tag(name = "Pagos", description = "API para gestión de pagos con Yape")
 public class PagoController {
 
     private static final Logger log = LoggerFactory.getLogger(PagoController.class);
 
-    @Value("${mercadopago.access-token}")
-    private String mercadoPagoAccessToken;
+    @Autowired
+    private PagoService pagoService;
 
     /**
-     * Crea un pago directo con Yape El flujo es: 1. Frontend obtiene el token
-     * del usuario (OTP o QR) 2. Backend procesa el pago 3. Se retorna el
-     * resultado inmediato
+     * Crea un pago directo con Yape
      */
     @PostMapping("/crear-pago-yape")
+    @Operation(summary = "Crear pago con Yape", description = "Procesa un pago usando Yape a través de MercadoPago")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Pago procesado exitosamente"),
+        @ApiResponse(responseCode = "400", description = "Error en los datos del pago"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public Object pagarConYape(@RequestBody YapePaymentRequest request) {
-
-        try {
-            // 1. Configurar token de Mercado Pago
-            MercadoPagoConfig.setAccessToken(mercadoPagoAccessToken);
-
-            // 2. Crear cliente de pagos
-            PaymentClient client = new PaymentClient();
-
-            // 3. Construir request de pago
-            PaymentCreateRequest createRequest = PaymentCreateRequest.builder()
-                    // Información del pago
-                    .description(request.getDescripcion())
-                    .transactionAmount(request.getMonto())
-                    .installments(1) // Yape solo permite pagos al contado
-
-                    // Método de pago
-                    .paymentMethodId("yape")
-                    .token(request.getToken()) // Token generado por el frontend
-
-                    // Información del pagador
-                    .payer(PaymentPayerRequest.builder()
-                            .email(request.getEmail())
-                            .build())
-                    // Referencia externa (tu ID interno)
-                    .externalReference(request.getReferencia())
-                    // Metadata adicional (opcional)
-                    .metadata(crearMetadata(request))
-                    // Descripción en el estado de cuenta
-                    .statementDescriptor("SIGEA")
-                    .build();
-
-            // 4. Crear el pago
-            Payment payment = client.create(createRequest);
-
-            // 5. Retornar respuesta exitosa
-            return YapePaymentResponse.builder()
-                    .success(true)
-                    .paymentId(payment.getId())
-                    .status(payment.getStatus())
-                    .statusDetail(payment.getStatusDetail())
-                    .transactionAmount(payment.getTransactionAmount())
-                    .dateCreated(payment.getDateCreated())
-                    .mensaje("Pago procesado correctamente")
-                    .build();
-
-        } catch (MPApiException e) {
-            // Error de la API de Mercado Pago
-            log.error("Error API Mercado Pago: {}", e.getApiResponse().getContent(), e);
-            return ErrorResponse.builder()
-                    .success(false)
-                    .error("API_ERROR")
-                    .mensaje("Error al procesar el pago: " + e.getMessage())
-                    .statusCode(e.getStatusCode())
-                    .build();
-
-        } catch (MPException e) {
-            // Error general de Mercado Pago
-            log.error("Error Mercado Pago: {}", e.getMessage(), e);
-            return ErrorResponse.builder()
-                    .success(false)
-                    .error("MP_ERROR")
-                    .mensaje("Error en Mercado Pago: " + e.getMessage())
-                    .build();
-
-        } catch (Exception e) {
-            // Error inesperado
-            log.error("Error inesperado: {}", e.getMessage(), e);
-            return ErrorResponse.builder()
-                    .success(false)
-                    .error("INTERNAL_ERROR")
-                    .mensaje("Error interno del servidor")
-                    .build();
-        }
+        log.info("Procesando pago con Yape para referencia: {}", request.getReferencia());
+        return pagoService.pagarConYape(convertToMap(request));
     }
 
     /**
      * Consulta el estado de un pago
      */
     @PostMapping("/consultar-pago")
+    @Operation(summary = "Consultar estado de pago", description = "Obtiene el estado actual de un pago por su ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Estado consultado exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Pago no encontrado"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public Object consultarPago(@RequestBody ConsultPagoRequest request) {
-        try {
-            MercadoPagoConfig.setAccessToken(mercadoPagoAccessToken);
-
-            PaymentClient client = new PaymentClient();
-            Payment payment = client.get(request.getPaymentId());
-
-            return YapePaymentResponse.builder()
-                    .success(true)
-                    .paymentId(payment.getId())
-                    .status(payment.getStatus())
-                    .statusDetail(payment.getStatusDetail())
-                    .transactionAmount(payment.getTransactionAmount())
-                    .dateCreated(payment.getDateCreated())
-                    .build();
-
-        } catch (Exception e) {
-            log.error("Error al consultar pago: {}", e.getMessage(), e);
-            return ErrorResponse.builder()
-                    .success(false)
-                    .mensaje("Error al consultar el pago")
-                    .build();
-        }
+        log.info("Consultando pago ID: {}", request.getPaymentId());
+        return pagoService.consultarPago(convertToMap(request));
     }
 
     /**
-     * Crea metadata para el pago
+     * Endpoint de prueba con datos hardcodeados
      */
-    private Map<String, Object> crearMetadata(YapePaymentRequest request) {
-        Map<String, Object> metadata = new HashMap<>();
-        metadata.put("sistema", "SIGEA");
-        metadata.put("referencia", request.getReferencia());
-        if (request.getUsuarioId() != null) {
-            metadata.put("usuario_id", request.getUsuarioId());
-        }
-        return metadata;
+    @PostMapping("/test-endpoint")
+    @Operation(summary = "Endpoint de prueba de pago", description = "Realiza un pago de prueba con datos hardcodeados para verificar la integración con MercadoPago")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Pago de prueba procesado correctamente"),
+        @ApiResponse(responseCode = "400", description = "Error en la configuración de MercadoPago"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    public Object testEndpoint() {
+        log.info("Ejecutando endpoint de prueba con datos hardcodeados");
+        return pagoService.testEndpoint();
+    }
+
+    // Métodos helper para convertir DTOs a Map (temporalmente)
+    private Map<String, Object> convertToMap(YapePaymentRequest request) {
+        Map<String, Object> map = new java.util.HashMap<>();
+        map.put("descripcion", request.getDescripcion());
+        map.put("monto", request.getMonto());
+        map.put("token", request.getToken());
+        map.put("email", request.getEmail());
+        map.put("referencia", request.getReferencia());
+        map.put("usuarioId", request.getUsuarioId());
+        return map;
+    }
+
+    private Map<String, Object> convertToMap(ConsultPagoRequest request) {
+        Map<String, Object> map = new java.util.HashMap<>();
+        map.put("paymentId", request.getPaymentId());
+        return map;
     }
 }
