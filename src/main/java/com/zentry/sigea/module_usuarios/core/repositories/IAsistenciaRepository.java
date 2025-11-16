@@ -7,6 +7,7 @@ import com.zentry.sigea.module_usuarios.core.entities.AsistenciaDomainEntity;
 
 public interface IAsistenciaRepository {
     public void save(AsistenciaDomainEntity asistenciaDomainEntity);
+    public void saveAll(List<AsistenciaDomainEntity> listAsistenciaDomainEntities);
     public Optional<AsistenciaDomainEntity> findById(String id);
     public List<AsistenciaDomainEntity> findByInscripcionId(String inscripcionId);
     public List<AsistenciaDomainEntity> findBySesionId(String sesionId);

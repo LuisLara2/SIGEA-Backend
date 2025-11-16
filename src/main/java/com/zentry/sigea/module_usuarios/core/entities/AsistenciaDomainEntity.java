@@ -1,6 +1,7 @@
 package com.zentry.sigea.module_usuarios.core.entities;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class AsistenciaDomainEntity {
     private String sesionId;
@@ -39,16 +40,22 @@ public class AsistenciaDomainEntity {
     public static AsistenciaDomainEntity create(
         String sesionId,
         String inscripcionId,
-        Boolean presente
+        Boolean presente , 
+        Optional<LocalDateTime> registradoEn
     ){
-        LocalDateTime nowLocalDateTime = LocalDateTime.now();
-
+        
         AsistenciaDomainEntity asistenciaDomainEntity = new AsistenciaDomainEntity();
-
+        
         asistenciaDomainEntity.setSesionId(sesionId);
         asistenciaDomainEntity.setInscripcionId(inscripcionId);
         asistenciaDomainEntity.setPresente(presente);
-        asistenciaDomainEntity.setRegistradoEn(nowLocalDateTime);
+        
+        if (registradoEn.isPresent()) {
+            asistenciaDomainEntity.setRegistradoEn(registradoEn.get());
+        } else {
+            LocalDateTime nowLocalDateTime = LocalDateTime.now();
+            asistenciaDomainEntity.setRegistradoEn(nowLocalDateTime);
+        }
 
         return asistenciaDomainEntity;
     }

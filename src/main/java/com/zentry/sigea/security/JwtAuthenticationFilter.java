@@ -30,22 +30,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         HttpServletRequest request,
         HttpServletResponse response , 
         FilterChain filterChain
-    ) throws ServletException , IOException{
+    ) throws ServletException , IOException{        
         String header = request.getHeader("Authorization");
 
-        if(header != null && header.startsWith("Bearer")){
+        if(header != null && header.startsWith("Bearer ")){
             try {
                 String token = header.substring(7);
                 Claims claims = jwtUtil.extractClaims(token);
 
+                String usuarioId = claims.get("usuarioId" , String.class);
                 String email = claims.getSubject();
+                
                 List<String> roles = claims.get("roles" , List.class);
 
                 var authorities = roles.stream()
-                        .map(SimpleGrantedAuthority::new)
+                        .map(r -> new SimpleGrantedAuthority("ROLE_" + r))
                         .collect(Collectors.toList());
 
-                Authentication auth = new UsernamePasswordAuthenticationToken(email, null , authorities);
+                UsuarioAuthInfo usuarioAuthInfo = new UsuarioAuthInfo(usuarioId, email);
+
+                Authentication auth = new UsernamePasswordAuthenticationToken(usuarioAuthInfo, null , authorities);
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } catch (Exception e) {
