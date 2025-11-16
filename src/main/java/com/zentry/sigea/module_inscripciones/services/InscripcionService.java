@@ -8,10 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.zentry.sigea.module_inscripciones.core.entities.InscripcionDomainEntity;
 import com.zentry.sigea.module_inscripciones.core.repositories.IInscripcionRepository;
-import com.zentry.sigea.module_inscripciones.presentation.models.requestDTO.CrearInscripcionRequest;
 import com.zentry.sigea.module_inscripciones.presentation.models.requestDTO.InscripcionRequest;
 import com.zentry.sigea.module_inscripciones.presentation.models.responseDTO.InscripcionResponse;
 import com.zentry.sigea.module_inscripciones.services.interfaces.IInscripcion;
+import com.zentry.sigea.module_inscripciones.services.serviceDTO.CrearInscripcionServiceDTO;
 import com.zentry.sigea.module_inscripciones.services.usecases.inscripcion.ActualizarInscripcionUseCase;
 import com.zentry.sigea.module_inscripciones.services.usecases.inscripcion.CrearInscripcionUseCase;
 import com.zentry.sigea.module_inscripciones.services.usecases.inscripcion.EliminarInscripcionUseCase;
@@ -48,8 +48,8 @@ public class InscripcionService implements IInscripcion {
      * Crea una nueva inscripción usando el request con IDs
      */
     @Override
-    public String crearInscripcion(CrearInscripcionRequest request) {
-        return crearInscripcionUseCase.execute(request);
+    public String crearInscripcion(CrearInscripcionServiceDTO crearInscripcionServiceDTO) {
+        return crearInscripcionUseCase.execute(crearInscripcionServiceDTO);
     }
 
     /**

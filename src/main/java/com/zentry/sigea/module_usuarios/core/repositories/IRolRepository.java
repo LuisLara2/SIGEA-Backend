@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.zentry.sigea.module_usuarios.core.entities.RolDomainEntity;
 
 public interface IRolRepository {
+    public void save(RolDomainEntity rolDomainEntity);
     public List<RolDomainEntity> findAll();
     public Optional<RolDomainEntity> findById(String id);
 }

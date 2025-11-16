@@ -21,6 +21,12 @@ public class RolRepositoryAdapter implements IRolRepository{
         this.rolJPARepository = rolJPARepository;
     }
 
+    public void save(RolDomainEntity rolDomainEntity){
+        rolJPARepository.save(
+            RolMapper.toEntity(rolDomainEntity)
+        );
+    }
+
     public List<RolDomainEntity> findAll(){
         return rolJPARepository.findAll()
             .stream()
