@@ -1,224 +1,254 @@
 package com.zentry.sigea.module_pago.services;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.mercadopago.MercadoPagoConfig;
-import com.mercadopago.client.payment.PaymentClient;
-import com.mercadopago.client.payment.PaymentCreateRequest;
-import com.mercadopago.client.payment.PaymentPayerRequest;
+import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
+import com.mercadopago.client.preference.PreferenceClient;
+import com.mercadopago.client.preference.PreferenceItemRequest;
+import com.mercadopago.client.preference.PreferencePayerRequest;
+import com.mercadopago.client.preference.PreferencePaymentMethodRequest;
+import com.mercadopago.client.preference.PreferencePaymentMethodsRequest;
+import com.mercadopago.client.preference.PreferenceRequest;
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
-import com.mercadopago.resources.payment.Payment;
+import com.mercadopago.resources.preference.Preference;
+import com.zentry.sigea.config.MercadoPagoSetup;
 import com.zentry.sigea.module_pago.services.interfaces.IPago;
 
 @Service
 public class PagoService implements IPago {
 
     private static final Logger log = LoggerFactory.getLogger(PagoService.class);
-
-    @Value("${mercadopago.access-token}")
-    private String mercadoPagoAccessToken;
-
-
-
-    @Override
-    public Object pagarConYape(Object requestObj) {
-        try {
-            @SuppressWarnings("unchecked")
-            Map<String, Object> request = (Map<String, Object>) requestObj;
-            
-            // 1. Configurar token de Mercado Pago
-            MercadoPagoConfig.setAccessToken(mercadoPagoAccessToken);
-
-            // 2. Crear cliente de pagos
-            PaymentClient client = new PaymentClient();
-
-            // 3. Construir request de pago
-            PaymentCreateRequest createRequest = PaymentCreateRequest.builder()
-                    // Información del pago
-                    .description((String) request.get("descripcion"))
-                    .transactionAmount(new BigDecimal(request.get("monto").toString()))
-                    .installments(1) // Yape solo permite pagos al contado
-
-                    // Método de pago
-                    .paymentMethodId("yape")
-                    .token((String) request.get("token")) // Token generado por el frontend
-
-                    // Información del pagador
-                    .payer(PaymentPayerRequest.builder()
-                            .email((String) request.get("email"))
-                            .build())
-                    // Referencia externa (tu ID interno)
-                    .externalReference((String) request.get("referencia"))
-                    // Metadata adicional (opcional)
-                    .metadata(createMetadata(request))
-                    // Descripción en el estado de cuenta
-                    .statementDescriptor("SIGEA")
-                    .build();
-
-            // 4. Crear el pago
-            Payment payment = client.create(createRequest);
-
-            // 5. Retornar respuesta exitosa
-            Map<String, Object> response = new HashMap<>();
-            response.put("success", true);
-            response.put("paymentId", payment.getId());
-            response.put("status", payment.getStatus());
-            response.put("statusDetail", payment.getStatusDetail());
-            response.put("transactionAmount", payment.getTransactionAmount());
-            response.put("dateCreated", payment.getDateCreated());
-            response.put("mensaje", "Pago procesado correctamente");
-            return response;
-
-        } catch (MPApiException e) {
-            // Error de la API de Mercado Pago
-            log.error("Error API Mercado Pago: {}", e.getApiResponse().getContent(), e);
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("success", false);
-            errorResponse.put("error", "API_ERROR");
-            errorResponse.put("mensaje", "Error al procesar el pago: " + e.getMessage());
-            errorResponse.put("statusCode", e.getStatusCode());
-            return errorResponse;
-
-        } catch (MPException e) {
-            // Error general de Mercado Pago
-            log.error("Error Mercado Pago: {}", e.getMessage(), e);
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("success", false);
-            errorResponse.put("error", "MP_ERROR");
-            errorResponse.put("mensaje", "Error en Mercado Pago: " + e.getMessage());
-            return errorResponse;
-
-        } catch (Exception e) {
-            // Error inesperado
-            log.error("Error inesperado: {}", e.getMessage(), e);
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("success", false);
-            errorResponse.put("error", "INTERNAL_ERROR");
-            errorResponse.put("mensaje", "Error interno del servidor");
-            return errorResponse;
-        }   
+    
+    private final MercadoPagoSetup mercadoPagoSetup;
+    
+    public PagoService(MercadoPagoSetup mercadoPagoSetup) {
+        this.mercadoPagoSetup = mercadoPagoSetup;
     }
 
     @Override
-    public Object consultarPago(Object requestObj) {
+    public Object pagarConYape() {
         try {
-            @SuppressWarnings("unchecked")
-            Map<String, Object> request = (Map<String, Object>) requestObj;
+            // Configurar MercadoPago
+            mercadoPagoSetup.configurar();
             
-            MercadoPagoConfig.setAccessToken(mercadoPagoAccessToken);
+            // Crear cliente de preferencia
+            PreferenceClient client = new PreferenceClient();
+            
+            // Crear item del producto/servicio
+            List<PreferenceItemRequest> items = new ArrayList<>();
+            PreferenceItemRequest item = PreferenceItemRequest.builder()
+                .id("001")
+                .title("Pago con Yape - Servicio SIGEA")
+                .description("Pago de inscripción o actividad")
+                .pictureUrl("https://via.placeholder.com/300x200.png?text=SIGEA")
+                .categoryId("services")
+                .quantity(1)
+                .currencyId("PEN") // Soles peruanos
+                .unitPrice(new BigDecimal("50.00")) // Monto de ejemplo
+                .build();
+            items.add(item);
 
-            PaymentClient client = new PaymentClient();
-            Payment payment = client.get(Long.valueOf(request.get("paymentId").toString()));
+            // URLs de retorno
+            PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
+                .success("https://brennisc.github.io/url_sigea?status=success")
+                .pending("https://brennisc.github.io/url_sigea?status=pending")
+                .failure("https://brennisc.github.io/url_sigea?status=failure")
+                .build();
 
+            // Configurar métodos de pago (solo Yape)
+            List<PreferencePaymentMethodRequest> excludedPaymentMethods = new ArrayList<>();
+            // Excluir todos los métodos excepto Yape
+            excludedPaymentMethods.add(PreferencePaymentMethodRequest.builder().id("visa").build());
+            excludedPaymentMethods.add(PreferencePaymentMethodRequest.builder().id("master").build());
+            excludedPaymentMethods.add(PreferencePaymentMethodRequest.builder().id("amex").build());
+            excludedPaymentMethods.add(PreferencePaymentMethodRequest.builder().id("diners").build());
+            
+            PreferencePaymentMethodsRequest paymentMethods = PreferencePaymentMethodsRequest.builder()
+                .excludedPaymentMethods(excludedPaymentMethods)
+                .installments(1) // Solo 1 cuota para Yape
+                .build();
+
+            // Información del pagador
+            PreferencePayerRequest payer = PreferencePayerRequest.builder()
+                .name("Usuario")
+                .surname("SIGEA")
+                .email("test_user_123@testuser.com")
+                .build();
+
+            // Crear la preferencia
+            PreferenceRequest preferenceRequest = PreferenceRequest.builder()
+                .items(items)
+                .backUrls(backUrls)
+                .paymentMethods(paymentMethods)
+                .payer(payer)
+                .autoReturn("approved")
+                .externalReference("SIGEA-" + System.currentTimeMillis())
+                .build();
+
+            Preference preference = client.create(preferenceRequest);
+            
+            // Preparar respuesta con URLs
             Map<String, Object> response = new HashMap<>();
-            response.put("success", true);
-            response.put("paymentId", payment.getId());
-            response.put("status", payment.getStatus());
-            response.put("statusDetail", payment.getStatusDetail());
-            response.put("transactionAmount", payment.getTransactionAmount());
-            response.put("dateCreated", payment.getDateCreated());
+            response.put("preference_id", preference.getId());
+            response.put("init_point", preference.getInitPoint()); // URL para web
+            response.put("sandbox_init_point", preference.getSandboxInitPoint()); // URL para sandbox
+            response.put("status", "success");
+            response.put("message", "URL de pago generada exitosamente");
+            
+            log.info("Preferencia creada exitosamente: ID = {}", preference.getId());
+            log.info("URL de pago: {}", preference.getInitPoint());
+            
             return response;
-
-        } catch (Exception e) {
-            log.error("Error al consultar pago: {}", e.getMessage(), e);
+            
+        } catch (MPApiException apiException) {
+            log.error("Error de API de MercadoPago:");
+            log.error("Status: {}", apiException.getStatusCode());
+            log.error("Mensaje: {}", apiException.getApiResponse().getContent());
+            
             Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("success", false);
-            errorResponse.put("mensaje", "Error al consultar el pago");
+            errorResponse.put("status", "error");
+            errorResponse.put("message", "Error al crear preferencia de pago");
+            errorResponse.put("details", apiException.getApiResponse().getContent());
+            return errorResponse;
+            
+        } catch (MPException exception) {
+            log.error("Error de MercadoPago: {}", exception.getMessage());
+            exception.printStackTrace();
+            
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", "error");
+            errorResponse.put("message", "Error interno de MercadoPago");
+            errorResponse.put("details", exception.getMessage());
             return errorResponse;
         }
+    }
+
+    @Override
+    public Object crearUrlPago(String titulo, String descripcion, BigDecimal monto, String emailUsuario) {
+        try {
+            // Configurar MercadoPago
+            mercadoPagoSetup.configurar();
+            
+            // Crear cliente de preferencia
+            PreferenceClient client = new PreferenceClient();
+            
+            // Crear item personalizado
+            List<PreferenceItemRequest> items = new ArrayList<>();
+            PreferenceItemRequest item = PreferenceItemRequest.builder()
+                .id("2986591420")
+                .title(titulo)
+                .description(descripcion)
+                .pictureUrl("https://via.placeholder.com/300x200.png?text=SIGEA")
+                .categoryId("services")
+                .quantity(1)
+                .currencyId("PEN") // Soles peruanos
+                .unitPrice(monto)
+                .build();
+            items.add(item);
+
+            // URLs de retorno - puedes cambiar estas URLs
+            PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
+                .success("https://tu-dominio.com/pago-exitoso")
+                .pending("https://tu-dominio.com/pago-pendiente")
+                .failure("https://tu-dominio.com/pago-fallido")
+                .build();
+
+            // Configurar métodos de pago (solo Yape)
+            List<PreferencePaymentMethodRequest> excludedPaymentMethods = new ArrayList<>();
+            excludedPaymentMethods.add(PreferencePaymentMethodRequest.builder().id("visa").build());
+            excludedPaymentMethods.add(PreferencePaymentMethodRequest.builder().id("master").build());
+            excludedPaymentMethods.add(PreferencePaymentMethodRequest.builder().id("amex").build());
+            excludedPaymentMethods.add(PreferencePaymentMethodRequest.builder().id("diners").build());
+            
+            PreferencePaymentMethodsRequest paymentMethods = PreferencePaymentMethodsRequest.builder()
+                .excludedPaymentMethods(excludedPaymentMethods)
+                .installments(1)
+                .build();
+
+            // Información del pagador
+            PreferencePayerRequest payer = PreferencePayerRequest.builder()
+                .name("Usuario")
+                .surname("SIGEA")
+                .email(emailUsuario)
+                .build();
+
+            // Crear la preferencia
+            PreferenceRequest preferenceRequest = PreferenceRequest.builder()
+                .items(items)
+                .backUrls(backUrls)
+                .paymentMethods(paymentMethods)
+                .payer(payer)
+                .autoReturn("approved")
+                .externalReference("SIGEA-CUSTOM-" + System.currentTimeMillis())
+                .build();
+
+            Preference preference = client.create(preferenceRequest);
+            
+            // Preparar respuesta con URLs
+            Map<String, Object> response = new HashMap<>();
+            response.put("preference_id", preference.getId());
+            response.put("init_point", preference.getInitPoint()); 
+            response.put("sandbox_init_point", preference.getSandboxInitPoint()); 
+            response.put("status", "success");
+            response.put("message", "URL de pago personalizada generada exitosamente");
+            
+            log.info("Preferencia personalizada creada: ID = {}", preference.getId());
+            log.info("URL de pago personalizada: {}", preference.getInitPoint());
+            
+            return response;
+            
+        } catch (MPApiException apiException) {
+            log.error("Error de API de MercadoPago en pago personalizado:");
+            log.error("Status: {}", apiException.getStatusCode());
+            log.error("Mensaje: {}", apiException.getApiResponse().getContent());
+            
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", "error");
+            errorResponse.put("message", "Error al crear preferencia personalizada");
+            errorResponse.put("details", apiException.getApiResponse().getContent());
+            return errorResponse;
+            
+        } catch (MPException exception) {
+            log.error("Error de MercadoPago en pago personalizado: {}", exception.getMessage());
+            
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", "error");
+            errorResponse.put("message", "Error interno de MercadoPago");
+            errorResponse.put("details", exception.getMessage());
+            return errorResponse;
+        }
+    }
+
+    @Override
+    public Object consultarPago(Object request) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'consultarPago'");
     }
 
     @Override
     public Object testEndpoint() {
-        try {
-            // Configurar token de Mercado Pago
-            MercadoPagoConfig.setAccessToken(mercadoPagoAccessToken);
-
-            // Crear cliente de pagos
-            PaymentClient client = new PaymentClient();
-
-            // Construir request de pago con datos hardcodeados para prueba
-            PaymentCreateRequest createRequest = PaymentCreateRequest.builder()
-                    .description("Titulo del producto")
-                    .installments(1)
-                    .payer(PaymentPayerRequest.builder()
-                            .email("test_user_123@testuser.com")
-                            .build())
-                    .paymentMethodId("yape")
-                    .token("ff8080814c11e237014c1ff593b57b4d")
-                    .transactionAmount(new BigDecimal("5000"))
-                    .build();
-
-            // Crear el pago de prueba
-            Payment payment = client.create(createRequest);
-
-            // Retornar respuesta exitosa
-            Map<String, Object> response = new HashMap<>();
-            response.put("success", true);
-            response.put("paymentId", payment.getId());
-            response.put("status", payment.getStatus());
-            response.put("statusDetail", payment.getStatusDetail());
-            response.put("transactionAmount", payment.getTransactionAmount());
-            response.put("dateCreated", payment.getDateCreated());
-            response.put("mensaje", "Pago de prueba procesado correctamente");
-            response.put("testData", Map.of(
-                "descripcion", "Titulo del producto",
-                "email", "test_user_123@testuser.com",
-                "monto", "5000"
-            ));
-            return response;
-
-        } catch (MPApiException e) {
-            // Error de la API de Mercado Pago
-            log.error("Error API Mercado Pago en test: {}", e.getApiResponse().getContent(), e);
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("success", false);
-            errorResponse.put("error", "API_ERROR");
-            errorResponse.put("mensaje", "Error al procesar el pago de prueba: " + e.getMessage());
-            errorResponse.put("statusCode", e.getStatusCode());
-            return errorResponse;
-
-        } catch (MPException e) {
-            // Error general de Mercado Pago
-            log.error("Error Mercado Pago en test: {}", e.getMessage(), e);
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("success", false);
-            errorResponse.put("error", "MP_ERROR");
-            errorResponse.put("mensaje", "Error en Mercado Pago: " + e.getMessage());
-            return errorResponse;
-
-        } catch (Exception e) {
-            // Error inesperado
-            log.error("Error inesperado en test: {}", e.getMessage(), e);
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("success", false);
-            errorResponse.put("error", "INTERNAL_ERROR");
-            errorResponse.put("mensaje", "Error interno del servidor");
-            return errorResponse;
-        }
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'testEndpoint'");
     }
+
+
 
     @Override
     public Map<String, Object> createMetadata(Map<String, Object> request) {
-         Map<String, Object> metadata = new HashMap<>();
-        metadata.put("sistema", "SIGEA");
-        metadata.put("referencia", request.get("referencia"));
-        if (request.get("usuarioId") != null) {
-            metadata.put("usuario_id", request.get("usuarioId"));
-        }
-        return metadata;
-    }
-
-
-
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'createMetadata'");
+    }   
 
     
+
+
 }
