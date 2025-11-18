@@ -44,9 +44,6 @@ public class AsistenciaDomainEntity {
         this.registradoEn = registradoEn;
     }
 
-     /**
-     * Factory method para crear una nueva asistencia
-     */
     public static AsistenciaDomainEntity create(
         String sesionId,
         String inscripcionId,
@@ -64,9 +61,6 @@ public class AsistenciaDomainEntity {
         return asistenciaDomainEntity;
     }
 
-     /**
-     * Factory method para reconstruir desde base de datos
-     */
     public static AsistenciaDomainEntity reconstruct(
         String id,
         String sesionId,
@@ -83,9 +77,6 @@ public class AsistenciaDomainEntity {
         return asistencia;
     }
 
-     /**
-     * Métodos de negocio
-     */
     public void marcarPresente() {
         this.presente = true;
     }
