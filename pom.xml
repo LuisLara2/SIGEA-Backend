@@ -109,6 +109,12 @@
             <version>3.0.0</version>
         </dependency>
         <!-- dotenv-java -->
+        <!-- Dependencia de Validacion con @Valid -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <!-- Dependencia de Validacion con @Valid -->
     </dependencies>
 
     <build>

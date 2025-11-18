@@ -8,7 +8,10 @@ public class EstadoInscripcionDomainEntity {
     private String codigo;
     private String etiqueta;
 
-    public static EstadoInscripcionDomainEntity create(String codigo, String etiqueta) {
+    public static EstadoInscripcionDomainEntity create(
+        String codigo, 
+        String etiqueta
+    ) {
         EstadoInscripcionDomainEntity estadoInscripcionDomainEntity = new EstadoInscripcionDomainEntity();
 
         estadoInscripcionDomainEntity.setCodigo(codigo);
