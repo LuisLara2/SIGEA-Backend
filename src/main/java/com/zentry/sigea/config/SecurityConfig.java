@@ -28,17 +28,6 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                            "/v3/api-docs/**",
-                            "/v3/api-docs.yaml",
-                            "/swagger-ui/**",
-                            "/swagger-ui.html",
-                            "/swagger-resources/**",
-                            "/webjars/**"
-                        ).permitAll()
-                        .requestMatchers("/api/{version}/pagos/crear-pago-yape").permitAll()
-                        .requestMatchers("/api/v1/pagos/test-endpoint").permitAll()
-                        .requestMatchers("/api/v1/pagos/consultar-pago").permitAll()
                         .requestMatchers("/api/v1/usuarios/auth/**", "/").permitAll()
                         .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/webjars/**").permitAll()
                         .requestMatchers("/api/{version}/usuarios/administrador/**").hasRole("ADMINISTRADOR")
