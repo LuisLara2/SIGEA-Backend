@@ -18,10 +18,15 @@ public class JwtUtil {
     
     private final SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    public String generateToken(String email , List<?> roles){
+    public String generateToken(
+        String email , 
+        String usuarioId ,
+        List<?> roles
+    ){
         return Jwts.builder()
             .setSubject(email)
             .claim("roles", roles.stream().map(Object::toString).collect(Collectors.toList()))
+            .claim("usuarioId", usuarioId)
             .setIssuedAt(new Date())
             .setExpiration(new Date(System.currentTimeMillis() + 3600000)) // El token expira en 1 hora
             .signWith(secretKey)

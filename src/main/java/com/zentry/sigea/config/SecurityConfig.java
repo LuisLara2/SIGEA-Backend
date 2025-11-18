@@ -11,15 +11,25 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.zentry.sigea.security.CustomAccessDeniedHandler;
+import com.zentry.sigea.security.CustomAuthenticationEntryPoint;
 import com.zentry.sigea.security.JwtAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig {
     
     private final JwtAuthenticationFilter jwtAuthFilter;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter){
+    public SecurityConfig(
+        JwtAuthenticationFilter jwtAuthFilter , 
+        CustomAuthenticationEntryPoint customAuthenticationEntryPoint,
+        CustomAccessDeniedHandler customAccessDeniedHandler
+    ){
         this.jwtAuthFilter = jwtAuthFilter;
+        this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
+        this.customAccessDeniedHandler = customAccessDeniedHandler;
     }
 
     @Bean
@@ -27,12 +37,16 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(ex -> ex
+                    .authenticationEntryPoint(customAuthenticationEntryPoint)
+                    .accessDeniedHandler(customAccessDeniedHandler)
+                )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/{version}/usuarios/auth/**", "/").permitAll()
+                        .requestMatchers("/api/v*/usuarios/auth/**", "/").permitAll()
                         .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/webjars/**").permitAll()
-                        .requestMatchers("/api/{version}/usuarios/administrador/**").hasRole("ADMINISTRADOR")
-                        .requestMatchers("/api/{version}/usuarios/organizador/**").hasRole("ORGANIZADOR")
-                        .requestMatchers("/api/{version}/usuarios/participante/**").hasRole("PARTICIPANTE")
+                        .requestMatchers("/api/v*/usuarios/administrador/**").hasRole("ADMINISTRADOR")
+                        .requestMatchers("/api/v*/usuarios/organizador/**").hasRole("ORGANIZADOR")
+                        .requestMatchers("/api/v*/usuarios/participante/**").hasRole("PARTICIPANTE")
                         // .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
                 )
