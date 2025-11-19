@@ -56,6 +56,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/actividades/**", "/api/{version}/actividades/**").permitAll()
                         // Endpoints de sesiones - temporalmente abiertos para pruebas
                         .requestMatchers("/api/v1/sesiones/**", "/api/{version}/sesiones/**").permitAll()
+                        // Endpoints de certificaciones - temporalmente abiertos para pruebas
+                        .requestMatchers("/api/v1/certificaciones/**", "/api/{version}/certificaciones/**").permitAll()
                         // Endpoints protegidos por rol
                         .requestMatchers("/api/{version}/usuarios/administrador/**").hasRole("ADMINISTRADOR")
                         .requestMatchers("/api/{version}/usuarios/organizador/**").hasRole("ORGANIZADOR")

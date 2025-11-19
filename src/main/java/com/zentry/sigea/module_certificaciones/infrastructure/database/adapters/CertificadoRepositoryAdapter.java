@@ -12,6 +12,7 @@ import com.zentry.sigea.module_certificaciones.core.entities.EstadoCertificadoDo
 import com.zentry.sigea.module_certificaciones.core.repositories.ICertificadoRepository;
 import com.zentry.sigea.module_certificaciones.infrastructure.database.entities.CertificadoEntity;
 import com.zentry.sigea.module_certificaciones.infrastructure.repository.CertificadoRepository;
+import com.zentry.sigea.module_certificaciones.infrastructure.repository.EstadoCertificadoRepository;
 
 /**
  * Adaptador que implementa la interfaz del dominio ICertificadoRepository
@@ -21,9 +22,13 @@ import com.zentry.sigea.module_certificaciones.infrastructure.repository.Certifi
 public class CertificadoRepositoryAdapter implements ICertificadoRepository {
     
     private final CertificadoRepository jpaRepository;
+    private final EstadoCertificadoRepository estadoRepository;
     
-    public CertificadoRepositoryAdapter(CertificadoRepository jpaRepository) {
+    public CertificadoRepositoryAdapter(
+            CertificadoRepository jpaRepository,
+            EstadoCertificadoRepository estadoRepository) {
         this.jpaRepository = jpaRepository;
+        this.estadoRepository = estadoRepository;
     }
     
     @Override
@@ -48,7 +53,8 @@ public class CertificadoRepositoryAdapter implements ICertificadoRepository {
     
     @Override
     public Optional<CertificadoDomainEntity> findByAsistenciaId(String asistenciaId) {
-        return jpaRepository.findByAsistencia(asistenciaId)
+        UUID uuid = UUID.fromString(asistenciaId);
+        return jpaRepository.findByAsistenciaId(uuid)
             .map(this::convertToDomain);
     }
     
@@ -69,8 +75,8 @@ public class CertificadoRepositoryAdapter implements ICertificadoRepository {
     }
     
     @Override
-    public boolean existsByAsistenciaId(String asistenciaId) {
-        return jpaRepository.existsByAsistencia(asistenciaId);
+    public boolean existsByAsistenciaId(UUID asistenciaId) {
+        return jpaRepository.existsByAsistenciaId(asistenciaId);
     }
     
     @Override
@@ -114,7 +120,7 @@ public class CertificadoRepositoryAdapter implements ICertificadoRepository {
             domain.setIdCertificado(entity.getIdCertificado().toString());
         }
         domain.setCodigoValidacion(entity.getCodigoValidacion());
-        domain.setAsistenciaId(entity.getAsistenciaId());
+        domain.setAsistenciaId(entity.getAsistenciaId().toString());
         domain.setFechaEmision(entity.getFechaEmision());
         domain.setUrlPdf(entity.getUrlPdf());
         domain.setCreatedAt(entity.getCreatedAt());
@@ -146,18 +152,16 @@ public class CertificadoRepositoryAdapter implements ICertificadoRepository {
             entity.setIdCertificado(UUID.fromString(domain.getIdCertificado()));
         }
         entity.setCodigoValidacion(domain.getCodigoValidacion());
-        entity.setAsistenciaId(domain.getAsistenciaId());
+        entity.setAsistenciaId(UUID.fromString(domain.getAsistenciaId()));
         entity.setFechaEmision(domain.getFechaEmision());
         entity.setUrlPdf(domain.getUrlPdf());
         entity.setCreatedAt(domain.getCreatedAt());
         entity.setUpdatedAt(domain.getUpdatedAt());
         
-        // TODO: Mapear estado y otros campos complejos
-        // Se necesitará obtener la entidad EstadoCertificadoEntity por ID o código
+        // Mapear estado
         if (domain.getEstado() != null) {
-            // Por ahora solo guardamos el ID como string
-            // En una implementación completa, se debería buscar la entidad EstadoCertificadoEntity
-            // entity.setEstado(estadoCertificadoRepository.findByCodigo(domain.getEstado().getCodigo()));
+            estadoRepository.findByCodigo(domain.getEstado().getCodigo())
+                .ifPresent(entity::setEstado);
         }
         
         return entity;

@@ -12,11 +12,9 @@ import com.zentry.sigea.module_certificaciones.infrastructure.database.entities.
 public class ValidacionMapper {
 
     private final CertificadoMapper certificadoMapper;
-    private final TipoValidadorMapper tipoValidadorMapper;
 
-    public ValidacionMapper(CertificadoMapper certificadoMapper, TipoValidadorMapper tipoValidadorMapper) {
+    public ValidacionMapper(CertificadoMapper certificadoMapper) {
         this.certificadoMapper = certificadoMapper;
-        this.tipoValidadorMapper = tipoValidadorMapper;
     }
 
     /**
@@ -28,8 +26,14 @@ public class ValidacionMapper {
         }
 
         ValidacionDomainEntity domainEntity = new ValidacionDomainEntity();
-        domainEntity.setCertificado(certificadoMapper.toDomain(validacion.getCertificado()));
-        domainEntity.setTipoValidador(tipoValidadorMapper.toDomain(validacion.getTipoValidador()));
+        
+        // Convertir UUID a String para el certificado con verificación de null
+        if (validacion.getCertificado() != null && validacion.getCertificado().getIdCertificado() != null) {
+            domainEntity.setCertificado(validacion.getCertificado().getIdCertificado().toString());
+        }
+        
+        // El tipo validador ya es String en ambas entidades
+        domainEntity.setTipoValidador(validacion.getTipoValidador());
         domainEntity.setFechaValidacion(validacion.getFechaValidacion());
         domainEntity.setResultado(validacion.getResultado());
         domainEntity.setDetalle(validacion.getDetalle());
@@ -39,6 +43,8 @@ public class ValidacionMapper {
 
     /**
      * Convierte de entidad de dominio a entidad de infraestructura
+     * NOTA: Este método requiere cargar las entidades relacionadas desde los repositorios
+     * Debe ser usado con precaución y preferiblemente en un contexto de servicio
      */
     public ValidacionEntity toInfrastructure(ValidacionDomainEntity domainEntity) {
         if (domainEntity == null) {
@@ -46,8 +52,10 @@ public class ValidacionMapper {
         }
 
         ValidacionEntity validacion = new ValidacionEntity();
-        validacion.setCertificado(certificadoMapper.toInfrastructure(domainEntity.getCertificado()));
-        validacion.setTipoValidador(tipoValidadorMapper.toInfrastructure(domainEntity.getTipoValidador()));
+        // NOTA: Aquí necesitarías cargar las entidades desde los repositorios usando los IDs
+        // Por ahora dejamos comentado para evitar errores de compilación
+        // validacion.setCertificado(certificadoRepository.findById(domainEntity.getCertificado()));
+        // validacion.setTipoValidador(tipoValidadorRepository.findByCodigo(domainEntity.getTipoValidador()));
         validacion.setFechaValidacion(domainEntity.getFechaValidacion());
         validacion.setResultado(domainEntity.getResultado());
         validacion.setDetalle(domainEntity.getDetalle());

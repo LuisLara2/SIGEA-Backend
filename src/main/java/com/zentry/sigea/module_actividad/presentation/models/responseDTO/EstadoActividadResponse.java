@@ -19,7 +19,7 @@ public class EstadoActividadResponse {
 
     public static EstadoActividadResponse fromEntity(EstadoActividadDomainEntity estadoActividad) {
         return new EstadoActividadResponse(
-            estadoActividad.getEstadoActividadId(),
+            estadoActividad.getId().toString(),
             estadoActividad.getCodigo(),
             estadoActividad.getEtiqueta()
         );

@@ -71,4 +71,44 @@ public class ActualizarEstadoNotificacionUseCase {
             return false;
         }
     }
+
+    /**
+     * Marcar una notificación como leída
+     */
+    public NotificacionDomainEntity marcarComoLeida(String notificacionId) {
+        NotificacionDomainEntity notificacion = notificacionRepository.findById(notificacionId)
+            .orElseThrow(() -> new IllegalArgumentException(
+                "No se encontró la notificación con ID: " + notificacionId
+            ));
+        
+        EstadoNotificacionDomainEntity estadoLeida = 
+            estadoNotificacionRepository.findByCodigo("LEIDA")
+                .orElseThrow(() -> new IllegalStateException("Estado LEIDA no encontrado"));
+        
+        notificacion.cambiarEstado(estadoLeida);
+        notificacionRepository.save(notificacion);
+        
+        logger.info("Notificación {} marcada como leída", notificacionId);
+        return notificacion;
+    }
+
+    /**
+     * Marcar todas las notificaciones de un usuario como leídas
+     */
+    public void marcarTodasComoLeidas(String usuarioId) {
+        if (usuarioId == null || usuarioId.trim().isEmpty()) {
+            throw new IllegalArgumentException("El ID del usuario es obligatorio");
+        }
+        
+        EstadoNotificacionDomainEntity estadoLeida = 
+            estadoNotificacionRepository.findByCodigo("LEIDA")
+                .orElseThrow(() -> new IllegalStateException("Estado LEIDA no encontrado"));
+        
+        notificacionRepository.findByUsuarioId(usuarioId).forEach(notificacion -> {
+            notificacion.cambiarEstado(estadoLeida);
+            notificacionRepository.save(notificacion);
+        });
+        
+        logger.info("Todas las notificaciones del usuario {} marcadas como leídas", usuarioId);
+    }
 }

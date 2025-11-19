@@ -10,7 +10,7 @@ import com.zentry.sigea.module_asistencias.core.entities.AsistenciaDomainEntity;
 import com.zentry.sigea.module_asistencias.core.repositories.IAsistenciaRepository;
 import com.zentry.sigea.module_usuarios.services.serviceDTO.RegistrarAsistenciaServiceDTO;
 
-@Component
+@Component("organizadorRegistrarAsistenciaUseCase")
 public class RegistrarAsistenciaUseCase {
     
     private final IAsistenciaRepository asistenciaRepository;

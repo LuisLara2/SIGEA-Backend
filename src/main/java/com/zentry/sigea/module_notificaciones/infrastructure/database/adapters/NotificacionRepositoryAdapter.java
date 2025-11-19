@@ -123,4 +123,27 @@ public class NotificacionRepositoryAdapter implements INotificacionRepository {
     public void deleteById(String id) {
         notificacionJPARepository.deleteById(UUID.fromString(id));
     }
+
+    @Override
+    public List<NotificacionDomainEntity> findByTipoEvento(String tipoEvento) {
+        return notificacionJPARepository.findByTipoNotificacionCodigo(tipoEvento)
+            .stream()
+            .map(NotificacionMapper::toDomain)
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<NotificacionDomainEntity> findByUsuarioIdAndTipoEvento(String usuarioId, String tipoEvento) {
+        return notificacionJPARepository.findByUsuarioIdAndTipoNotificacionCodigo(
+            UUID.fromString(usuarioId),
+            tipoEvento
+        ).stream()
+        .map(NotificacionMapper::toDomain)
+        .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteByUsuarioId(String usuarioId) {
+        notificacionJPARepository.deleteByUsuarioId(UUID.fromString(usuarioId));
+    }
 }

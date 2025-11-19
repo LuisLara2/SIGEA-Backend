@@ -20,7 +20,7 @@ public interface ValidacionRepository extends JpaRepository<ValidacionEntity, UU
      * @param certificadoId ID del certificado
      * @return Lista de validaciones del certificado
      */
-    @Query("SELECT v FROM Validacion v WHERE v.certificado.idCertificado = :certificadoId")
+    @Query("SELECT v FROM ValidacionEntity v WHERE v.certificado.id = :certificadoId")
     List<ValidacionEntity> findByCertificadoId(@Param("certificadoId") UUID certificadoId);
     
     /**
@@ -28,7 +28,7 @@ public interface ValidacionRepository extends JpaRepository<ValidacionEntity, UU
      * @param tipoValidadorId ID del tipo de validador
      * @return Lista de validaciones de ese tipo
      */
-    @Query("SELECT v FROM Validacion v WHERE v.tipoValidador.idTipoValidador = :tipoValidadorId")
+    @Query("SELECT v FROM ValidacionEntity v WHERE v.tipoValidador = :tipoValidadorId")
     List<ValidacionEntity> findByTipoValidadorId(@Param("tipoValidadorId") UUID tipoValidadorId);
     
     /**
@@ -37,8 +37,8 @@ public interface ValidacionRepository extends JpaRepository<ValidacionEntity, UU
      * @param tipoValidadorId ID del tipo de validador
      * @return Optional con la validación encontrada
      */
-    @Query("SELECT v FROM Validacion v WHERE v.certificado.idCertificado = :certificadoId " +
-           "AND v.tipoValidador.idTipoValidador = :tipoValidadorId")
+    @Query("SELECT v FROM ValidacionEntity v WHERE v.certificado.id = :certificadoId " +
+           "AND v.tipoValidador = :tipoValidadorId")
     Optional<ValidacionEntity> findByCertificadoIdAndTipoValidadorId(
             @Param("certificadoId") UUID certificadoId,
             @Param("tipoValidadorId") UUID tipoValidadorId);
@@ -56,7 +56,7 @@ public interface ValidacionRepository extends JpaRepository<ValidacionEntity, UU
      * @param fechaFin Fecha fin del rango
      * @return Lista de validaciones en ese rango
      */
-    @Query("SELECT v FROM Validacion v WHERE v.fechaValidacion BETWEEN :fechaInicio AND :fechaFin")
+    @Query("SELECT v FROM ValidacionEntity v WHERE v.fechaValidacion BETWEEN :fechaInicio AND :fechaFin")
     List<ValidacionEntity> findByFechaValidacionBetween(@Param("fechaInicio") LocalDate fechaInicio,
                                                   @Param("fechaFin") LocalDate fechaFin);
     
@@ -65,7 +65,7 @@ public interface ValidacionRepository extends JpaRepository<ValidacionEntity, UU
      * @param certificadoId ID del certificado
      * @return Número de validaciones aprobadas
      */
-    @Query("SELECT COUNT(v) FROM Validacion v WHERE v.certificado.idCertificado = :certificadoId " +
+    @Query("SELECT COUNT(v) FROM ValidacionEntity v WHERE v.certificado.id = :certificadoId " +
            "AND v.resultado = 'APROBADO'")
     Long countValidacionesAprobadasByCertificado(@Param("certificadoId") UUID certificadoId);
 }

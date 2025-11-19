@@ -27,4 +27,15 @@ public class EliminarNotificacionUseCase {
 
         notificacionRepository.deleteById(id);
     }
+
+    /**
+     * Eliminar todas las notificaciones de un usuario
+     */
+    public void eliminarPorUsuario(String usuarioId) {
+        if (usuarioId == null || usuarioId.trim().isEmpty()) {
+            throw new IllegalArgumentException("El ID del usuario es obligatorio");
+        }
+
+        notificacionRepository.deleteByUsuarioId(usuarioId);
+    }
 }

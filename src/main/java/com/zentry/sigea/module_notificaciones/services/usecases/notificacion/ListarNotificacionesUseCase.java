@@ -36,4 +36,21 @@ public class ListarNotificacionesUseCase {
         }
         return notificacionRepository.findByActividadId(actividadId);
     }
+
+    public List<NotificacionDomainEntity> executeByTipoEvento(String tipoEvento) {
+        if (tipoEvento == null || tipoEvento.trim().isEmpty()) {
+            throw new IllegalArgumentException("El tipo de evento es obligatorio");
+        }
+        return notificacionRepository.findByTipoEvento(tipoEvento);
+    }
+
+    public List<NotificacionDomainEntity> executeByUsuarioIdAndTipoEvento(String usuarioId, String tipoEvento) {
+        if (usuarioId == null || usuarioId.trim().isEmpty()) {
+            throw new IllegalArgumentException("El ID del usuario es obligatorio");
+        }
+        if (tipoEvento == null || tipoEvento.trim().isEmpty()) {
+            throw new IllegalArgumentException("El tipo de evento es obligatorio");
+        }
+        return notificacionRepository.findByUsuarioIdAndTipoEvento(usuarioId, tipoEvento);
+    }
 }

@@ -41,7 +41,7 @@ public class CertificadoEntity {
     
     // Cambiado de inscripcion_id para evitar dependencia de asistencia
     @Column(name = "asistencia_id", nullable = false, unique = true)
-    private String asistenciaId;
+    private UUID asistenciaId;
     
     @Column(name = "codigo_validacion", length = 50, nullable = false, unique = true)
     private String codigoValidacion;
@@ -50,7 +50,7 @@ public class CertificadoEntity {
     private LocalDate fechaEmision;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "estado_id", nullable = false)
+    @JoinColumn(name = "estado_certificado_id", nullable = false)
     private EstadoCertificadoEntity estado;
     
     @Column(name = "url_pdf", length = 300)

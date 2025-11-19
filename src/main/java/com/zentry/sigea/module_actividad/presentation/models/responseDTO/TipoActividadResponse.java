@@ -24,7 +24,7 @@ public class TipoActividadResponse {
     public static TipoActividadResponse fromEntity(TipoActividadDomainEntity tipoActividad) {
         
         return new TipoActividadResponse(
-            tipoActividad.getTipoActividadId(),
+            tipoActividad.getId().toString(),
             tipoActividad.getNombreActividad(),
             tipoActividad.getDescripcion()
         );

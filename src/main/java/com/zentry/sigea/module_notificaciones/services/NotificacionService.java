@@ -240,4 +240,47 @@ public class NotificacionService {
     public void eliminarNotificacion(String id) {
         eliminarNotificacionUseCase.execute(id);
     }
+
+    /**
+     * Obtener notificaciones filtradas por tipo de evento
+     */
+    public List<NotificacionResponse> obtenerNotificacionesPorTipo(String tipoEvento) {
+        return listarNotificacionesUseCase.executeByTipoEvento(tipoEvento)
+            .stream()
+            .map(NotificacionResponse::fromEntity)
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Obtener notificaciones de un usuario filtradas por tipo de evento
+     */
+    public List<NotificacionResponse> obtenerNotificacionesPorUsuarioYTipo(String usuarioId, String tipoEvento) {
+        return listarNotificacionesUseCase.executeByUsuarioIdAndTipoEvento(usuarioId, tipoEvento)
+            .stream()
+            .map(NotificacionResponse::fromEntity)
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Marcar una notificación como leída
+     */
+    public NotificacionResponse marcarComoLeida(String id) {
+        return NotificacionResponse.fromEntity(
+            actualizarEstadoNotificacionUseCase.marcarComoLeida(id)
+        );
+    }
+
+    /**
+     * Marcar todas las notificaciones de un usuario como leídas
+     */
+    public void marcarTodasComoLeidas(String usuarioId) {
+        actualizarEstadoNotificacionUseCase.marcarTodasComoLeidas(usuarioId);
+    }
+
+    /**
+     * Eliminar todas las notificaciones de un usuario
+     */
+    public void eliminarNotificacionesPorUsuario(String usuarioId) {
+        eliminarNotificacionUseCase.eliminarPorUsuario(usuarioId);
+    }
 }

@@ -115,6 +115,91 @@ public class NotificacionController {
     }
 
     /**
+     * Obtener notificaciones por tipo de evento
+     * @param tipoEvento Ejemplos: CERTIFICADO_GENERADO, SESION_CREADA, INSCRIPCION_APROBADA, etc.
+     */
+    @GetMapping("/tipo/{tipoEvento}")
+    public ResponseEntity<List<NotificacionResponse>> obtenerNotificacionesPorTipo(
+        @PathVariable String tipoEvento
+    ) {
+        try {
+            List<NotificacionResponse> notificaciones = 
+                notificacionService.obtenerNotificacionesPorTipo(tipoEvento);
+            return ResponseEntity.ok(notificaciones);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    /**
+     * Obtener notificaciones de un usuario filtradas por tipo de evento
+     * @param usuarioId ID del usuario
+     * @param tipoEvento Tipo de evento a filtrar
+     */
+    @GetMapping("/usuario/{usuarioId}/tipo/{tipoEvento}")
+    public ResponseEntity<List<NotificacionResponse>> obtenerNotificacionesPorUsuarioYTipo(
+        @PathVariable String usuarioId,
+        @PathVariable String tipoEvento
+    ) {
+        try {
+            List<NotificacionResponse> notificaciones = 
+                notificacionService.obtenerNotificacionesPorUsuarioYTipo(usuarioId, tipoEvento);
+            return ResponseEntity.ok(notificaciones);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    /**
+     * Marcar una notificación como leída
+     */
+    @PutMapping("/{id}/marcar-leida")
+    public ResponseEntity<NotificacionResponse> marcarComoLeida(@PathVariable String id) {
+        try {
+            NotificacionResponse notificacion = notificacionService.marcarComoLeida(id);
+            return ResponseEntity.ok(notificacion);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    /**
+     * Marcar todas las notificaciones de un usuario como leídas
+     */
+    @PutMapping("/usuario/{usuarioId}/marcar-todas-leidas")
+    public ResponseEntity<String> marcarTodasComoLeidas(@PathVariable String usuarioId) {
+        try {
+            notificacionService.marcarTodasComoLeidas(usuarioId);
+            return ResponseEntity.ok("Todas las notificaciones marcadas como leídas");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    /**
+     * Eliminar todas las notificaciones de un usuario
+     */
+    @DeleteMapping("/usuario/{usuarioId}")
+    public ResponseEntity<Void> eliminarNotificacionesUsuario(@PathVariable String usuarioId) {
+        try {
+            notificacionService.eliminarNotificacionesPorUsuario(usuarioId);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    /**
      * Actualizar una notificación existente
      */
     @PutMapping("/{id}")

@@ -22,4 +22,16 @@ public interface NotificacionJPARepository extends JpaRepository<NotificacionEnt
     
     @Query("SELECT n FROM NotificacionEntity n WHERE n.tipoNotificacion.id = :tipoId")
     public List<NotificacionEntity> findByTipoNotificacionId(@Param("tipoId") UUID tipoId);
+    
+    @Query("SELECT n FROM NotificacionEntity n WHERE n.tipoNotificacion.codigo = :codigo")
+    public List<NotificacionEntity> findByTipoNotificacionCodigo(@Param("codigo") String codigo);
+    
+    @Query("SELECT n FROM NotificacionEntity n WHERE n.usuario.id = :usuarioId AND n.tipoNotificacion.codigo = :codigo")
+    public List<NotificacionEntity> findByUsuarioIdAndTipoNotificacionCodigo(
+        @Param("usuarioId") UUID usuarioId,
+        @Param("codigo") String codigo
+    );
+    
+    @Query("DELETE FROM NotificacionEntity n WHERE n.usuario.id = :usuarioId")
+    public void deleteByUsuarioId(@Param("usuarioId") UUID usuarioId);
 }

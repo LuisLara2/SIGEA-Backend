@@ -1,15 +1,13 @@
 package com.zentry.sigea.module_certificaciones.presentation.models.requestDTO;
 
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 
 /**
  * DTO para solicitud de creación de certificado
  */
 public class CrearCertificadoRequest {
     
-    @NotNull(message = "El ID de inscripción es obligatorio")
-    @Positive(message = "El ID de inscripción debe ser positivo")
+    @NotNull(message = "El ID de asistencia es obligatorio")
     private String asistenciaId;
     
     private String observaciones;

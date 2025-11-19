@@ -23,18 +23,18 @@ public interface CertificadoRepository extends JpaRepository<CertificadoEntity, 
     Optional<CertificadoEntity> findByCodigoValidacion(String codigoValidacion);
     
     /**
-     * Busca certificados por ID de inscripción
+     * Busca certificados por ID de asistencia
      * @param asistenciaId ID de la asistencia
      * @return Optional con el certificado (debería ser único por asistencia)
      */
-    Optional<CertificadoEntity> findByAsistencia(String asistenciaId);
+    Optional<CertificadoEntity> findByAsistenciaId(UUID asistenciaId);
     
     /**
      * Busca certificados por estado
      * @param estadoId ID del estado del certificado
      * @return Lista de certificados con ese estado
      */
-    @Query("SELECT c FROM Certificado c WHERE c.estado.idEstadoCertificado = :estadoId")
+    @Query("SELECT c FROM CertificadoEntity c WHERE c.estado.id = :estadoId")
     List<CertificadoEntity> findByEstadoId(@Param("estadoId") String estadoId);
     
     /**
@@ -43,22 +43,22 @@ public interface CertificadoRepository extends JpaRepository<CertificadoEntity, 
      * @param fechaFin Fecha fin del rango
      * @return Lista de certificados emitidos en ese rango
      */
-    @Query("SELECT c FROM Certificado c WHERE c.fechaEmision BETWEEN :fechaInicio AND :fechaFin")
+    @Query("SELECT c FROM CertificadoEntity c WHERE c.fechaEmision BETWEEN :fechaInicio AND :fechaFin")
     List<CertificadoEntity> findByFechaEmisionBetween(@Param("fechaInicio") LocalDate fechaInicio, 
                                                 @Param("fechaFin") LocalDate fechaFin);
     
     /**
-     * Verifica si existe un certificado para una inscripción
-     * @param inscripcionId ID de la inscripción
+     * Verifica si existe un certificado para una asistencia
+     * @param asistenciaId ID de la asistencia
      * @return true si existe, false caso contrario
      */
-    boolean existsByAsistencia(String asistenciaId);
+    boolean existsByAsistenciaId(UUID asistenciaId);
     
     /**
      * Cuenta certificados por estado
      * @param estadoId ID del estado
      * @return Número de certificados con ese estado
      */
-    @Query("SELECT COUNT(c) FROM Certificado c WHERE c.estado.idEstadoCertificado = :estadoId")
+    @Query("SELECT COUNT(c) FROM CertificadoEntity c WHERE c.estado.id = :estadoId")
     Long countByEstadoId(@Param("estadoId") Long estadoId);
 }

@@ -55,29 +55,38 @@ public class SesionService implements ISesionService {
 
     @Override
     public SesionResponse crearSesion(CrearSesionRequest request) {
-        // Crear la sesión
-        SesionDomainEntity sesionCreada = crearSesionUseCase.execute(request);
-        
-        // Obtener usuarios inscritos en la actividad para notificarles
-        List<String> usuariosInscritos = inscripcionRepository
-            .findByActividadId(request.getActividadId())
-            .stream()
-            .map(inscripcion -> inscripcion.getUsuarioId())
-            .collect(Collectors.toList());
-        
-        // Solo publicar evento si hay usuarios inscritos
-        if (!usuariosInscritos.isEmpty()) {
-            eventPublisher.publishEvent(new SesionCreadaEvent(
-                sesionCreada.getId(),
-                request.getActividadId(),
-                sesionCreada.getTitulo(),
-                sesionCreada.getFechaSesion(),
-                usuariosInscritos,
-                LocalDateTime.now()
-            ));
+        try {
+            // Crear la sesión
+            SesionDomainEntity sesionCreada = crearSesionUseCase.execute(request);
+            
+            if (sesionCreada == null || sesionCreada.getId() == null) {
+                throw new IllegalStateException("La sesión no fue creada correctamente - ID es null");
+            }
+            
+            // Obtener usuarios inscritos en la actividad para notificarles
+            List<String> usuariosInscritos = inscripcionRepository
+                .findByActividadId(request.getActividadId())
+                .stream()
+                .map(inscripcion -> inscripcion.getUsuarioId())
+                .collect(Collectors.toList());
+            
+            // Solo publicar evento si hay usuarios inscritos
+            if (!usuariosInscritos.isEmpty()) {
+                eventPublisher.publishEvent(new SesionCreadaEvent(
+                    sesionCreada.getId(),
+                    request.getActividadId(),
+                    sesionCreada.getTitulo(),
+                    sesionCreada.getFechaSesion(),
+                    usuariosInscritos,
+                    LocalDateTime.now()
+                ));
+            }
+            
+            return SesionResponse.fromDomain(sesionCreada);
+        } catch (Exception e) {
+            // Log detallado del error
+            throw new RuntimeException("Error al crear sesión: " + e.getMessage(), e);
         }
-        
-        return SesionResponse.fromDomain(sesionCreada);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.zentry.sigea.module_certificaciones.core.repositories;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import com.zentry.sigea.module_certificaciones.core.entities.CertificadoDomainEntity;
 
@@ -42,7 +43,7 @@ public interface ICertificadoRepository {
     /**
      * Verifica si existe un certificado para una asistencia específica
      */
-    boolean existsByAsistenciaId(String asistenciaId);
+    boolean existsByAsistenciaId(UUID asistenciaId);
     
     /**
      * Verifica si existe un certificado con un código de validación específico

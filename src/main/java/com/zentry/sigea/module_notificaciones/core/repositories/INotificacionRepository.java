@@ -27,6 +27,11 @@ public interface INotificacionRepository {
     List<NotificacionDomainEntity> findByEstadoNotificacionId(String estadoId);
     List<NotificacionDomainEntity> findByTipoNotificacionId(String tipoId);
     
+    // Consultas por tipo de evento
+    List<NotificacionDomainEntity> findByTipoEvento(String tipoEvento);
+    List<NotificacionDomainEntity> findByUsuarioIdAndTipoEvento(String usuarioId, String tipoEvento);
+    
     // Eliminar
     void deleteById(String id);
+    void deleteByUsuarioId(String usuarioId);
 }
