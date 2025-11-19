@@ -1,5 +1,7 @@
 package com.zentry.sigea.module_notificaciones.infrastructure.database.mappers;
 
+import java.util.UUID;
+
 import com.zentry.sigea.module_notificaciones.core.entities.TipoNotificacionDomainEntity;
 import com.zentry.sigea.module_notificaciones.infrastructure.database.entities.TipoNotificacionEntity;
 
@@ -18,6 +20,11 @@ public class TipoNotificacionMapper {
         
         TipoNotificacionEntity tipoNotificacionEntity = new TipoNotificacionEntity();
 
+        // IMPORTANTE: Incluir el ID para que Hibernate sepa que es una entidad existente
+        if (tipoNotificacionDomainEntity.getId() != null) {
+            tipoNotificacionEntity.setId(UUID.fromString(tipoNotificacionDomainEntity.getId()));
+        }
+        
         tipoNotificacionEntity.setCodigo(tipoNotificacionDomainEntity.getCodigo());
         tipoNotificacionEntity.setEtiqueta(tipoNotificacionDomainEntity.getEtiqueta());
         

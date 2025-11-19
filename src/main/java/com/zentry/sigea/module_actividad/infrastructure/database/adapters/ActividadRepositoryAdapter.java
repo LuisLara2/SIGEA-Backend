@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.zentry.sigea.module_actividad.core.entities.ActividadDomainEntity;
 import com.zentry.sigea.module_actividad.core.repositories.IActividadRespository;
+import com.zentry.sigea.module_actividad.infrastructure.database.entities.ActividadEntity;
 import com.zentry.sigea.module_actividad.infrastructure.database.mappers.ActividadMapper;
 import com.zentry.sigea.module_actividad.infrastructure.repository.ActividadJPARepository;
 import com.zentry.sigea.module_usuarios.infrastructure.database.entities.UsuarioEntity;
@@ -28,19 +29,19 @@ public class ActividadRepositoryAdapter implements IActividadRespository {
         this.usuarioJPARepository = usuarioJPARepository;
     }
 
-    public boolean save(ActividadDomainEntity actividadDomainEntity) {
+    public String save(ActividadDomainEntity actividadDomainEntity) {
         try {
             UsuarioEntity usuarioEntity = usuarioJPARepository.findById(
                     UUID.fromString(actividadDomainEntity.getOrganizadorId())).orElse(null);
 
-            actividadJPARepository.save(
+            ActividadEntity savedEntity = actividadJPARepository.save(
                     ActividadMapper.toEntity(
                             actividadDomainEntity,
                             usuarioEntity));
 
-            return true;
+            return savedEntity.getId().toString();
         } catch (Exception e) {
-            return false;
+            throw new RuntimeException("Error al guardar la actividad: " + e.getMessage(), e);
         }
     }
 

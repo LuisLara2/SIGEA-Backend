@@ -55,9 +55,12 @@ public class ActividadMapper {
                 actividadEntity.getTipoActividad()
             )
         );
-        actividadDomainEntity.setOrganizadorId(
-            actividadEntity.getOrganizador().getId().toString()
-        );
+        // Manejar organizador null (actividades sin organizador asignado)
+        if (actividadEntity.getOrganizador() != null) {
+            actividadDomainEntity.setOrganizadorId(
+                actividadEntity.getOrganizador().getId().toString()
+            );
+        }
         actividadDomainEntity.setLugar(actividadEntity.getLugar());
         actividadDomainEntity.setCreatedAt(actividadEntity.getCreatedAt());
         actividadDomainEntity.setUpdatedAt(actividadEntity.getUpdatedAt());

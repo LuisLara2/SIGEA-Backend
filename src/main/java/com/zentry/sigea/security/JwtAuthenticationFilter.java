@@ -30,7 +30,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         HttpServletRequest request,
         HttpServletResponse response , 
         FilterChain filterChain
-    ) throws ServletException , IOException{        
+    ) throws ServletException , IOException{
+        
+        // Saltar validación JWT para rutas públicas
+        String path = request.getRequestURI();
+        if (path.startsWith("/api/v1/actividades") || 
+            path.startsWith("/api/v1/notificaciones") ||
+            path.startsWith("/api/v1/inscripciones") ||
+            path.startsWith("/api/v1/sesiones") ||
+            path.contains("/auth/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        
         String header = request.getHeader("Authorization");
 
         if(header != null && header.startsWith("Bearer ")){

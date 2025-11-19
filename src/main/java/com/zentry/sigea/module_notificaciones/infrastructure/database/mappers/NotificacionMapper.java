@@ -1,5 +1,6 @@
 package com.zentry.sigea.module_notificaciones.infrastructure.database.mappers;
 
+import com.zentry.sigea.module_notificaciones.core.entities.CanalNotificacion;
 import com.zentry.sigea.module_notificaciones.core.entities.NotificacionDomainEntity;
 import com.zentry.sigea.module_notificaciones.infrastructure.database.entities.NotificacionEntity;
 import com.zentry.sigea.module_actividad.infrastructure.database.entities.ActividadEntity;
@@ -38,6 +39,10 @@ public class NotificacionMapper {
                 notificacionDomainEntity.getEstadoNotificacion()
             )
         );
+        notificacionEntity.setCanal(
+            notificacionDomainEntity.getCanal() != null ? 
+            notificacionDomainEntity.getCanal().name() : null
+        );
         notificacionEntity.setCreatedAt(notificacionDomainEntity.getCreatedAt());
         notificacionEntity.setUpdatedAt(notificacionDomainEntity.getUpdatedAt());
 
@@ -74,6 +79,10 @@ public class NotificacionMapper {
             EstadoNotificacionMapper.toDomain(
                 notificacionEntity.getEstadoNotificacion()
             )
+        );
+        notificacionDomainEntity.setCanal(
+            notificacionEntity.getCanal() != null ? 
+            CanalNotificacion.fromString(notificacionEntity.getCanal()) : null
         );
         notificacionDomainEntity.setCreatedAt(notificacionEntity.getCreatedAt());
         notificacionDomainEntity.setUpdatedAt(notificacionEntity.getUpdatedAt());

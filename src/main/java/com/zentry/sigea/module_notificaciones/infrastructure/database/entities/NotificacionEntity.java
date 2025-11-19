@@ -9,7 +9,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -46,7 +45,6 @@ public class NotificacionEntity {
     @JoinColumn(name = "tipo_notificacion_id", nullable = false)
     private TipoNotificacionEntity tipoNotificacion;
 
-    @Lob
     @Column(name = "mensaje", nullable = false, columnDefinition = "TEXT")
     private String mensaje;
 
@@ -56,6 +54,9 @@ public class NotificacionEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "estado_notificacion_id", nullable = false)
     private EstadoNotificacionEntity estadoNotificacion;
+
+    @Column(name = "canal", nullable = false, length = 20)
+    private String canal; // Almacena el valor del enum: SISTEMA, CORREO, WHATSAPP
 
     @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt = LocalDateTime.now();

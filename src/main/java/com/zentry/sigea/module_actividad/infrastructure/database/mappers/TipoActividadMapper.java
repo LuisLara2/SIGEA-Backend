@@ -18,8 +18,8 @@ public class TipoActividadMapper {
         }
         
         TipoActividadDomainEntity tipoActividadDomainEntity = new TipoActividadDomainEntity();
-        
-        tipoActividadDomainEntity.setTipoActividadId(tipoActividadEntity.getId().toString());
+
+        tipoActividadDomainEntity.setId(tipoActividadEntity.getId());
         tipoActividadDomainEntity.setNombreActividad(tipoActividadEntity.getNombreActividad());
         tipoActividadDomainEntity.setDescripcion(tipoActividadEntity.getDescripcion());
         tipoActividadDomainEntity.setCreatedAt(tipoActividadEntity.getCreatedAt());
@@ -38,9 +38,7 @@ public class TipoActividadMapper {
         
         TipoActividadEntity tipoActividadEntity = new TipoActividadEntity();
         
-        if (tipoActividadDomainEntity.getTipoActividadId() != null) {
-            tipoActividadEntity.setId(java.util.UUID.fromString(tipoActividadDomainEntity.getTipoActividadId()));
-        }
+        tipoActividadEntity.setId(tipoActividadDomainEntity.getId());
         tipoActividadEntity.setNombreActividad(tipoActividadDomainEntity.getNombreActividad());
         tipoActividadEntity.setDescripcion(tipoActividadDomainEntity.getDescripcion());
         tipoActividadEntity.setCreatedAt(tipoActividadDomainEntity.getCreatedAt());

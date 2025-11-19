@@ -9,6 +9,7 @@ public class CrearNotificacionRequest {
     private String tipoNotificacionId;
     private String mensaje;
     private String estadoNotificacionId;
+    private String canal; // SISTEMA, CORREO, WHATSAPP
 
     // Constructor vacío para Jackson
     public CrearNotificacionRequest() {}
@@ -18,13 +19,15 @@ public class CrearNotificacionRequest {
         String actividadId,
         String tipoNotificacionId,
         String mensaje,
-        String estadoNotificacionId
+        String estadoNotificacionId,
+        String canal
     ) {
         this.usuarioId = usuarioId;
         this.actividadId = actividadId;
         this.tipoNotificacionId = tipoNotificacionId;
         this.mensaje = mensaje;
         this.estadoNotificacionId = estadoNotificacionId;
+        this.canal = canal;
     }
 
     // Getters y Setters
@@ -66,5 +69,13 @@ public class CrearNotificacionRequest {
 
     public void setEstadoNotificacionId(String estadoNotificacionId) {
         this.estadoNotificacionId = estadoNotificacionId;
+    }
+
+    public String getCanal() {
+        return canal;
+    }
+
+    public void setCanal(String canal) {
+        this.canal = canal;
     }
 }

@@ -8,6 +8,7 @@ import com.zentry.sigea.module_notificaciones.core.entities.TipoNotificacionDoma
 
 /**
  * DTO para enviar datos de notificación al frontend
+ * Simplificado - el estado se obtiene desde estadoNotificacion.codigo
  */
 public class NotificacionResponse {
     private String id;
@@ -17,13 +18,7 @@ public class NotificacionResponse {
     private String mensaje;
     private LocalDateTime fechaEnvio;
     private EstadoNotificacionDomainEntity estadoNotificacion;
-    private LocalDateTime fechaCreacion;
-    private LocalDateTime fechaActualizacion;
-    
-    // Campos adicionales para la vista
-    private boolean leida;
-    private boolean pendiente;
-    private boolean enviada;
+    private String canal; // SISTEMA, CORREO, WHATSAPP
 
     // Constructor vacío para Jackson
     public NotificacionResponse() {}
@@ -36,11 +31,7 @@ public class NotificacionResponse {
         String mensaje,
         LocalDateTime fechaEnvio,
         EstadoNotificacionDomainEntity estadoNotificacion,
-        LocalDateTime fechaCreacion,
-        LocalDateTime fechaActualizacion,
-        boolean leida,
-        boolean pendiente,
-        boolean enviada
+        String canal
     ) {
         this.id = id;
         this.usuarioId = usuarioId;
@@ -49,11 +40,7 @@ public class NotificacionResponse {
         this.mensaje = mensaje;
         this.fechaEnvio = fechaEnvio;
         this.estadoNotificacion = estadoNotificacion;
-        this.fechaCreacion = fechaCreacion;
-        this.fechaActualizacion = fechaActualizacion;
-        this.leida = leida;
-        this.pendiente = pendiente;
-        this.enviada = enviada;
+        this.canal = canal;
     }
 
     /**
@@ -68,11 +55,7 @@ public class NotificacionResponse {
             notificacion.getMensaje(),
             notificacion.getFechaEnvio(),
             notificacion.getEstadoNotificacion(),
-            notificacion.getCreatedAt(),
-            notificacion.getUpdatedAt(),
-            notificacion.estaLeida(),
-            notificacion.estaPendiente(),
-            notificacion.estaEnviada()
+            notificacion.getCanal() != null ? notificacion.getCanal().name() : null
         );
     }
 
@@ -133,43 +116,11 @@ public class NotificacionResponse {
         this.estadoNotificacion = estadoNotificacion;
     }
 
-    public LocalDateTime getFechaCreacion() {
-        return fechaCreacion;
+    public String getCanal() {
+        return canal;
     }
 
-    public void setFechaCreacion(LocalDateTime fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-    }
-
-    public LocalDateTime getFechaActualizacion() {
-        return fechaActualizacion;
-    }
-
-    public void setFechaActualizacion(LocalDateTime fechaActualizacion) {
-        this.fechaActualizacion = fechaActualizacion;
-    }
-
-    public boolean isLeida() {
-        return leida;
-    }
-
-    public void setLeida(boolean leida) {
-        this.leida = leida;
-    }
-
-    public boolean isPendiente() {
-        return pendiente;
-    }
-
-    public void setPendiente(boolean pendiente) {
-        this.pendiente = pendiente;
-    }
-
-    public boolean isEnviada() {
-        return enviada;
-    }
-
-    public void setEnviada(boolean enviada) {
-        this.enviada = enviada;
+    public void setCanal(String canal) {
+        this.canal = canal;
     }
 }

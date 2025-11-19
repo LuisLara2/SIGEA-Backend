@@ -1,9 +1,10 @@
 package com.zentry.sigea.module_actividad.core.entities;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class TipoActividadDomainEntity {
-    private String tipoActividadId;
+    private UUID id;
     private String nombreActividad;
     private String descripcion;
     private LocalDateTime createdAt;
@@ -23,12 +24,11 @@ public class TipoActividadDomainEntity {
         return tipoActividadDomainEntity;
     }
 
-    public String getTipoActividadId() {
-        return tipoActividadId;
+    public UUID getId() {
+        return id;
     }
-
-    public void setTipoActividadId(String tipoActividadId) {
-        this.tipoActividadId = tipoActividadId;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getNombreActividad() {

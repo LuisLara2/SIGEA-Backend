@@ -58,9 +58,8 @@ public class CrearActividadUseCase {
             request.getUbicacion()
         );
         
-        // Guardar usando el repositorio directamente
-        
-        return  actividadRepository.save(nuevaActividad) ? "Actividad Registrada con exito" : "Algo salio mal al guardar la Actividad";
+        // Guardar usando el repositorio y retornar el ID
+        return actividadRepository.save(nuevaActividad);
     }
 
     /**

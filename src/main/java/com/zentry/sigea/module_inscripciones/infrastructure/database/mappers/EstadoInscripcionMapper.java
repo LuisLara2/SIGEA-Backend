@@ -18,6 +18,11 @@ public class EstadoInscripcionMapper {
         
         EstadoInscripcionEntity estadoInscripcionEntity = new EstadoInscripcionEntity();
 
+        if (estadoInscripcionDomainEntity.getId() != null) {
+            estadoInscripcionEntity.setId(
+                java.util.UUID.fromString(estadoInscripcionDomainEntity.getId())
+            );
+        }
         estadoInscripcionEntity.setCodigo(estadoInscripcionDomainEntity.getCodigo());
         estadoInscripcionEntity.setEtiqueta(estadoInscripcionDomainEntity.getEtiqueta());
         
@@ -34,6 +39,9 @@ public class EstadoInscripcionMapper {
 
         EstadoInscripcionDomainEntity estadoInscripcionDomainEntity = new EstadoInscripcionDomainEntity();
 
+        if (estadoInscripcionEntity.getId() != null) {
+            estadoInscripcionDomainEntity.setId(estadoInscripcionEntity.getId().toString());
+        }
         estadoInscripcionDomainEntity.setCodigo(estadoInscripcionEntity.getCodigo());
         estadoInscripcionDomainEntity.setEtiqueta(estadoInscripcionEntity.getEtiqueta());
         

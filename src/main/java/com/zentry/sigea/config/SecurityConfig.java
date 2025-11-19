@@ -42,11 +42,24 @@ public class SecurityConfig {
                     .accessDeniedHandler(customAccessDeniedHandler)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v*/usuarios/auth/**", "/").permitAll()
+                        // Endpoints públicos para autenticación
+                        .requestMatchers("/api/{version}/usuarios/auth/**", "/").permitAll()
                         .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/webjars/**").permitAll()
-                        .requestMatchers("/api/v*/usuarios/administrador/**").hasRole("ADMINISTRADOR")
-                        .requestMatchers("/api/v*/usuarios/organizador/**").hasRole("ORGANIZADOR")
-                        .requestMatchers("/api/v*/usuarios/participante/**").hasRole("PARTICIPANTE")
+                        // Endpoints de notificaciones - temporalmente abiertos para pruebas
+                        .requestMatchers("/api/v1/notificaciones/**", "/api/{version}/notificaciones/**").permitAll()
+                        .requestMatchers("/api/v1/estados-notificacion/**", "/api/{version}/estados-notificacion/**").permitAll()
+                        .requestMatchers("/api/v1/tipos-notificacion/**", "/api/{version}/tipos-notificacion/**").permitAll()
+                        // Endpoints de inscripciones - temporalmente abiertos para pruebas
+                        .requestMatchers("/api/v1/inscripciones/**", "/api/{version}/inscripciones/**").permitAll()
+                        .requestMatchers("/api/v1/estados-inscripcion/**", "/api/{version}/estados-inscripcion/**").permitAll()
+                        // Endpoints de actividades - temporalmente abiertos para pruebas
+                        .requestMatchers("/api/v1/actividades/**", "/api/{version}/actividades/**").permitAll()
+                        // Endpoints de sesiones - temporalmente abiertos para pruebas
+                        .requestMatchers("/api/v1/sesiones/**", "/api/{version}/sesiones/**").permitAll()
+                        // Endpoints protegidos por rol
+                        .requestMatchers("/api/{version}/usuarios/administrador/**").hasRole("ADMINISTRADOR")
+                        .requestMatchers("/api/{version}/usuarios/organizador/**").hasRole("ORGANIZADOR")
+                        .requestMatchers("/api/{version}/usuarios/participante/**").hasRole("PARTICIPANTE")
                         // .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
                 )

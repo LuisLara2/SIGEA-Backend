@@ -1,7 +1,9 @@
 package com.zentry.sigea.module_actividad.core.entities;
 
+import java.util.UUID;
+
 public class EstadoActividadDomainEntity {
-    private String estadoActividadId;
+    private UUID id;
     private String codigo;
     private String etiqueta;
 
@@ -17,12 +19,14 @@ public class EstadoActividadDomainEntity {
 
         return estadoActividadDomainEntity;
     }
-    public String getEstadoActividadId() {
-        return estadoActividadId;
+
+    public UUID getId() {
+        return id;
     }
-    public void setEstadoActividadId(String estadoActividadId) {
-        this.estadoActividadId = estadoActividadId;
+    public void setId(UUID id) {
+        this.id = id;
     }
+
     public String getCodigo() {
         return codigo;
     }

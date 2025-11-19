@@ -14,6 +14,7 @@ public class NotificacionDomainEntity {
     private String mensaje;
     private LocalDateTime fechaEnvio;
     private EstadoNotificacionDomainEntity estadoNotificacion;
+    private CanalNotificacion canal; // Canal por el que se envía la notificación
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -74,6 +75,14 @@ public class NotificacionDomainEntity {
         this.estadoNotificacion = estadoNotificacion;
     }
 
+    public CanalNotificacion getCanal() {
+        return canal;
+    }
+
+    public void setCanal(CanalNotificacion canal) {
+        this.canal = canal;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -100,7 +109,8 @@ public class NotificacionDomainEntity {
         String actividadId,
         TipoNotificacionDomainEntity tipoNotificacion,
         String mensaje,
-        EstadoNotificacionDomainEntity estadoNotificacion
+        EstadoNotificacionDomainEntity estadoNotificacion,
+        CanalNotificacion canal
     ) {
         LocalDateTime now = LocalDateTime.now();
 
@@ -117,6 +127,9 @@ public class NotificacionDomainEntity {
         if (estadoNotificacion == null) {
             throw new IllegalArgumentException("El estado de notificación es obligatorio");
         }
+        if (canal == null) {
+            throw new IllegalArgumentException("El canal es obligatorio");
+        }
 
         NotificacionDomainEntity notificacion = new NotificacionDomainEntity();
         notificacion.setUsuarioId(usuarioId);
@@ -125,6 +138,7 @@ public class NotificacionDomainEntity {
         notificacion.setMensaje(mensaje.trim());
         notificacion.setFechaEnvio(now);
         notificacion.setEstadoNotificacion(estadoNotificacion);
+        notificacion.setCanal(canal);
         notificacion.setCreatedAt(now);
         notificacion.setUpdatedAt(now);
 

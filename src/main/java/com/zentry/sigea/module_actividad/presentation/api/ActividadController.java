@@ -36,19 +36,26 @@ public class ActividadController {
      * Crear una nueva actividad
      */
     @PostMapping("/create")
-    public ResponseEntity<String> crearActividad(@RequestBody CrearActividadRequest request) {
+    public ResponseEntity<?> crearActividad(@RequestBody CrearActividadRequest request) {
         try {
             // Ejecutar el caso de uso a través del servicio pasando el request con IDs
-            String responseMessage = actividadService.crearActividad(request);
+            String actividadId = actividadService.crearActividad(request);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
+            // Retornar el ID de la actividad creada
+            return ResponseEntity.status(HttpStatus.CREATED).body(new CrearActividadResponse(actividadId, "Actividad creada exitosamente"));
 
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Error al crear la actividad"));
         }
     }
+    
+    // Clase interna para respuesta de creación
+    private record CrearActividadResponse(String id, String mensaje) {}
+    
+    // Clase interna para respuesta de error
+    private record ErrorResponse(String error) {}
 
     /**
      * Obtener una actividad por ID

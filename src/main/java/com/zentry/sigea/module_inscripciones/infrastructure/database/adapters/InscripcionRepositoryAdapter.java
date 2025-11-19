@@ -37,15 +37,15 @@ public class InscripcionRepositoryAdapter implements IInscripcionRepository {
         try {
             UsuarioEntity usuarioEntity = usuarioJPARepository.findById(
                 UUID.fromString(inscripcionDomainEntity.getUsuarioId())
-            ).orElse(null);
+            ).orElseThrow(() -> new IllegalArgumentException(
+                "No se encontró un usuario con ID: " + inscripcionDomainEntity.getUsuarioId()
+            ));
 
             ActividadEntity actividadEntity = actividadJPARepository.findById(
                 UUID.fromString(inscripcionDomainEntity.getActividadId())
-            ).orElse(null);
-
-            if (usuarioEntity == null || actividadEntity == null) {
-                return false;
-            }
+            ).orElseThrow(() -> new IllegalArgumentException(
+                "No se encontró una actividad con ID: " + inscripcionDomainEntity.getActividadId()
+            ));
 
             inscripcionJPARepository.save(
                 InscripcionMapper.toEntity(
@@ -56,8 +56,10 @@ public class InscripcionRepositoryAdapter implements IInscripcionRepository {
             );
 
             return true;
+        } catch (IllegalArgumentException e) {
+            throw e;
         } catch (Exception e) {
-            return false;
+            throw new RuntimeException("Error al guardar la inscripción: " + e.getMessage(), e);
         }
     }
 

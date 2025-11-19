@@ -39,6 +39,7 @@ public class ActualizarActividadUseCase {
             actividad.setTipoActividadDomainEntity(request.getTipoActividad());
         }
 
+        // Guardar y descartar el ID retornado
         actividadRepository.save(actividad);
         return actividad;
     }
