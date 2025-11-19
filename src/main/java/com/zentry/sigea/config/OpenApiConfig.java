@@ -21,7 +21,7 @@ import io.swagger.v3.oas.models.servers.Server;
 @Configuration
 public class OpenApiConfig {
 
-    @Value("${server.port:8080}")
+    @Value("${server.port:16001}")
     private String serverPort;
 
     @Bean
