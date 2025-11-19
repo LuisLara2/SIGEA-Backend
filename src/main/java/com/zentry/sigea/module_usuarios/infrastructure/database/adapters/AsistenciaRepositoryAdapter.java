@@ -98,4 +98,12 @@ public class AsistenciaRepositoryAdapter implements IAsistenciaRepository{
             .map(AsistenciaMapper::toDomain)
             .collect(Collectors.toList());
     }
+
+    public List<String> findIdsByInscripcionId(String inscripcionId){
+        return asistenciaJPARepository.findIdsByInscripcionId(
+            UUID.fromString(inscripcionId)
+        ).stream()
+        .map(Object::toString)
+        .collect(Collectors.toList());
+    }
 }

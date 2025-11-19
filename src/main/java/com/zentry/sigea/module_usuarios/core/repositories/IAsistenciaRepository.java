@@ -10,6 +10,7 @@ public interface IAsistenciaRepository {
     public void saveAll(List<AsistenciaDomainEntity> listAsistenciaDomainEntities);
     public Optional<AsistenciaDomainEntity> findById(String id);
     public List<AsistenciaDomainEntity> findByInscripcionId(String inscripcionId);
+    public List<String> findIdsByInscripcionId(String inscripcionId);
     public List<AsistenciaDomainEntity> findBySesionId(String sesionId);
     public List<AsistenciaDomainEntity> findBySesionIdAndPresente(String sesionId , Boolean presente);
 }
