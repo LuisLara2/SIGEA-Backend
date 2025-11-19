@@ -6,8 +6,8 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
-import com.zentry.sigea.module_usuarios.core.entities.AsistenciaDomainEntity;
-import com.zentry.sigea.module_usuarios.core.repositories.IAsistenciaRepository;
+import com.zentry.sigea.module_asistencias.core.entities.AsistenciaDomainEntity;
+import com.zentry.sigea.module_asistencias.core.repositories.IAsistenciaRepository;
 import com.zentry.sigea.module_usuarios.services.serviceDTO.RegistrarAsistenciaServiceDTO;
 
 @Component
