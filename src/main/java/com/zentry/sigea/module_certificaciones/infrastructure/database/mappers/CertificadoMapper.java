@@ -26,7 +26,17 @@ public class CertificadoMapper {
         }
 
         CertificadoDomainEntity domainEntity = new CertificadoDomainEntity();
-        domainEntity.setAsistenciaId(certificado.getAsistenciaId()); // Mapeo del nombre inconsistente
+        
+        // Convertir UUID a String con validación de null
+        if (certificado.getIdCertificado() != null) {
+            domainEntity.setIdCertificado(certificado.getIdCertificado().toString());
+        }
+        
+        // Convertir UUID a String para asistenciaId
+        if (certificado.getAsistenciaId() != null) {
+            domainEntity.setAsistenciaId(certificado.getAsistenciaId().toString());
+        }
+        
         domainEntity.setCodigoValidacion(certificado.getCodigoValidacion());
         domainEntity.setFechaEmision(certificado.getFechaEmision());
         domainEntity.setEstado(estadoMapper.toDomain(certificado.getEstado()));
@@ -46,7 +56,17 @@ public class CertificadoMapper {
         }
 
         CertificadoEntity certificado = new CertificadoEntity();
-        certificado.setAsistenciaId(domainEntity.getAsistenciaId()); // Mapeo del nombre inconsistente
+        
+        // Convertir String a UUID para idCertificado
+        if (domainEntity.getIdCertificado() != null) {
+            certificado.setIdCertificado(java.util.UUID.fromString(domainEntity.getIdCertificado()));
+        }
+        
+        // Convertir String a UUID para asistenciaId
+        if (domainEntity.getAsistenciaId() != null) {
+            certificado.setAsistenciaId(java.util.UUID.fromString(domainEntity.getAsistenciaId()));
+        }
+        
         certificado.setCodigoValidacion(domainEntity.getCodigoValidacion());
         certificado.setFechaEmision(domainEntity.getFechaEmision());
         certificado.setEstado(estadoMapper.toInfrastructure(domainEntity.getEstado()));
@@ -65,7 +85,11 @@ public class CertificadoMapper {
             return;
         }
 
-        certificado.setAsistenciaId(domainEntity.getAsistenciaId());
+        // Convertir String a UUID para asistenciaId
+        if (domainEntity.getAsistenciaId() != null) {
+            certificado.setAsistenciaId(java.util.UUID.fromString(domainEntity.getAsistenciaId()));
+        }
+        
         certificado.setCodigoValidacion(domainEntity.getCodigoValidacion());
         certificado.setFechaEmision(domainEntity.getFechaEmision());
         certificado.setEstado(estadoMapper.toInfrastructure(domainEntity.getEstado()));
