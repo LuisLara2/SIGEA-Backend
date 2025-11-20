@@ -38,8 +38,9 @@ public class ValidacionEntity {
     @JoinColumn(name = "certificado_id", nullable = false)
     private CertificadoEntity certificado;
     
-    @Column(name = "tipo_validador_id", nullable = false)
-    private String tipoValidador;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tipo_validador_id", nullable = false)
+    private TipoValidadorEntity tipoValidador;
     
     @Column(name = "fecha_validacion", nullable = false)
     private LocalDate fechaValidacion;

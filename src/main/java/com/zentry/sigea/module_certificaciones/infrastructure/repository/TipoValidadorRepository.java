@@ -32,6 +32,6 @@ public interface TipoValidadorRepository extends JpaRepository<TipoValidadorEnti
      * @param etiqueta Texto a buscar en la etiqueta
      * @return Lista de tipos que coinciden
      */
-    @Query("SELECT tv FROM TipoValidador tv WHERE LOWER(tv.etiqueta) LIKE LOWER(CONCAT('%', :etiqueta, '%'))")
+    @Query("SELECT tv FROM TipoValidadorEntity tv WHERE LOWER(tv.etiqueta) LIKE LOWER(CONCAT('%', :etiqueta, '%'))")
     java.util.List<TipoValidadorEntity> findByEtiquetaContainingIgnoreCase(@Param("etiqueta") String etiqueta);
 }

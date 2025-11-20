@@ -48,13 +48,15 @@ public class CertificadoRepositoryAdapter implements ICertificadoRepository {
     
     @Override
     public Optional<CertificadoDomainEntity> findByAsistenciaId(String asistenciaId) {
-        return jpaRepository.findByAsistencia(asistenciaId)
+        UUID asistenciaUuid = UUID.fromString(asistenciaId);
+        return jpaRepository.findByAsistenciaId(asistenciaUuid)
             .map(this::convertToDomain);
     }
     
     @Override
     public List<CertificadoDomainEntity> findByEstadoId(String estadoId) {
-        return jpaRepository.findByEstadoId(estadoId)
+        UUID estadoUuid = UUID.fromString(estadoId);
+        return jpaRepository.findByEstadoId(estadoUuid)
             .stream()
             .map(this::convertToDomain)
             .collect(Collectors.toList());
@@ -70,7 +72,8 @@ public class CertificadoRepositoryAdapter implements ICertificadoRepository {
     
     @Override
     public boolean existsByAsistenciaId(String asistenciaId) {
-        return jpaRepository.existsByAsistencia(asistenciaId);
+        UUID asistenciaUuid = UUID.fromString(asistenciaId);
+        return jpaRepository.existsByAsistenciaId(asistenciaUuid);
     }
     
     @Override
@@ -97,7 +100,8 @@ public class CertificadoRepositoryAdapter implements ICertificadoRepository {
     
     @Override
     public Long countByEstadoId(Long estadoId) {
-        return jpaRepository.countByEstadoId(estadoId);
+        UUID estadoUuid = UUID.fromString(estadoId.toString());
+        return jpaRepository.countByEstadoId(estadoUuid);
     }
     
     /**
@@ -114,7 +118,7 @@ public class CertificadoRepositoryAdapter implements ICertificadoRepository {
             domain.setIdCertificado(entity.getIdCertificado().toString());
         }
         domain.setCodigoValidacion(entity.getCodigoValidacion());
-        domain.setAsistenciaId(entity.getAsistenciaId());
+        domain.setAsistenciaId(entity.getAsistenciaId().toString());
         domain.setFechaEmision(entity.getFechaEmision());
         domain.setUrlPdf(entity.getUrlPdf());
         domain.setCreatedAt(entity.getCreatedAt());
@@ -146,7 +150,7 @@ public class CertificadoRepositoryAdapter implements ICertificadoRepository {
             entity.setIdCertificado(UUID.fromString(domain.getIdCertificado()));
         }
         entity.setCodigoValidacion(domain.getCodigoValidacion());
-        entity.setAsistenciaId(domain.getAsistenciaId());
+        entity.setAsistenciaId(UUID.fromString(domain.getAsistenciaId()));
         entity.setFechaEmision(domain.getFechaEmision());
         entity.setUrlPdf(domain.getUrlPdf());
         entity.setCreatedAt(domain.getCreatedAt());

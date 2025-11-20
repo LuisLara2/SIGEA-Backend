@@ -32,6 +32,6 @@ public interface EstadoCertificadoRepository extends JpaRepository<EstadoCertifi
      * @param etiqueta Texto a buscar en la etiqueta
      * @return Lista de estados que coinciden
      */
-    @Query("SELECT ec FROM EstadoCertificado ec WHERE LOWER(ec.etiqueta) LIKE LOWER(CONCAT('%', :etiqueta, '%'))")
+    @Query("SELECT ec FROM EstadoCertificadoEntity ec WHERE LOWER(ec.etiqueta) LIKE LOWER(CONCAT('%', :etiqueta, '%'))")
     java.util.List<EstadoCertificadoEntity> findByEtiquetaContainingIgnoreCase(@Param("etiqueta") String etiqueta);
 }
