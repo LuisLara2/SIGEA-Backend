@@ -9,7 +9,9 @@ import org.springframework.stereotype.Component;
 
 import com.zentry.sigea.module_certificaciones.core.entities.ValidacionDomainEntity;
 import com.zentry.sigea.module_certificaciones.core.repositories.IValidacionRepository;
+import com.zentry.sigea.module_certificaciones.infrastructure.database.entities.TipoValidadorEntity;
 import com.zentry.sigea.module_certificaciones.infrastructure.database.entities.ValidacionEntity;
+import com.zentry.sigea.module_certificaciones.infrastructure.repository.TipoValidadorRepository;
 import com.zentry.sigea.module_certificaciones.infrastructure.repository.ValidacionRepository;
 
 /**
@@ -20,14 +22,27 @@ import com.zentry.sigea.module_certificaciones.infrastructure.repository.Validac
 public class ValidacionRepositoryAdapter implements IValidacionRepository {
     
     private final ValidacionRepository jpaRepository;
+    private final TipoValidadorRepository tipoValidadorRepository;
     
-    public ValidacionRepositoryAdapter(ValidacionRepository jpaRepository) {
+    public ValidacionRepositoryAdapter(
+        ValidacionRepository jpaRepository , 
+        TipoValidadorRepository tipoValidadorRepository
+    ) {
         this.jpaRepository = jpaRepository;
+        this.tipoValidadorRepository = tipoValidadorRepository;
     }
     
     @Override
     public ValidacionDomainEntity save(ValidacionDomainEntity validacionDomainEntity) {
-        ValidacionEntity entity = convertToEntity(validacionDomainEntity);
+        TipoValidadorEntity tipoValidadorEntity = tipoValidadorRepository.findByCodigo(
+            validacionDomainEntity.getTipoValidador()
+        ).orElse(null);
+        
+        ValidacionEntity entity = convertToEntity(
+            validacionDomainEntity , 
+            tipoValidadorEntity
+        );
+
         ValidacionEntity savedEntity = jpaRepository.save(entity);
         return convertToDomain(savedEntity);
     }
@@ -121,12 +136,12 @@ public class ValidacionRepositoryAdapter implements IValidacionRepository {
      */
     private ValidacionDomainEntity convertToDomain(ValidacionEntity entity) {
         ValidacionDomainEntity domain = new ValidacionDomainEntity();
-        
+
         // Mapear campos básicos
         if (entity.getCertificado() != null) {
             domain.setCertificado(entity.getCertificado().getIdCertificado().toString());
         }
-        domain.setTipoValidador(entity.getTipoValidador());
+        domain.setTipoValidador(entity.getTipoValidador().getCodigo());
         domain.setFechaValidacion(entity.getFechaValidacion());
         domain.setResultado(entity.getResultado());
         domain.setDetalle(entity.getDetalle());
@@ -137,12 +152,15 @@ public class ValidacionRepositoryAdapter implements IValidacionRepository {
     /**
      * Convierte una entidad de dominio a una entidad JPA
      */
-    private ValidacionEntity convertToEntity(ValidacionDomainEntity domain) {
+    private ValidacionEntity convertToEntity(
+        ValidacionDomainEntity domain , 
+        TipoValidadorEntity tipoValidadorEntity
+    ) {
         ValidacionEntity entity = new ValidacionEntity();
         
         // Mapear campos básicos
         // Nota: El certificado y tipo validador deben ser cargados por separado
-        entity.setTipoValidador(domain.getTipoValidador());
+        entity.setTipoValidador(tipoValidadorEntity);
         entity.setFechaValidacion(domain.getFechaValidacion());
         entity.setResultado(domain.getResultado());
         entity.setDetalle(domain.getDetalle());

@@ -3,6 +3,8 @@ package com.zentry.sigea.module_certificaciones.infrastructure.database.mappers;
 import org.springframework.stereotype.Component;
 
 import com.zentry.sigea.module_certificaciones.core.entities.ValidacionDomainEntity;
+import com.zentry.sigea.module_certificaciones.infrastructure.database.entities.CertificadoEntity;
+import com.zentry.sigea.module_certificaciones.infrastructure.database.entities.TipoValidadorEntity;
 import com.zentry.sigea.module_certificaciones.infrastructure.database.entities.ValidacionEntity;
 
 /**
@@ -28,8 +30,8 @@ public class ValidacionMapper {
         }
 
         ValidacionDomainEntity domainEntity = new ValidacionDomainEntity();
-        domainEntity.setCertificado(certificadoMapper.toDomain(validacion.getCertificado()));
-        domainEntity.setTipoValidador(tipoValidadorMapper.toDomain(validacion.getTipoValidador()));
+        domainEntity.setCertificado(validacion.getCertificado().getIdCertificado().toString());
+        domainEntity.setTipoValidador(validacion.getTipoValidador().getCodigo());
         domainEntity.setFechaValidacion(validacion.getFechaValidacion());
         domainEntity.setResultado(validacion.getResultado());
         domainEntity.setDetalle(validacion.getDetalle());
@@ -40,14 +42,18 @@ public class ValidacionMapper {
     /**
      * Convierte de entidad de dominio a entidad de infraestructura
      */
-    public ValidacionEntity toInfrastructure(ValidacionDomainEntity domainEntity) {
+    public ValidacionEntity toInfrastructure(
+        ValidacionDomainEntity domainEntity , 
+        CertificadoEntity certificadoEntity , 
+        TipoValidadorEntity tipoValidadorEntity
+    ) {
         if (domainEntity == null) {
             return null;
         }
 
         ValidacionEntity validacion = new ValidacionEntity();
-        validacion.setCertificado(certificadoMapper.toInfrastructure(domainEntity.getCertificado()));
-        validacion.setTipoValidador(tipoValidadorMapper.toInfrastructure(domainEntity.getTipoValidador()));
+        validacion.setCertificado(certificadoEntity);
+        validacion.setTipoValidador(tipoValidadorEntity);
         validacion.setFechaValidacion(domainEntity.getFechaValidacion());
         validacion.setResultado(domainEntity.getResultado());
         validacion.setDetalle(domainEntity.getDetalle());

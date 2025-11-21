@@ -115,4 +115,8 @@ public class AsistenciaRepositoryAdapter implements IAsistenciaRepository {
         .map(Object::toString)
         .collect(Collectors.toList());
     }
+
+    public boolean existsById(String id){
+        return asistenciaJPARepository.existsById(UUID.fromString(id));
+    }
 }

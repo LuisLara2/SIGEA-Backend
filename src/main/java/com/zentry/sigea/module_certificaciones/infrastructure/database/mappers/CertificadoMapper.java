@@ -1,5 +1,7 @@
 package com.zentry.sigea.module_certificaciones.infrastructure.database.mappers;
 
+import java.util.UUID;
+
 import org.springframework.stereotype.Component;
 
 import com.zentry.sigea.module_certificaciones.core.entities.CertificadoDomainEntity;
@@ -26,7 +28,7 @@ public class CertificadoMapper {
         }
 
         CertificadoDomainEntity domainEntity = new CertificadoDomainEntity();
-        domainEntity.setAsistenciaId(certificado.getAsistenciaId()); // Mapeo del nombre inconsistente
+        domainEntity.setAsistenciaId(certificado.getAsistenciaId().toString()); // Mapeo del nombre inconsistente
         domainEntity.setCodigoValidacion(certificado.getCodigoValidacion());
         domainEntity.setFechaEmision(certificado.getFechaEmision());
         domainEntity.setEstado(estadoMapper.toDomain(certificado.getEstado()));
@@ -46,7 +48,7 @@ public class CertificadoMapper {
         }
 
         CertificadoEntity certificado = new CertificadoEntity();
-        certificado.setAsistenciaId(domainEntity.getAsistenciaId()); // Mapeo del nombre inconsistente
+        certificado.setAsistenciaId(UUID.fromString(domainEntity.getAsistenciaId())); // Mapeo del nombre inconsistente
         certificado.setCodigoValidacion(domainEntity.getCodigoValidacion());
         certificado.setFechaEmision(domainEntity.getFechaEmision());
         certificado.setEstado(estadoMapper.toInfrastructure(domainEntity.getEstado()));
@@ -65,7 +67,7 @@ public class CertificadoMapper {
             return;
         }
 
-        certificado.setAsistenciaId(domainEntity.getAsistenciaId());
+        certificado.setAsistenciaId(UUID.fromString(domainEntity.getAsistenciaId()));
         certificado.setCodigoValidacion(domainEntity.getCodigoValidacion());
         certificado.setFechaEmision(domainEntity.getFechaEmision());
         certificado.setEstado(estadoMapper.toInfrastructure(domainEntity.getEstado()));
