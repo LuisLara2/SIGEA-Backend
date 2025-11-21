@@ -41,7 +41,7 @@ public class CertificadoEntity {
     
     // Cambiado de inscripcion_id para evitar dependencia de asistencia
     @Column(name = "asistencia_id", nullable = false, unique = true)
-    private String asistenciaId;
+    private UUID asistenciaId;
     
     @Column(name = "codigo_validacion", length = 50, nullable = false, unique = true)
     private String codigoValidacion;
