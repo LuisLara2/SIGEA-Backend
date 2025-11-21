@@ -16,6 +16,6 @@ public class LoginUsuarioRequestDTO {
     private String correo;
     
     @NotBlank(message = "Debe ingresar la contraseña.")
-    @Size(min = 8 , max = 100 , message = "La contraseña debe tener entre 8 y 100 caracteres de longitud.")
+    @Size(min = 6 , max = 100 , message = "La contraseña debe tener entre 6 y 100 caracteres de longitud.")
     private String password;
 }

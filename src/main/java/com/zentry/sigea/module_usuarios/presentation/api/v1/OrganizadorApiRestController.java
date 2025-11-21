@@ -70,7 +70,7 @@ public class OrganizadorApiRestController {
             name = "organizadorJWT"
             )
     )
-    public ResponseEntity<GeneralResponseDTO<?>> registrarAsistencia(
+    public ResponseEntity<GeneralResponseDTO<?>> registrarAsistenciaMasiva(
         @RequestBody RegistrarAsistenciaRequestDTO registrarAsistenciaRequestDTO
     ) {
         try {

@@ -1,8 +1,11 @@
 package com.zentry.sigea.module_usuarios.presentation.api.v1;
 
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,9 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.zentry.sigea.module_inscripciones.presentation.models.mappers.CrearInscripcionMapper;
 import com.zentry.sigea.module_inscripciones.presentation.models.requestDTO.CrearInscripcionRequest;
 import com.zentry.sigea.module_inscripciones.services.InscripcionService;
+import com.zentry.sigea.module_usuarios.presentation.models.responseDTO.GeneralResponseDTO;
+import com.zentry.sigea.security.UsuarioAuthInfo;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/api/v1/usuarios/participante")
@@ -26,6 +32,30 @@ public class ParticipanteApiRestController {
     public ParticipanteApiRestController(InscripcionService inscripcionService){
         this.inscripcionService = inscripcionService;
     }
+
+    @GetMapping("/home")
+    @PreAuthorize("hasRole('ROLE_PARTICIPANTE')")
+    @Operation(
+        summary = "Home de participante.",
+        security = @SecurityRequirement(
+            name = "participanteJWT"
+            )
+    )
+    public ResponseEntity<GeneralResponseDTO<?>> indexParticipante(
+        @AuthenticationPrincipal UsuarioAuthInfo usuarioAuthInfo
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+            new GeneralResponseDTO<>(
+                true, 
+                "Operacion exitosa",
+                Map.of(
+                    "correo" , usuarioAuthInfo.getCorreo() ,  
+                    "id" , usuarioAuthInfo.getId()
+                )
+            )
+        );
+    }
+    
 
     @PostMapping("/inscripcion")
     @PreAuthorize("hasRole('ROLE_PARTICIPANTE')")

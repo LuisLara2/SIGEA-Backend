@@ -11,11 +11,11 @@ import com.zentry.sigea.module_asistencias.core.repositories.IAsistenciaReposito
 import com.zentry.sigea.module_usuarios.services.serviceDTO.RegistrarAsistenciaServiceDTO;
 
 @Component
-public class RegistrarAsistenciaUseCase {
+public class RegistrarAsistenciaMasivaUseCase {
     
     private final IAsistenciaRepository asistenciaRepository;
 
-    public RegistrarAsistenciaUseCase(IAsistenciaRepository asistenciaRepository){
+    public RegistrarAsistenciaMasivaUseCase(IAsistenciaRepository asistenciaRepository){
         this.asistenciaRepository = asistenciaRepository;
     }
 
