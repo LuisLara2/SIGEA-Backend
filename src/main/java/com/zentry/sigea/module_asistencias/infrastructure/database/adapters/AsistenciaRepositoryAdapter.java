@@ -108,8 +108,11 @@ public class AsistenciaRepositoryAdapter implements IAsistenciaRepository {
             .collect(Collectors.toList());
     }
 
-    @Override
-    public boolean existsById(String id) {
-        return asistenciaJPARepository.existsById(UUID.fromString(id));
+    public List<String> findIdsByInscripcionId(String inscripcionId){
+        return asistenciaJPARepository.findIdsByInscripcionId(
+            UUID.fromString(inscripcionId)
+        ).stream()
+        .map(Object::toString)
+        .collect(Collectors.toList());
     }
 }
