@@ -3,6 +3,17 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 -- 1) Limpiar e insertar roles
 -- Usamos DELETE primero para evitar duplicados
+
+DELETE FROM usuario_rol ur
+USING usuario u, rol r
+WHERE ur.usuario_id = u.id_usuario
+  AND ur.rol_id = r.id_rol
+  AND (
+        (u.correo = 'administrador@sigea.unas.edu.pe' AND r.nombre_rol = 'ADMINISTRADOR') OR
+        (u.correo = 'organizador@sigea.unas.edu.pe' AND r.nombre_rol = 'ORGANIZADOR') OR
+        (u.correo = 'participante@sigea.unas.edu.pe' AND r.nombre_rol = 'PARTICIPANTE')
+      );
+
 DELETE FROM usuario WHERE correo IN (
     'administrador@sigea.unas.edu.pe',
     'organizador@sigea.unas.edu.pe',

@@ -8,7 +8,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -22,7 +21,6 @@ import lombok.Setter;
 @Entity
 @Table(name = "certificado" ,
        uniqueConstraints = {
-        
            @UniqueConstraint(
                     name = "ux_asistencia_unica", 
                     columnNames = {"asistencia_id"}
@@ -33,7 +31,7 @@ import lombok.Setter;
 public class CertificadoEntity {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "id_certificado" , updatable= false, nullable = false,
             columnDefinition = "UUID DEFAULT gen_random_uuid()"
     )

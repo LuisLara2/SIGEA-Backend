@@ -5,7 +5,6 @@ import java.util.UUID;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -18,8 +17,11 @@ import lombok.Setter;
 public class TipoValidadorEntity {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_tipo_validador", columnDefinition = "UUID DEFAULT gen_random_uuid()")
+    @GeneratedValue
+    @Column(
+        name = "id_tipo_validador", updatable= false, nullable = false,
+        columnDefinition = "UUID DEFAULT gen_random_uuid()"
+    )
     private UUID idTipoValidador;
     
     @Column(name = "codigo", length = 30, nullable = false, unique = true)
