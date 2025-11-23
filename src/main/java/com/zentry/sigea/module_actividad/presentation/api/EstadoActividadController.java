@@ -3,6 +3,7 @@ package com.zentry.sigea.module_actividad.presentation.api;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,9 @@ import com.zentry.sigea.module_actividad.core.entities.EstadoActividadDomainEnti
 import com.zentry.sigea.module_actividad.presentation.models.requestDTO.EstadoActividadRequest;
 import com.zentry.sigea.module_actividad.presentation.models.responseDTO.EstadoActividadResponse;
 import com.zentry.sigea.module_actividad.services.EstadoActividadService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 
 
@@ -35,6 +39,13 @@ public class EstadoActividadController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Crear un estado de actividad",
+        security = @SecurityRequirement(
+            name = "administradorJWT"
+            )
+    )
     public ResponseEntity<String> createEstadoActividad(@RequestBody EstadoActividadRequest request) {
         try {
             String responseMessage = estadoActividadService.crearEstadoActividad(request);
@@ -47,7 +58,14 @@ public class EstadoActividadController {
         }
     }
 
-    @GetMapping
+    @GetMapping("/listar")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Listar estados de actividad",
+        security = @SecurityRequirement(
+            name = "administradorJWT"
+            )
+    )
     public ResponseEntity<List<EstadoActividadResponse>> listarEstadoActividad() {
         List<EstadoActividadDomainEntity> estadosActividad = estadoActividadService.listarEstadosActividad();
 
@@ -58,7 +76,14 @@ public class EstadoActividadController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/eliminar/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Obtener un estado de actividad por su ID",
+        security = @SecurityRequirement(
+            name = "administradorJWT"
+            )
+    )
     public ResponseEntity<Void> eliminarEstadoActividad(@PathVariable String id) {
         try {
             estadoActividadService.eliminarEstadoActividad(id);
@@ -70,7 +95,14 @@ public class EstadoActividadController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/actualizar/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Actualizar un estado de actividad por su ID",
+        security = @SecurityRequirement(
+            name = "administradorJWT"
+            )
+    )
     public ResponseEntity<EstadoActividadResponse> actualizarEstado(@PathVariable String id, @RequestBody EstadoActividadRequest request) {
         try {
             EstadoActividadDomainEntity estadoActualizado = estadoActividadService.actualizarEstadoActividad(request);

@@ -84,7 +84,7 @@ public class InformeController {
         }
     }
 
-    @GetMapping
+    @GetMapping("/listar")
     @PreAuthorize("hasRole('ROLE_ORGANIZADOR')")
     @Operation(
         summary = "Listar los informes",
@@ -97,7 +97,7 @@ public class InformeController {
         return ResponseEntity.ok(informes);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/obtener/{id}")
     @PreAuthorize("hasRole('ROLE_ORGANIZADOR')")
     @Operation(
         summary = "Obtener un informe",
@@ -116,7 +116,7 @@ public class InformeController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/actualizar/{id}")
     @PreAuthorize("hasRole('ROLE_ORGANIZADOR')")
     @Operation(
         summary = "Actualizar un informe",
@@ -135,7 +135,7 @@ public class InformeController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/eliminar/{id}")
     @PreAuthorize("hasRole('ROLE_ORGANIZADOR')")
     @Operation(
         summary = "Eliminar un informe",
@@ -163,7 +163,7 @@ public class InformeController {
     }
 
 
-    @GetMapping("/{informeId}/archivos/{filename:.+}")
+    @GetMapping("/descargar/{informeId}/archivos/{filename:.+}")
     @PreAuthorize("hasRole('ROLE_ORGANIZADOR')")
     @Operation(
         summary = "Descargar un informe",

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.zentry.sigea.module_inscripciones.presentation.models.requestDTO.InscripcionRequest;
 import com.zentry.sigea.module_inscripciones.presentation.models.responseDTO.InscripcionResponse;
 import com.zentry.sigea.module_inscripciones.services.InscripcionService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 /**
  * Controlador REST para gestionar inscripciones
@@ -34,7 +38,16 @@ public class InscripcionController {
     /**
      * Obtener una inscripción por ID
      */
-    @GetMapping("/{id}")
+    @GetMapping("/obtener/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR' , 'ROLE_ORGANIZADOR' , 'ROLE_PARTICIPANTE')")
+    @Operation(
+        summary = "Obtener inscipcion por ID.",
+        security = {
+            @SecurityRequirement(name = "administradorJWT"),
+            @SecurityRequirement(name = "organizadorJWT"),
+            @SecurityRequirement(name = "participanteJWT")
+        }
+    )
     public ResponseEntity<InscripcionResponse> obtenerInscripcion(@PathVariable String id) {
         try {
             InscripcionResponse inscripcion = inscripcionService.obtenerInscripcionPorId(id);
@@ -49,7 +62,15 @@ public class InscripcionController {
     /**
      * Listar todas las inscripciones
      */
-    @GetMapping
+    @GetMapping("/listar")
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR' , 'ROLE_ORGANIZADOR')")
+    @Operation(
+        summary = "Listar las inscipciones.",
+        security = {
+            @SecurityRequirement(name = "administradorJWT"),
+            @SecurityRequirement(name = "organizadorJWT")
+        }
+    )
     public ResponseEntity<List<InscripcionResponse>> listarInscripciones() {
         List<InscripcionResponse> inscripciones = inscripcionService.listarInscripciones();
         return ResponseEntity.ok(inscripciones);
@@ -58,7 +79,14 @@ public class InscripcionController {
     /**
      * Obtener inscripciones por usuario
      */
-    @GetMapping("/usuario/{usuarioId}")
+    @GetMapping("/obtener/usuario/{usuarioId}")
+    @PreAuthorize("hasRole('ROLE_PARTICIPANTE')")
+    @Operation(
+        summary = "obtener inscripciones por ID de usuario.",
+        security = {
+            @SecurityRequirement(name = "participanteJWT")
+        }
+    )
     public ResponseEntity<List<InscripcionResponse>> obtenerInscripcionesPorUsuario(
         @PathVariable String usuarioId
     ) {
@@ -74,7 +102,15 @@ public class InscripcionController {
     /**
      * Obtener inscripciones por actividad
      */
-    @GetMapping("/actividad/{actividadId}")
+    @GetMapping("/obtener/actividad/{actividadId}")
+    @PreAuthorize("hasAnyRole('ROLE_ORGANIZADOR' , 'ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "obtener inscripciones por ID de actividad.",
+        security = {
+            @SecurityRequirement(name = "administradorJWT"),
+            @SecurityRequirement(name = "organizadorJWT")
+        }
+    )
     public ResponseEntity<List<InscripcionResponse>> obtenerInscripcionesPorActividad(
         @PathVariable String actividadId
     ) {
@@ -90,7 +126,16 @@ public class InscripcionController {
     /**
      * Actualizar una inscripción
      */
-    @PutMapping("/{id}")
+    @PutMapping("actualizar/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ORGANIZADOR' , 'ROLE_ADMINISTRADOR' , 'ROLE_PARTICIPANTE')")
+    @Operation(
+        summary = "Actualizar inscripcion por su ID.",
+        security = {
+            @SecurityRequirement(name = "administradorJWT"),
+            @SecurityRequirement(name = "organizadorJWT"),
+            @SecurityRequirement(name = "participanteJWT")
+        }
+    )
     public ResponseEntity<InscripcionResponse> actualizarInscripcion(
         @PathVariable String id,
         @RequestBody InscripcionRequest request
@@ -109,6 +154,15 @@ public class InscripcionController {
      * Eliminar una inscripción
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ORGANIZADOR' , 'ROLE_ADMINISTRADOR' , 'ROLE_PARTICIPANTE')")
+    @Operation(
+        summary = "Eliminar inscripcion por su ID.",
+        security = {
+            @SecurityRequirement(name = "administradorJWT"),
+            @SecurityRequirement(name = "organizadorJWT"),
+            @SecurityRequirement(name = "participanteJWT")
+        }
+    )
     public ResponseEntity<Void> eliminarInscripcion(@PathVariable String id) {
         try {
             inscripcionService.eliminarInscripcion(id);
@@ -124,6 +178,9 @@ public class InscripcionController {
      * Endpoint de salud para verificar que el controlador funciona
      */
     @GetMapping("/health")
+    @Operation(
+        summary = "Verificar funcionamiento del controlador de inscripciones."
+    )
     public ResponseEntity<String> health() {
         return ResponseEntity.ok("Inscripciones API is running");
     }

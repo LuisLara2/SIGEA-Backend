@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,6 +17,7 @@ import com.zentry.sigea.security.CustomAuthenticationEntryPoint;
 import com.zentry.sigea.security.JwtAuthenticationFilter;
 
 @Configuration
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
     
     private final JwtAuthenticationFilter jwtAuthFilter;
@@ -42,11 +44,11 @@ public class SecurityConfig {
                     .accessDeniedHandler(customAccessDeniedHandler)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v*/usuarios/auth/**", "/").permitAll()
+                        .requestMatchers("/api/v*/usuarios/auth/**", "/" , "/api/v*/{any}/health").permitAll()
                         .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/webjars/**").permitAll()
-                        .requestMatchers("/api/v*/usuarios/administrador/**").hasRole("ADMINISTRADOR")
-                        .requestMatchers("/api/v*/usuarios/organizador/**").hasRole("ORGANIZADOR")
-                        .requestMatchers("/api/v*/usuarios/participante/**").hasRole("PARTICIPANTE")
+                        //.requestMatchers("/api/v*/administrador/**").hasRole("ADMINISTRADOR")
+                        //.requestMatchers("/api/v*/organizador/**").hasRole("ORGANIZADOR")
+                        //.requestMatchers("/api/v*/participante/**").hasRole("PARTICIPANTE")
                         // .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
                 )

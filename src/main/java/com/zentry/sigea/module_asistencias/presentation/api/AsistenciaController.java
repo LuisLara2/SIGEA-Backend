@@ -19,6 +19,8 @@ import com.zentry.sigea.module_asistencias.presentation.models.requestDTO.Regist
 import com.zentry.sigea.module_asistencias.presentation.models.responseDTO.AsistenciaResponse;
 import com.zentry.sigea.module_asistencias.services.AsistenciaService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
 @RestController
@@ -33,7 +35,13 @@ public class AsistenciaController {
     }
 
     @PostMapping("/registrar")
-    @PreAuthorize("hasRole('ORGANIZADOR')")
+    @PreAuthorize("hasRole('ROLE_ORGANIZADOR')")
+    @Operation(
+        summary = "Registrar asistencia.",
+        security = @SecurityRequirement(
+            name = "organizadorJWT"
+            )
+    )
     public ResponseEntity<String> registrarAsistencia(
         @Valid @RequestBody RegistrarAsistenciaRequest request
     ) {
@@ -48,8 +56,15 @@ public class AsistenciaController {
         }
     }
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ORGANIZADOR', 'ADMINISTRADOR')")
+    @GetMapping("/obtener/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ORGANIZADOR', 'ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Obtener asistencia por ID.",
+        security = {
+            @SecurityRequirement(name = "administradorJWT"),
+            @SecurityRequirement(name = "organizadorJWT")
+        }
+    )
     public ResponseEntity<AsistenciaResponse> obtenerAsistencia(@PathVariable String id) {
         try {
             AsistenciaResponse asistencia = asistenciaService.obtenerAsistenciaPorId(id);
@@ -61,8 +76,14 @@ public class AsistenciaController {
         }
     }
 
-    @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ORGANIZADOR')")
+    @PutMapping("/actualizar/{id}")
+    @PreAuthorize("hasRole('ROLE_ORGANIZADOR')")
+    @Operation(
+        summary = "Actualizar asistencia por ID.",
+        security = @SecurityRequirement(
+            name = "organizadorJWT"
+            )
+    )
     public ResponseEntity<AsistenciaResponse> actualizarAsistencia(
         @PathVariable String id,
         @Valid @RequestBody AsistenciaRequest request
@@ -78,8 +99,16 @@ public class AsistenciaController {
         }
     }
 
-    @GetMapping("/sesion/{sesionId}")
-    @PreAuthorize("hasAnyRole('ORGANIZADOR', 'ADMINISTRADOR')")
+    @GetMapping("/listar/sesion/{sesionId}")
+    @PreAuthorize("hasAnyRole('ROLE_ORGANIZADOR', 'ROLE_ADMINISTRADOR', 'ROLE_PARTICIPANTE')")
+    @Operation(
+        summary = "Listar asistencias por ID de sesion.",
+        security = {
+            @SecurityRequirement(name = "administradorJWT"),
+            @SecurityRequirement(name = "organizadorJWT"),
+            @SecurityRequirement(name = "participanteJWT")
+        }
+    )
     public ResponseEntity<List<AsistenciaResponse>> listarPorSesion(
         @PathVariable String sesionId
     ) {
@@ -92,7 +121,14 @@ public class AsistenciaController {
         }
     }
 
-    @GetMapping("/inscripcion/{inscripcionId}")
+    @GetMapping("/listar/inscripcion/{inscripcionId}")
+    @PreAuthorize("hasRole('ROLE_PARTICIPANTE')")
+    @Operation(
+        summary = "Listar asistencias por ID de inscripcion.",
+        security = @SecurityRequirement(
+            name = "participanteJWT"
+        )
+    )
     public ResponseEntity<List<AsistenciaResponse>> listarPorInscripcion(
         @PathVariable String inscripcionId
     ) {
@@ -106,7 +142,14 @@ public class AsistenciaController {
     }
 
     @GetMapping("/sesion/{sesionId}/presentes")
-    @PreAuthorize("hasAnyRole('ORGANIZADOR', 'ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ORGANIZADOR', 'ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Listar presentes en una sesion.",
+        security = {
+            @SecurityRequirement(name = "administradorJWT"),
+            @SecurityRequirement(name = "organizadorJWT")
+        }
+    )
     public ResponseEntity<List<AsistenciaResponse>> listarPresentesPorSesion(
         @PathVariable String sesionId
     ) {
@@ -120,6 +163,9 @@ public class AsistenciaController {
     }
 
     @GetMapping("/health")
+    @Operation(
+        summary = "Verificar el funcionamiento del modulo asistencias."
+    )
     public ResponseEntity<String> health() {
         return ResponseEntity.ok("Asistencias API is running");
     }

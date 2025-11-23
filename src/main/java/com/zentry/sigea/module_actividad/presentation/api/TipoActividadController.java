@@ -3,6 +3,7 @@ package com.zentry.sigea.module_actividad.presentation.api;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,9 @@ import com.zentry.sigea.module_actividad.core.entities.TipoActividadDomainEntity
 import com.zentry.sigea.module_actividad.presentation.models.requestDTO.TipoActividadRequest;
 import com.zentry.sigea.module_actividad.presentation.models.responseDTO.TipoActividadResponse;
 import com.zentry.sigea.module_actividad.services.TipoActividadService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 
 
@@ -36,6 +40,13 @@ public class TipoActividadController {
      * Crear un nuevo tipo de actividad
      */
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Crear un tipo de actividad.",
+        security = @SecurityRequirement(
+            name = "administradorJWT"
+            )
+    )
     public ResponseEntity<String>  createTipoActividad(@RequestBody TipoActividadRequest request) 
     {
         // Lógica para crear el tipo de actividad
@@ -53,7 +64,14 @@ public class TipoActividadController {
     /*
      * Listar todos los tipos de actividad
     */
-    @GetMapping
+    @GetMapping("/listar")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Listar los tipos de actividad.",
+        security = @SecurityRequirement(
+            name = "administradorJWT"
+            )
+    )
     public ResponseEntity<List<TipoActividadResponse>> listarTiposActividad() {
         List<TipoActividadDomainEntity> tiposActividad = tipoActividadService.listarTiposActividad();
         List<TipoActividadResponse> response = tiposActividad.stream()
@@ -62,7 +80,14 @@ public class TipoActividadController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/eliminar/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Eliminar tipo de actividad por su ID.",
+        security = @SecurityRequirement(
+            name = "administradorJWT"
+            )
+    )
     public ResponseEntity<Void> eliminarTipoActividad(@PathVariable String id) {
         try {
             tipoActividadService.eliminarTipoActividad(id);
@@ -74,7 +99,14 @@ public class TipoActividadController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/actualizar/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Actualizar un tipo de actividad.",
+        security = @SecurityRequirement(
+            name = "administradorJWT"
+            )
+    )
     public ResponseEntity<TipoActividadResponse> actualizarTipoActividad(@PathVariable String id, @RequestBody TipoActividadRequest request) {
         try {
             TipoActividadDomainEntity tipoActualizado = tipoActividadService.actualizarTipoActividad(id, request);

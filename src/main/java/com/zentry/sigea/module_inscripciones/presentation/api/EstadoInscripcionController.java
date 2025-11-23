@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.zentry.sigea.module_inscripciones.presentation.models.requestDTO.EstadoInscripcionRequest;
 import com.zentry.sigea.module_inscripciones.presentation.models.responseDTO.EstadoInscripcionResponse;
 import com.zentry.sigea.module_inscripciones.services.EstadoInscripcionService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 /**
  * Controlador REST para gestionar estados de inscripción
@@ -34,6 +38,13 @@ public class EstadoInscripcionController {
      * Crear un nuevo estado de inscripción
      */
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Crear estado de inscripcion",
+        security = @SecurityRequirement(
+            name = "administradorJWT"
+            )
+    )
     public ResponseEntity<String> crearEstadoInscripcion(
         @RequestBody EstadoInscripcionRequest request
     ) {
@@ -51,7 +62,14 @@ public class EstadoInscripcionController {
     /**
      * Listar todos los estados de inscripción
      */
-    @GetMapping
+    @GetMapping("/listar")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Listar estados de inscripcion",
+        security = @SecurityRequirement(
+            name = "administradorJWT"
+            )
+    )
     public ResponseEntity<List<EstadoInscripcionResponse>> listarEstadosInscripcion() {
         List<EstadoInscripcionResponse> estados = estadoInscripcionService.listarEstadosInscripcion();
         return ResponseEntity.ok(estados);
@@ -60,7 +78,14 @@ public class EstadoInscripcionController {
     /**
      * Obtener un estado de inscripción por ID
      */
-    @GetMapping("/{id}")
+    @GetMapping("obtener/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Obtener un estado de inscripcion por su ID.",
+        security = @SecurityRequirement(
+            name = "administradorJWT"
+            )
+    )
     public ResponseEntity<EstadoInscripcionResponse> obtenerEstadoInscripcionPorId(
         @PathVariable String id
     ) {
@@ -78,7 +103,14 @@ public class EstadoInscripcionController {
     /**
      * Obtener un estado de inscripción por código
      */
-    @GetMapping("/codigo/{codigo}")
+    @GetMapping("/obtener/codigo/{codigo}")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Obtener un estado de inscripcion por su codigo.",
+        security = @SecurityRequirement(
+            name = "administradorJWT"
+            )
+    )
     public ResponseEntity<EstadoInscripcionResponse> obtenerEstadoInscripcionPorCodigo(
         @PathVariable String codigo
     ) {
@@ -96,7 +128,14 @@ public class EstadoInscripcionController {
     /**
      * Eliminar un estado de inscripción
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("eliminar/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Eliminar un estado de inscripcion por su ID.",
+        security = @SecurityRequirement(
+            name = "administradorJWT"
+            )
+    )
     public ResponseEntity<Void> eliminarEstadoInscripcion(@PathVariable String id) {
         try {
             estadoInscripcionService.eliminarEstadoInscripcion(id);
@@ -112,6 +151,9 @@ public class EstadoInscripcionController {
      * Endpoint de salud
      */
     @GetMapping("/health")
+    @Operation(
+        summary = "Verificar el funcionamiento del controlador estado de inscripcion."
+    )
     public ResponseEntity<String> health() {
         return ResponseEntity.ok("Estados de Inscripción API is running");
     }
