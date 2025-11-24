@@ -65,12 +65,8 @@ public class ActividadController {
      * Obtener una actividad por ID
      */
     @GetMapping("/obtener/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     @Operation(
-        summary = "Obtener una actividad por su ID",
-        security = @SecurityRequirement(
-            name = "administradorJWT"
-            )
+        summary = "Obtener una actividad por su ID"
     )
     public ResponseEntity<ActividadResponse> obtenerActividad(@PathVariable String id) {
         return actividadService.obtenerActividadPorId(id) != null ? 

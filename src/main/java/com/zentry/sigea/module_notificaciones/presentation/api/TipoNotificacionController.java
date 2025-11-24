@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.zentry.sigea.module_notificaciones.core.entities.TipoNotificacionDomainEntity;
 import com.zentry.sigea.module_notificaciones.core.repositories.ITipoNotificacionRepository;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 /**
  * Controlador REST para gestionar tipos de notificación
@@ -36,7 +40,14 @@ public class TipoNotificacionController {
      * Crear un nuevo tipo de notificación
      * POST /api/v1/tipos-notificacion
      */
-    @PostMapping
+    @PostMapping("/crear")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Crear un nuevo tipo de notificación.",
+        security = @SecurityRequirement(
+            name = "administradorJWT"
+            )
+    )
     public ResponseEntity<?> crearTipo(@RequestBody TipoRequest request) {
         try {
             if (request.getCodigo() == null || request.getCodigo().trim().isEmpty()) {
@@ -64,7 +75,14 @@ public class TipoNotificacionController {
      * Listar todos los tipos de notificación
      * GET /api/v1/tipos-notificacion
      */
-    @GetMapping
+    @GetMapping("/listar")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Listar todos los tipos de notificación.",
+        security = @SecurityRequirement(
+            name = "administradorJWT"
+            )
+    )
     public ResponseEntity<List<TipoResponse>> listarTipos() {
         try {
             List<TipoNotificacionDomainEntity> tipos = tipoRepository.findAll();
@@ -81,7 +99,14 @@ public class TipoNotificacionController {
      * Obtener un tipo por ID
      * GET /api/v1/tipos-notificacion/{id}
      */
-    @GetMapping("/{id}")
+    @GetMapping("/obtener/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Obtener un tipo de notificacion por su ID.",
+        security = @SecurityRequirement(
+            name = "administradorJWT"
+            )
+    )
     public ResponseEntity<?> obtenerTipo(@PathVariable String id) {
         try {
             return tipoRepository.findById(id)
@@ -97,7 +122,14 @@ public class TipoNotificacionController {
      * Buscar tipo por código
      * GET /api/v1/tipos-notificacion/codigo/{codigo}
      */
-    @GetMapping("/codigo/{codigo}")
+    @GetMapping("/obtener/codigo/{codigo}")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Obtener un tipo de notificacion por su codigo.",
+        security = @SecurityRequirement(
+            name = "administradorJWT"
+            )
+    )
     public ResponseEntity<?> obtenerTipoPorCodigo(@PathVariable String codigo) {
         try {
             return tipoRepository.findByCodigo(codigo.toUpperCase())
@@ -113,7 +145,14 @@ public class TipoNotificacionController {
      * Eliminar un tipo
      * DELETE /api/v1/tipos-notificacion/{id}
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/eliminar/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Eliminar un tipo de notificacion por su ID.",
+        security = @SecurityRequirement(
+            name = "administradorJWT"
+            )
+    )
     public ResponseEntity<?> eliminarTipo(@PathVariable String id) {
         try {
             if (!tipoRepository.existsById(id)) {
@@ -132,6 +171,9 @@ public class TipoNotificacionController {
      * GET /api/v1/tipos-notificacion/health
      */
     @GetMapping("/health")
+    @Operation(
+        summary = "Verificar el funcionamiento del controlador tipo de notificacion"
+    )
     public ResponseEntity<String> health() {
         return ResponseEntity.ok("Tipos Notificación API is running");
     }

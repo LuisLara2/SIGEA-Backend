@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.zentry.sigea.module_notificaciones.core.entities.EstadoNotificacionDomainEntity;
 import com.zentry.sigea.module_notificaciones.core.repositories.IEstadoNotificacionRepository;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 /**
  * Controlador REST para gestionar estados de notificación
@@ -36,7 +40,14 @@ public class EstadoNotificacionController {
      * Crear un nuevo estado de notificación
      * POST /api/v1/estados-notificacion
      */
-    @PostMapping
+    @PostMapping("/create")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Crear un nuevo estado de notificacion",
+        security = @SecurityRequirement(
+            name = "administradorJWT"
+            )
+    )
     public ResponseEntity<?> crearEstado(@RequestBody EstadoRequest request) {
         try {
             if (request.getCodigo() == null || request.getCodigo().trim().isEmpty()) {
@@ -64,7 +75,14 @@ public class EstadoNotificacionController {
      * Listar todos los estados de notificación
      * GET /api/v1/estados-notificacion
      */
-    @GetMapping
+    @GetMapping("/listar")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Listar todos los estados de notificacion.",
+        security = @SecurityRequirement(
+            name = "administradorJWT"
+            )
+    )
     public ResponseEntity<List<EstadoResponse>> listarEstados() {
         try {
             List<EstadoNotificacionDomainEntity> estados = estadoRepository.findAll();
@@ -81,7 +99,14 @@ public class EstadoNotificacionController {
      * Obtener un estado por ID
      * GET /api/v1/estados-notificacion/{id}
      */
-    @GetMapping("/{id}")
+    @GetMapping("/obtener/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Obener un estado de notificacion por su ID",
+        security = @SecurityRequirement(
+            name = "administradorJWT"
+            )
+    )
     public ResponseEntity<?> obtenerEstado(@PathVariable String id) {
         try {
             return estadoRepository.findById(id)
@@ -97,7 +122,14 @@ public class EstadoNotificacionController {
      * Buscar estado por código
      * GET /api/v1/estados-notificacion/codigo/{codigo}
      */
-    @GetMapping("/codigo/{codigo}")
+    @GetMapping("/obtener/codigo/{codigo}")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Obener un estado de notificacion por su codigo",
+        security = @SecurityRequirement(
+            name = "administradorJWT"
+            )
+    )
     public ResponseEntity<?> obtenerEstadoPorCodigo(@PathVariable String codigo) {
         try {
             return estadoRepository.findByCodigo(codigo.toUpperCase())
@@ -113,7 +145,14 @@ public class EstadoNotificacionController {
      * Eliminar un estado
      * DELETE /api/v1/estados-notificacion/{id}
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/eliminar/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Eliminar un estado de notificacion por su ID",
+        security = @SecurityRequirement(
+            name = "administradorJWT"
+            )
+    )
     public ResponseEntity<?> eliminarEstado(@PathVariable String id) {
         try {
             if (!estadoRepository.existsById(id)) {
@@ -132,6 +171,9 @@ public class EstadoNotificacionController {
      * GET /api/v1/estados-notificacion/health
      */
     @GetMapping("/health")
+    @Operation(
+        summary = "Verificar el funcionamiento del controlador de estado notificacion."
+    )
     public ResponseEntity<String> health() {
         return ResponseEntity.ok("Estados Notificación API is running");
     }

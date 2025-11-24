@@ -44,12 +44,21 @@ public class SecurityConfig {
                     .accessDeniedHandler(customAccessDeniedHandler)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v*/usuarios/auth/**", "/" , "/api/v*/{any}/health").permitAll()
-                        .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/webjars/**").permitAll()
-                        //.requestMatchers("/api/v*/administrador/**").hasRole("ADMINISTRADOR")
-                        //.requestMatchers("/api/v*/organizador/**").hasRole("ORGANIZADOR")
-                        //.requestMatchers("/api/v*/participante/**").hasRole("PARTICIPANTE")
-                        // .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(
+                            "/api/v*/usuarios/auth/**", 
+                            "/" , 
+                            "/api/v*/{any}/health" , 
+
+                            // Permitir el acceso libre para ver las actividades en la pagina principal
+                            "/api/v*/actividades/listar",
+                            "/api/v*/actividades/obtener/**"
+                        ).permitAll()
+                        .requestMatchers(
+                            "/swagger-ui/**", 
+                            "/swagger-ui.html", 
+                            "/v3/api-docs/**", 
+                            "/webjars/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

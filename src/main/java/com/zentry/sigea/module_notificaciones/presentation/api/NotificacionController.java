@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,9 @@ import com.zentry.sigea.module_notificaciones.presentation.models.requestDTO.Act
 import com.zentry.sigea.module_notificaciones.presentation.models.requestDTO.CrearNotificacionRequest;
 import com.zentry.sigea.module_notificaciones.presentation.models.responseDTO.NotificacionResponse;
 import com.zentry.sigea.module_notificaciones.services.NotificacionService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 /**
  * Controlador REST para gestionar notificaciones
@@ -38,6 +42,15 @@ public class NotificacionController {
      * Crear una nueva notificación
      */
     @PostMapping("/create")
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR' , 'ROLE_ORGANIZADOR' , 'ROLE_PARTICIPANTE')")
+    @Operation(
+        summary = "Crear una notificacion.",
+        security = {
+            @SecurityRequirement(name = "administradorJWT") , 
+            @SecurityRequirement(name = "organizadorJWT") , 
+            @SecurityRequirement(name = "participanteJWT")
+        }
+    )
     public ResponseEntity<String> crearNotificacion(@RequestBody CrearNotificacionRequest request) {
         try {
             String responseMessage = notificacionService.crearNotificacion(request);
@@ -53,7 +66,16 @@ public class NotificacionController {
     /**
      * Obtener una notificación por ID
      */
-    @GetMapping("/{id}")
+    @GetMapping("/obtener/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR' , 'ROLE_ORGANIZADOR' , 'ROLE_PARTICIPANTE')")
+    @Operation(
+        summary = "Obtener notificacion por su ID.",
+        security = {
+            @SecurityRequirement(name = "administradorJWT") , 
+            @SecurityRequirement(name = "organizadorJWT") , 
+            @SecurityRequirement(name = "participanteJWT")
+        }
+    )
     public ResponseEntity<NotificacionResponse> obtenerNotificacion(@PathVariable String id) {
         try {
             NotificacionResponse notificacion = notificacionService.obtenerNotificacionPorId(id);
@@ -68,7 +90,16 @@ public class NotificacionController {
     /**
      * Listar todas las notificaciones
      */
-    @GetMapping
+    @GetMapping("/listar")
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR' , 'ROLE_ORGANIZADOR' , 'ROLE_PARTICIPANTE')")
+    @Operation(
+        summary = "Listar notificaciones.",
+        security = {
+            @SecurityRequirement(name = "administradorJWT") , 
+            @SecurityRequirement(name = "organizadorJWT") , 
+            @SecurityRequirement(name = "participanteJWT")
+        }
+    )
     public ResponseEntity<List<NotificacionResponse>> listarNotificaciones() {
         try {
             List<NotificacionResponse> notificaciones = notificacionService.listarNotificaciones();
@@ -81,7 +112,16 @@ public class NotificacionController {
     /**
      * Obtener notificaciones por usuario
      */
-    @GetMapping("/usuario/{usuarioId}")
+    @GetMapping("/obtener/usuario/{usuarioId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR' , 'ROLE_ORGANIZADOR' , 'ROLE_PARTICIPANTE')")
+    @Operation(
+        summary = "Obtener notificacion por el ID de usuario.",
+        security = {
+            @SecurityRequirement(name = "administradorJWT") , 
+            @SecurityRequirement(name = "organizadorJWT") , 
+            @SecurityRequirement(name = "participanteJWT")
+        }
+    )
     public ResponseEntity<List<NotificacionResponse>> obtenerNotificacionesPorUsuario(
         @PathVariable String usuarioId
     ) {
@@ -99,7 +139,16 @@ public class NotificacionController {
     /**
      * Obtener notificaciones por actividad
      */
-    @GetMapping("/actividad/{actividadId}")
+    @GetMapping("/obtener/actividad/{actividadId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR' , 'ROLE_ORGANIZADOR' , 'ROLE_PARTICIPANTE')")
+    @Operation(
+        summary = "Obtener notificacion por el ID de actividad.",
+        security = {
+            @SecurityRequirement(name = "administradorJWT") , 
+            @SecurityRequirement(name = "organizadorJWT") , 
+            @SecurityRequirement(name = "participanteJWT")
+        }
+    )
     public ResponseEntity<List<NotificacionResponse>> obtenerNotificacionesPorActividad(
         @PathVariable String actividadId
     ) {
@@ -118,7 +167,16 @@ public class NotificacionController {
      * Obtener notificaciones por tipo de evento
      * @param tipoEvento Ejemplos: CERTIFICADO_GENERADO, SESION_CREADA, INSCRIPCION_APROBADA, etc.
      */
-    @GetMapping("/tipo/{tipoEvento}")
+    @GetMapping("/obtener/tipo/{tipoEvento}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR' , 'ROLE_ORGANIZADOR' , 'ROLE_PARTICIPANTE')")
+    @Operation(
+        summary = "Obtener notificacion por tipo de evento.",
+        security = {
+            @SecurityRequirement(name = "administradorJWT") , 
+            @SecurityRequirement(name = "organizadorJWT") , 
+            @SecurityRequirement(name = "participanteJWT")
+        }
+    )
     public ResponseEntity<List<NotificacionResponse>> obtenerNotificacionesPorTipo(
         @PathVariable String tipoEvento
     ) {
@@ -138,7 +196,16 @@ public class NotificacionController {
      * @param usuarioId ID del usuario
      * @param tipoEvento Tipo de evento a filtrar
      */
-    @GetMapping("/usuario/{usuarioId}/tipo/{tipoEvento}")
+    @GetMapping("/obtener/usuario/{usuarioId}/tipo/{tipoEvento}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR' , 'ROLE_ORGANIZADOR' , 'ROLE_PARTICIPANTE')")
+    @Operation(
+        summary = "Obtener notificaciones de un usuario filtradas por tipo de evento.",
+        security = {
+            @SecurityRequirement(name = "administradorJWT") , 
+            @SecurityRequirement(name = "organizadorJWT") , 
+            @SecurityRequirement(name = "participanteJWT")
+        }
+    )
     public ResponseEntity<List<NotificacionResponse>> obtenerNotificacionesPorUsuarioYTipo(
         @PathVariable String usuarioId,
         @PathVariable String tipoEvento
@@ -158,6 +225,15 @@ public class NotificacionController {
      * Marcar una notificación como leída
      */
     @PutMapping("/{id}/marcar-leida")
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR' , 'ROLE_ORGANIZADOR' , 'ROLE_PARTICIPANTE')")
+    @Operation(
+        summary = "Marcar una notificación como leída.",
+        security = {
+            @SecurityRequirement(name = "administradorJWT") , 
+            @SecurityRequirement(name = "organizadorJWT") , 
+            @SecurityRequirement(name = "participanteJWT")
+        }
+    )
     public ResponseEntity<NotificacionResponse> marcarComoLeida(@PathVariable String id) {
         try {
             NotificacionResponse notificacion = notificacionService.marcarComoLeida(id);
@@ -173,6 +249,15 @@ public class NotificacionController {
      * Marcar todas las notificaciones de un usuario como leídas
      */
     @PutMapping("/usuario/{usuarioId}/marcar-todas-leidas")
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR' , 'ROLE_ORGANIZADOR' , 'ROLE_PARTICIPANTE')")
+    @Operation(
+        summary = "Marcar todas las notificaciones de un usuario como leídas.",
+        security = {
+            @SecurityRequirement(name = "administradorJWT") , 
+            @SecurityRequirement(name = "organizadorJWT") , 
+            @SecurityRequirement(name = "participanteJWT")
+        }
+    )
     public ResponseEntity<String> marcarTodasComoLeidas(@PathVariable String usuarioId) {
         try {
             notificacionService.marcarTodasComoLeidas(usuarioId);
@@ -187,7 +272,16 @@ public class NotificacionController {
     /**
      * Eliminar todas las notificaciones de un usuario
      */
-    @DeleteMapping("/usuario/{usuarioId}")
+    @DeleteMapping("/eliminar/usuario/{usuarioId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR' , 'ROLE_ORGANIZADOR' , 'ROLE_PARTICIPANTE')")
+    @Operation(
+        summary = "Eliminar todas las notificaciones de un usuario.",
+        security = {
+            @SecurityRequirement(name = "administradorJWT") , 
+            @SecurityRequirement(name = "organizadorJWT") , 
+            @SecurityRequirement(name = "participanteJWT")
+        }
+    )
     public ResponseEntity<Void> eliminarNotificacionesUsuario(@PathVariable String usuarioId) {
         try {
             notificacionService.eliminarNotificacionesPorUsuario(usuarioId);
@@ -202,7 +296,16 @@ public class NotificacionController {
     /**
      * Actualizar una notificación existente
      */
-    @PutMapping("/{id}")
+    @PutMapping("/actualizar/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR' , 'ROLE_ORGANIZADOR' , 'ROLE_PARTICIPANTE')")
+    @Operation(
+        summary = "Actualizar una notificación existente.",
+        security = {
+            @SecurityRequirement(name = "administradorJWT") , 
+            @SecurityRequirement(name = "organizadorJWT") , 
+            @SecurityRequirement(name = "participanteJWT")
+        }
+    )
     public ResponseEntity<NotificacionResponse> actualizarNotificacion(
         @PathVariable String id,
         @RequestBody ActualizarNotificacionRequest request
@@ -221,7 +324,16 @@ public class NotificacionController {
     /**
      * Eliminar una notificación
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/eliminar/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR' , 'ROLE_ORGANIZADOR' , 'ROLE_PARTICIPANTE')")
+    @Operation(
+        summary = "Eliminar una notificación.",
+        security = {
+            @SecurityRequirement(name = "administradorJWT") , 
+            @SecurityRequirement(name = "organizadorJWT") , 
+            @SecurityRequirement(name = "participanteJWT")
+        }
+    )
     public ResponseEntity<Void> eliminarNotificacion(@PathVariable String id) {
         try {
             notificacionService.eliminarNotificacion(id);
@@ -237,6 +349,9 @@ public class NotificacionController {
      * Endpoint de salud del servicio
      */
     @GetMapping("/health")
+    @Operation(
+        summary = "Verificar el funcionamiento del controlador notificacion."
+    )
     public ResponseEntity<String> health() {
         return ResponseEntity.ok("Notificaciones API is running");
     }
