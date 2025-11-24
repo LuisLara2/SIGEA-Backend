@@ -1,14 +1,24 @@
 package com.zentry.sigea.module_certificaciones.services.usecases.certificado;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
+import com.zentry.sigea.module_asistencias.core.entities.AsistenciaDomainEntity;
+import com.zentry.sigea.module_asistencias.core.repositories.IAsistenciaRepository;
 import com.zentry.sigea.module_certificaciones.core.entities.CertificadoDomainEntity;
 import com.zentry.sigea.module_certificaciones.core.entities.EstadoCertificadoDomainEntity;
 import com.zentry.sigea.module_certificaciones.core.repositories.ICertificadoRepository;
 import com.zentry.sigea.module_certificaciones.core.repositories.IEstadoCertificadoRepository;
 import com.zentry.sigea.module_certificaciones.presentation.models.requestDTO.CrearCertificadoRequest;
+import com.zentry.sigea.module_inscripciones.core.entities.InscripcionDomainEntity;
+import com.zentry.sigea.module_inscripciones.core.repositories.IInscripcionRepository;
+import com.zentry.sigea.module_notificaciones.events.domain.CertificadoGeneradoEvent;
+import com.zentry.sigea.module_notificaciones.events.domain.CertificadoGeneradoEvent.EstadoCertificado;
 
 /**
  * Caso de uso para crear un nuevo certificado
@@ -16,15 +26,26 @@ import com.zentry.sigea.module_certificaciones.presentation.models.requestDTO.Cr
 @Component
 public class CrearCertificadoUseCase {
 
+    private static final Logger logger = LoggerFactory.getLogger(CrearCertificadoUseCase.class);
+
     private final ICertificadoRepository certificadoRepository;
     private final IEstadoCertificadoRepository estadoCertificadoRepository;
+    private final IAsistenciaRepository asistenciaRepository;
+    private final IInscripcionRepository inscripcionRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     public CrearCertificadoUseCase(
         ICertificadoRepository certificadoRepository,
-        IEstadoCertificadoRepository estadoCertificadoRepository
+        IEstadoCertificadoRepository estadoCertificadoRepository,
+        IAsistenciaRepository asistenciaRepository,
+        IInscripcionRepository inscripcionRepository,
+        ApplicationEventPublisher eventPublisher
     ) {
         this.certificadoRepository = certificadoRepository;
         this.estadoCertificadoRepository = estadoCertificadoRepository;
+        this.asistenciaRepository = asistenciaRepository;
+        this.inscripcionRepository = inscripcionRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     /**
@@ -32,10 +53,10 @@ public class CrearCertificadoUseCase {
      */
     public CertificadoDomainEntity execute(CrearCertificadoRequest request) {
         // Validar que no exista ya un certificado para esta inscripción
-        String asistenciaId = request.getAsistenciaId().toString();
+        String asistenciaId = request.getAsistenciaId();
         if (certificadoRepository.existsByAsistenciaId(asistenciaId)) {
             throw new IllegalArgumentException(
-                "Ya existe un certificado para esta asistencia: " + asistenciaId
+                "Ya existe un certificado para esta asistencia"
             );
         }
         
@@ -63,7 +84,40 @@ public class CrearCertificadoUseCase {
         );
         
         // Guardar usando el repositorio
-        return certificadoRepository.save(nuevoCertificado);
+        CertificadoDomainEntity certificadoGuardado = certificadoRepository.save(nuevoCertificado);
+        
+        // Publicar evento de notificación
+        try {
+            AsistenciaDomainEntity asistencia = asistenciaRepository.findById(asistenciaId.toString())
+                .orElseThrow(() -> new IllegalArgumentException("Asistencia no encontrada: " + asistenciaId));
+            
+            InscripcionDomainEntity inscripcion = inscripcionRepository.findById(asistencia.getInscripcionId())
+                .orElseThrow(() -> new IllegalArgumentException("Inscripción no encontrada: " + asistencia.getInscripcionId()));
+            
+            logger.info("📧 Publicando evento CertificadoGeneradoEvent para certificado: {}", certificadoGuardado.getIdCertificado());
+            
+            eventPublisher.publishEvent(new CertificadoGeneradoEvent(
+                inscripcion.getUsuarioId(),                    // ID del usuario desde inscripción
+                certificadoGuardado.getIdCertificado(),        // ID del certificado
+                inscripcion.getActividadId(),                  // ID de la actividad desde inscripción
+                "Actividad Completada",                        // Título (se puede obtener del servicio de actividades)
+                certificadoGuardado.getCodigoValidacion(),     // Código de validación
+                certificadoGuardado.getFechaEmision(),         // Fecha de emisión
+                EstadoCertificado.EMITIDO,                     // Estado del certificado
+                certificadoGuardado.getUrlPdf(),               // URL del PDF (puede ser null)
+                asistenciaId.toString(),                        // ID de asistencia
+                LocalDateTime.now()                             // Fecha de generación
+            ));
+            
+            logger.info("✅ Evento CertificadoGeneradoEvent publicado exitosamente");
+            
+        } catch (Exception e) {
+            logger.error("❌ Error publicando evento de notificación para certificado {}: {}", 
+                certificadoGuardado.getIdCertificado(), e.getMessage(), e);
+            // No lanzamos la excepción para que el certificado se cree aunque falle la notificación
+        }
+        
+        return certificadoGuardado;
     }
 
     /**

@@ -78,6 +78,18 @@ DB_ADMIN_USER_PASSWORD={Contraseña del usuario sysdba de postgreSQL}
 # OpenAPI Variables
 API_DOCS_PATH={def: /v3/api-docs}
 API_UI_PATH={Ruta para la documentacion OpenAPI. def: /swagger-ui/index.html}
+
+# Configuracion de notificaciones
+EMAIL_ENABLED=true
+EMAIL_FROM={Email que enviara los correos}
+EMAIL_NOMBRE_REMITENTE={Nombre con que el que se enviara el email}
+
+# Obtén estas credenciales en: https://app.brevo.com/settings/keys/smtp
+SMTP_USER={Usuario SMTP}
+SMTP_PASS={Contraseña de usuario SMTP}
+
+# Almacenamiento de Medios
+MEDIA_LOCATION={Ubicacion de almacenamiento de medios. def: ./uploads}
 ```
 
 Recuerda reemplazar con tus variables entre los  `{}`  .
