@@ -39,7 +39,8 @@ public class ParticipanteApiRestController {
         summary = "Home de participante.",
         security = @SecurityRequirement(
             name = "participanteJWT"
-            )
+            ),
+        tags = {"Home"}
     )
     public ResponseEntity<GeneralResponseDTO<?>> indexParticipante(
         @AuthenticationPrincipal UsuarioAuthInfo usuarioAuthInfo
@@ -63,7 +64,8 @@ public class ParticipanteApiRestController {
         summary = "Registrar inscripcion en un evento.",
         security = @SecurityRequirement(
             name = "participanteJWT"
-            )
+            ),
+        tags = {"Registrar"}
     )
     public ResponseEntity<String> registrarInscripcion(@RequestBody CrearInscripcionRequest crearInscripcionRequest) {
         try {

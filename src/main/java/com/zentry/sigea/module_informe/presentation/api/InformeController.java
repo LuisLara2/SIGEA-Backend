@@ -9,7 +9,6 @@ import com.zentry.sigea.module_informe.services.usecases.informe.ObtenerInformeU
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 import com.zentry.sigea.module_informe.services.usecases.informe.ActualizarInformeUseCase;
 import com.zentry.sigea.module_informe.services.usecases.informe.EliminarInformeUseCase;
@@ -29,7 +28,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/informes")
-@Tag(name = "Modulo Informe", description = "APIs del modulo informe")
 @CrossOrigin(origins = "*")
 public class InformeController {
 
@@ -66,7 +64,8 @@ public class InformeController {
         summary = "Crear un informe",
         security = @SecurityRequirement(
             name = "organizadorJWT"
-            )
+            ),
+        tags = {"Crear"}
     )
     public ResponseEntity<InformeResponse> crearInforme(
         @ModelAttribute CrearInformeRequest request,
@@ -92,7 +91,8 @@ public class InformeController {
         summary = "Listar los informes",
         security = @SecurityRequirement(
             name = "organizadorJWT"
-            )
+            ),
+        tags = {"Listar"}
     )
     public ResponseEntity<List<InformeResponse>> listarInformes() {
         List<InformeResponse> informes = listarInformesUseCase.execute();
@@ -105,7 +105,8 @@ public class InformeController {
         summary = "Obtener un informe",
         security = @SecurityRequirement(
             name = "organizadorJWT"
-            )
+            ),
+        tags = {"Obtener"}
     )
     public ResponseEntity<InformeResponse> obtenerInforme(@PathVariable String id) {
         try {
@@ -124,7 +125,8 @@ public class InformeController {
         summary = "Actualizar un informe",
         security = @SecurityRequirement(
             name = "organizadorJWT"
-            )
+            ),
+        tags = {"Actualizar"}
     )
     public ResponseEntity<InformeResponse> actualizarInforme(@PathVariable String id, @RequestBody ActualizarInformeRequest request) {
         try {
@@ -143,7 +145,8 @@ public class InformeController {
         summary = "Eliminar un informe",
         security = @SecurityRequirement(
             name = "organizadorJWT"
-            )
+            ),
+        tags = {"Eliminar"}
     )
     public ResponseEntity<Void> eliminarInforme(@PathVariable String id) {
         try {
@@ -158,7 +161,8 @@ public class InformeController {
 
     @GetMapping("/health")
     @Operation(
-        summary = "Verificar el funcionamiento del endpoint de informes."
+        summary = "Verificar el funcionamiento del modulo de informes.",
+        tags = {"Health"}
     )
     public ResponseEntity<String> health() {
         return ResponseEntity.ok("Informes API is running");
@@ -171,7 +175,8 @@ public class InformeController {
         summary = "Descargar un informe",
         security = @SecurityRequirement(
             name = "organizadorJWT"
-            )
+            ),
+        tags = {"Descargar"}
     )
     public ResponseEntity<Resource> descargarArchivo(
         @PathVariable String informeId,

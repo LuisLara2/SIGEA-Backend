@@ -29,7 +29,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  */
 @RestController
 @RequestMapping("/api/v1/actividades")
-@Tag(name = "Modulo Actividad", description = "APIs del modulo actividad")
 @CrossOrigin(origins = "*")
 public class ActividadController {
     private final ActividadService actividadService;
@@ -47,7 +46,8 @@ public class ActividadController {
         summary = "Crear actividad",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Crear"}
     )
     public ResponseEntity<String> crearActividad(@RequestBody CrearActividadRequest request) {
         try {
@@ -68,7 +68,8 @@ public class ActividadController {
      */
     @GetMapping("/obtener/{id}")
     @Operation(
-        summary = "Obtener una actividad por su ID"
+        summary = "Obtener una actividad por su ID",
+        tags = {"Obtener"}
     )
     public ResponseEntity<ActividadResponse> obtenerActividad(@PathVariable String id) {
         return actividadService.obtenerActividadPorId(id) != null ? 
@@ -81,7 +82,8 @@ public class ActividadController {
      */
     @GetMapping("/listar")
     @Operation(
-        summary = "Listar actividades"
+        summary = "Listar actividades",
+        tags = {"Listar"}
     )
     public ResponseEntity<List<ActividadResponse>> listarActividades() {
         
@@ -97,7 +99,8 @@ public class ActividadController {
      */
     @GetMapping("/health")
     @Operation(
-        summary = "Verificar funcionamiento del modulo actividad"
+        summary = "Verificar funcionamiento del modulo actividad",
+        tags = {"Health"}
     )
     public ResponseEntity<String> health() {
         return ResponseEntity.ok("Actividades API is running");
@@ -109,7 +112,8 @@ public class ActividadController {
         summary = "Eliminar una actividad por su ID",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Eliminar"}
     )
     public ResponseEntity<Void> eliminarActividad(@PathVariable String id) {
         try {
@@ -131,7 +135,8 @@ public class ActividadController {
         summary = "Actualizar una actividad por su ID",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Actualizar"}
     )
     public ResponseEntity<ActividadResponse> actualizarActividad(@PathVariable String id, @RequestBody ActividadRequest request) {
         try {

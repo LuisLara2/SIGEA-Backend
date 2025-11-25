@@ -20,7 +20,6 @@ import com.zentry.sigea.module_notificaciones.core.repositories.ITipoNotificacio
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * Controlador REST para gestionar tipos de notificación
@@ -28,7 +27,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  */
 @RestController
 @RequestMapping("/api/v1/tipos-notificacion")
-@Tag(name = "Modulo Notificaciones", description = "APIs del modulo de notificaciones")
 @CrossOrigin(origins = "*")
 public class TipoNotificacionController {
     
@@ -48,7 +46,8 @@ public class TipoNotificacionController {
         summary = "Crear un nuevo tipo de notificación.",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Crear"}
     )
     public ResponseEntity<?> crearTipo(@RequestBody TipoRequest request) {
         try {
@@ -83,7 +82,8 @@ public class TipoNotificacionController {
         summary = "Listar todos los tipos de notificación.",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Listar"}
     )
     public ResponseEntity<List<TipoResponse>> listarTipos() {
         try {
@@ -107,7 +107,8 @@ public class TipoNotificacionController {
         summary = "Obtener un tipo de notificacion por su ID.",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Obtener"}
     )
     public ResponseEntity<?> obtenerTipo(@PathVariable String id) {
         try {
@@ -130,7 +131,8 @@ public class TipoNotificacionController {
         summary = "Obtener un tipo de notificacion por su codigo.",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Obtener"}
     )
     public ResponseEntity<?> obtenerTipoPorCodigo(@PathVariable String codigo) {
         try {
@@ -153,7 +155,8 @@ public class TipoNotificacionController {
         summary = "Eliminar un tipo de notificacion por su ID.",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Eliminar"}
     )
     public ResponseEntity<?> eliminarTipo(@PathVariable String id) {
         try {
@@ -174,7 +177,8 @@ public class TipoNotificacionController {
      */
     @GetMapping("/health")
     @Operation(
-        summary = "Verificar el funcionamiento del controlador tipo de notificacion"
+        summary = "Verificar el funcionamiento del controlador tipo de notificacion",
+        tags = {"Health"}
     )
     public ResponseEntity<String> health() {
         return ResponseEntity.ok("Tipos Notificación API is running");

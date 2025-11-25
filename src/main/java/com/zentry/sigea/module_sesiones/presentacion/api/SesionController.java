@@ -21,7 +21,7 @@ import java.util.List;
  * Controlador REST para gestionar sesiones
  */
 @RestController
-@RequestMapping("/api/v1/organizador/sesiones")
+@RequestMapping("/api/v1/sesiones")
 @CrossOrigin(origins = "*")
 public class SesionController {
     
@@ -38,7 +38,8 @@ public class SesionController {
         summary = "Crear sesion",
         security = @SecurityRequirement(
             name = "organizadorJWT"
-            )
+            ),
+        tags = {"Crear"}
     )
     public ResponseEntity<SesionResponse> crearSesion(@Valid @RequestBody CrearSesionRequest request) {
         try {
@@ -59,7 +60,8 @@ public class SesionController {
         summary = "Listar sesiones",
         security = @SecurityRequirement(
             name = "organizadorJWT"
-            )
+            ),
+        tags = {"Listar"}
     )
     public ResponseEntity<List<SesionResponse>> listarSesiones(
         @RequestParam(required = false) String actividadId
@@ -85,7 +87,8 @@ public class SesionController {
         summary = "Obtener una sesion por su ID",
         security = @SecurityRequirement(
             name = "organizadorJWT"
-            )
+            ),
+        tags = {"Obtener"}
     )
     public ResponseEntity<SesionResponse> obtenerSesion(@PathVariable String id) {
         try {
@@ -105,7 +108,8 @@ public class SesionController {
         summary = "Actualizar sesion por su ID",
         security = @SecurityRequirement(
             name = "organizadorJWT"
-            )
+            ),
+        tags = {"Actualizar"}
     )
     public ResponseEntity<SesionResponse> actualizarSesion(
         @PathVariable String id,
@@ -128,7 +132,8 @@ public class SesionController {
         summary = "Eliminar una sesion por su ID",
         security = @SecurityRequirement(
             name = "organizadorJWT"
-            )
+            ),
+        tags = {"Eliminar"}
     )
     public ResponseEntity<Void> eliminarSesion(@PathVariable String id) {
         try {
@@ -140,5 +145,4 @@ public class SesionController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
 }

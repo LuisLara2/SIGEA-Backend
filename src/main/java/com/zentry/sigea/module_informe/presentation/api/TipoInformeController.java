@@ -6,7 +6,6 @@ import com.zentry.sigea.module_informe.services.TipoInformeService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,7 +15,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/tipos-informe")
-@Tag(name = "Modulo Informe", description = "APIs del modulo informe")
 @CrossOrigin(origins = "*")
 public class TipoInformeController {
 
@@ -35,7 +33,8 @@ public class TipoInformeController {
         summary = "Crear tipo de informe",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Crear"}
     )
     public ResponseEntity<TipoInformeResponse> createTipoInforme(@RequestBody TipoInformeRequest request) {
         try {
@@ -51,13 +50,14 @@ public class TipoInformeController {
     /**
      * Listar todos los tipos de informe
      */
-    @GetMapping
+    @GetMapping("/listar")
     @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     @Operation(
         summary = "Listar los tipos de informe",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Listar"}
     )
     public ResponseEntity<List<TipoInformeResponse>> listarTiposInforme() {
         List<TipoInformeResponse> response = tipoInformeService.listarTiposInforme();
@@ -67,13 +67,14 @@ public class TipoInformeController {
     /**
      * Eliminar un tipo de informe por ID
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("eliminar/{id}")
     @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     @Operation(
         summary = "Eliminar un tipo de informe",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Eliminar"}
     )
     public ResponseEntity<Void> eliminarTipoInforme(@PathVariable String id) {
         try {

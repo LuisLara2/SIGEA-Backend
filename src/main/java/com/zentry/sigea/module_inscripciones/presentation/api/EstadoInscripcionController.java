@@ -20,14 +20,11 @@ import com.zentry.sigea.module_inscripciones.services.EstadoInscripcionService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
-
 /**
  * Controlador REST para gestionar estados de inscripción
  */
 @RestController
 @RequestMapping("/api/v1/estados-inscripcion")
-@Tag(name = "Modulo Inscripciones", description = "APIs del modulo inscripciones")
 @CrossOrigin(origins = "*")
 public class EstadoInscripcionController {
     private final EstadoInscripcionService estadoInscripcionService;
@@ -45,7 +42,8 @@ public class EstadoInscripcionController {
         summary = "Crear estado de inscripcion",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Crear"}
     )
     public ResponseEntity<String> crearEstadoInscripcion(
         @RequestBody EstadoInscripcionRequest request
@@ -70,7 +68,8 @@ public class EstadoInscripcionController {
         summary = "Listar estados de inscripcion",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Listar"}
     )
     public ResponseEntity<List<EstadoInscripcionResponse>> listarEstadosInscripcion() {
         List<EstadoInscripcionResponse> estados = estadoInscripcionService.listarEstadosInscripcion();
@@ -86,7 +85,8 @@ public class EstadoInscripcionController {
         summary = "Obtener un estado de inscripcion por su ID.",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Obtener"}
     )
     public ResponseEntity<EstadoInscripcionResponse> obtenerEstadoInscripcionPorId(
         @PathVariable String id
@@ -111,7 +111,8 @@ public class EstadoInscripcionController {
         summary = "Obtener un estado de inscripcion por su codigo.",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Obtener"}
     )
     public ResponseEntity<EstadoInscripcionResponse> obtenerEstadoInscripcionPorCodigo(
         @PathVariable String codigo
@@ -136,7 +137,8 @@ public class EstadoInscripcionController {
         summary = "Eliminar un estado de inscripcion por su ID.",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Eliminar"}
     )
     public ResponseEntity<Void> eliminarEstadoInscripcion(@PathVariable String id) {
         try {
@@ -154,7 +156,8 @@ public class EstadoInscripcionController {
      */
     @GetMapping("/health")
     @Operation(
-        summary = "Verificar el funcionamiento del controlador estado de inscripcion."
+        summary = "Verificar el funcionamiento del controlador estado de inscripcion.",
+        tags = {"Health"}
     )
     public ResponseEntity<String> health() {
         return ResponseEntity.ok("Estados de Inscripción API is running");

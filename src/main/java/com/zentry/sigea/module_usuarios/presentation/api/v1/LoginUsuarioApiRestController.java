@@ -32,7 +32,8 @@ public class LoginUsuarioApiRestController {
 
     @PostMapping("/auth/login")
     @Operation(
-        summary = "Inicio de sesion de los usuarios"
+        summary = "Inicio de sesion de los usuarios" , 
+        tags = {"Login"}
     )
     public ResponseEntity<GeneralResponseDTO<?>> loginUsuario(
         @Valid @RequestBody LoginUsuarioRequestDTO loginUsuarioRequestDTO ,

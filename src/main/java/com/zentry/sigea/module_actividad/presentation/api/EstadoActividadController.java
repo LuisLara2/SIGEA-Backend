@@ -21,9 +21,6 @@ import com.zentry.sigea.module_actividad.services.EstadoActividadService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
-
-
 
 /*
  * Controlador para gestionar los estados de las actividades
@@ -32,7 +29,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1/estados-actividad")
-@Tag(name = "Modulo Actividad", description = "APIs del modulo actividad")
 @CrossOrigin(origins = "*")
 public class EstadoActividadController {
     private final EstadoActividadService estadoActividadService;
@@ -46,7 +42,8 @@ public class EstadoActividadController {
         summary = "Crear un estado de actividad",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Crear"}
     )
     public ResponseEntity<String> createEstadoActividad(@RequestBody EstadoActividadRequest request) {
         try {
@@ -66,7 +63,8 @@ public class EstadoActividadController {
         summary = "Listar estados de actividad",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Listar"}
     )
     public ResponseEntity<List<EstadoActividadResponse>> listarEstadoActividad() {
         List<EstadoActividadDomainEntity> estadosActividad = estadoActividadService.listarEstadosActividad();
@@ -84,7 +82,8 @@ public class EstadoActividadController {
         summary = "Obtener un estado de actividad por su ID",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Eliminar"}
     )
     public ResponseEntity<Void> eliminarEstadoActividad(@PathVariable String id) {
         try {
@@ -103,7 +102,8 @@ public class EstadoActividadController {
         summary = "Actualizar un estado de actividad por su ID",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Actualizar"}
     )
     public ResponseEntity<EstadoActividadResponse> actualizarEstado(@PathVariable String id, @RequestBody EstadoActividadRequest request) {
         try {
@@ -116,5 +116,4 @@ public class EstadoActividadController {
             return ResponseEntity.status(500).build();
         }
     }
-    
 }
