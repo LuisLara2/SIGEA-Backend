@@ -40,7 +40,7 @@ else
 fi
 
 echo "=== Creando usuario si no existe ==="
-psql -U "$DB_ADMIN_USERNAME" -h "$DB_HOST" -p "$DB_PORT" -d "$DB_NAME" -c "
+psql -v ON_ERROR_STOP=1 -U "$DB_ADMIN_USERNAME" -h "$DB_HOST" -p "$DB_PORT" -d "$DB_NAME" -c "
 DO \$\$ 
 BEGIN 
     IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = '$DB_USERNAME') THEN 
@@ -52,7 +52,8 @@ END
 echo "Usuario de base de datos listo."
 
 echo "=== Asignando permisos ==="
-psql -U "$DB_ADMIN_USERNAME" -h "$DB_HOST" -p "$DB_PORT" -d "$DB_NAME" <<EOF
+psql -v ON_ERROR_STOP=1 -U "$DB_ADMIN_USERNAME" -h "$DB_HOST" -p "$DB_PORT" -d "$DB_NAME" <<EOF
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
 GRANT CONNECT ON DATABASE $DB_NAME TO $DB_USERNAME;
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO $DB_USERNAME;
 GRANT INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO $DB_USERNAME;

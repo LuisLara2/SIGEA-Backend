@@ -23,6 +23,7 @@ import com.zentry.sigea.security.UsuarioAuthInfo;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +46,7 @@ public class AdministradorApiRestController {
 
     @GetMapping("/home")
     @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Tag(name = "Administrador", description = "Endpoints solo para administradores")
     @Operation(
         summary = "Home de administrador",
         security = @SecurityRequirement(

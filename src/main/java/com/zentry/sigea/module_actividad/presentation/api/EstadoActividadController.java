@@ -21,6 +21,7 @@ import com.zentry.sigea.module_actividad.services.EstadoActividadService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 
 
@@ -31,6 +32,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @RequestMapping("/api/v1/estados-actividad")
+@Tag(name = "Modulo Actividad", description = "APIs del modulo actividad")
 @CrossOrigin(origins = "*")
 public class EstadoActividadController {
     private final EstadoActividadService estadoActividadService;

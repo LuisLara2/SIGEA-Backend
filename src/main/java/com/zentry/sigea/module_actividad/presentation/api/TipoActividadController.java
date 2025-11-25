@@ -21,11 +21,13 @@ import com.zentry.sigea.module_actividad.services.TipoActividadService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 
 
 @RestController
 @RequestMapping("/api/v1/tipos-actividad")
+@Tag(name = "Modulo Actividad", description = "APIs del modulo actividad")
 // cabecera para permitir solicitudes desde cualquier origen
 @CrossOrigin(origins = "*")
 public class TipoActividadController {

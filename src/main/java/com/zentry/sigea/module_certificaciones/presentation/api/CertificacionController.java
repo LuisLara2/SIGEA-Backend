@@ -35,7 +35,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/certificaciones")
-@Tag(name = "Certificaciones", description = "API para gestión de certificados y validaciones")
+@Tag(name = "Modulo Certificaciones", description = "API para gestión de certificados y validaciones")
 @CrossOrigin(origins = "*")
 public class CertificacionController {
     

@@ -9,6 +9,7 @@ import com.zentry.sigea.module_informe.services.usecases.informe.ObtenerInformeU
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import com.zentry.sigea.module_informe.services.usecases.informe.ActualizarInformeUseCase;
 import com.zentry.sigea.module_informe.services.usecases.informe.EliminarInformeUseCase;
@@ -28,6 +29,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/informes")
+@Tag(name = "Modulo Informe", description = "APIs del modulo informe")
 @CrossOrigin(origins = "*")
 public class InformeController {
 

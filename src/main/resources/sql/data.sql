@@ -1,6 +1,3 @@
--- 0) Habilitar pgcrypto (para gen_random_uuid y crypt)
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
-
 -- 1) Limpiar e insertar roles
 -- Usamos DELETE primero para evitar duplicados
 

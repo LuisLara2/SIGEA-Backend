@@ -21,6 +21,7 @@ import com.zentry.sigea.module_actividad.services.ActividadService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * Controlador REST para gestionar actividades
@@ -28,6 +29,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
  */
 @RestController
 @RequestMapping("/api/v1/actividades")
+@Tag(name = "Modulo Actividad", description = "APIs del modulo actividad")
 @CrossOrigin(origins = "*")
 public class ActividadController {
     private final ActividadService actividadService;

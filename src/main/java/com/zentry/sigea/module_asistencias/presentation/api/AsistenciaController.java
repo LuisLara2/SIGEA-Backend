@@ -21,10 +21,12 @@ import com.zentry.sigea.module_asistencias.services.AsistenciaService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/asistencias")
+@Tag(name = "Modulo Asistencia", description = "APIs del modulo asistencia")
 @CrossOrigin(origins = "*")
 public class AsistenciaController {
     

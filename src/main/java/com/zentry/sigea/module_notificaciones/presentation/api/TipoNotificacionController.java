@@ -20,6 +20,7 @@ import com.zentry.sigea.module_notificaciones.core.repositories.ITipoNotificacio
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * Controlador REST para gestionar tipos de notificación
@@ -27,6 +28,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
  */
 @RestController
 @RequestMapping("/api/v1/tipos-notificacion")
+@Tag(name = "Modulo Notificaciones", description = "APIs del modulo de notificaciones")
 @CrossOrigin(origins = "*")
 public class TipoNotificacionController {
     

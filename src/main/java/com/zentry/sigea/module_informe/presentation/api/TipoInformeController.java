@@ -6,6 +6,7 @@ import com.zentry.sigea.module_informe.services.TipoInformeService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/tipos-informe")
+@Tag(name = "Modulo Informe", description = "APIs del modulo informe")
 @CrossOrigin(origins = "*")
 public class TipoInformeController {
 

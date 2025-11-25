@@ -30,46 +30,51 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         HttpServletRequest request,
         HttpServletResponse response , 
         FilterChain filterChain
-    ) throws ServletException , IOException{        
-        // Saltar validación JWT para rutas públicas
-        String path = request.getRequestURI();
-        if (path.startsWith("/api/v1/actividades") || 
-            path.startsWith("/api/v1/notificaciones") ||
-            path.startsWith("/api/v1/inscripciones") ||
-            path.startsWith("/api/v1/sesiones") ||
-            path.contains("/auth/")) {
+    ) throws ServletException , IOException{
+
+        if (request.getMethod().equals("OPTIONS")) {
             filterChain.doFilter(request, response);
             return;
         }
-        
+
         String header = request.getHeader("Authorization");
 
-        if(header != null && header.startsWith("Bearer ")){
-            try {
-                String token = header.substring(7);
-                Claims claims = jwtUtil.extractClaims(token);
-
-                String usuarioId = claims.get("usuarioId" , String.class);
-                String email = claims.getSubject();
-                
-                List<String> roles = claims.get("roles" , List.class);
-
-                var authorities = roles.stream()
-                        .map(r -> new SimpleGrantedAuthority("ROLE_" + r))
-                        .collect(Collectors.toList());
-
-                UsuarioAuthInfo usuarioAuthInfo = new UsuarioAuthInfo(usuarioId, email);
-
-                Authentication auth = new UsernamePasswordAuthenticationToken(usuarioAuthInfo, null , authorities);
-
-                SecurityContextHolder.getContext().setAuthentication(auth);
-            } catch (Exception e) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED , "Token invalido");
-                return;
-            }
+        if (header == null || !header.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
         }
 
-        filterChain.doFilter(request , response);
+        try {
+            String token = header.substring(7);
+            Claims claims = jwtUtil.extractClaims(token);
+
+            String usuarioId = claims.get("usuarioId" , String.class);
+            String email = claims.getSubject();
+            
+            List<String> roles = claims.get("roles" , List.class);
+
+            var authorities = roles.stream()
+                    .map(r -> new SimpleGrantedAuthority("ROLE_" + r))
+                    .collect(Collectors.toList());
+
+            UsuarioAuthInfo usuarioAuthInfo = new UsuarioAuthInfo(usuarioId, email);
+
+            if (SecurityContextHolder.getContext().getAuthentication() == null) {
+                Authentication auth = new UsernamePasswordAuthenticationToken(
+                        usuarioAuthInfo,
+                        null,
+                        authorities
+                );
+
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
+
+        } catch (Exception e) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        filterChain.doFilter(request, response);
     }
 
 }

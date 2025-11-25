@@ -22,6 +22,7 @@ import com.zentry.sigea.module_notificaciones.services.NotificacionService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * Controlador REST para gestionar notificaciones
@@ -29,6 +30,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
  */
 @RestController
 @RequestMapping("/api/v1/notificaciones")
+@Tag(name = "Modulo Notificaciones", description = "APIs del modulo de notificaciones")
 @CrossOrigin(origins = "*")
 public class NotificacionController {
     
