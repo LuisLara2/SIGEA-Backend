@@ -1,6 +1,7 @@
 package com.zentry.sigea.module_certificaciones.services.interfaces;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.zentry.sigea.module_certificaciones.presentation.models.requestDTO.CrearCertificadoRequest;
@@ -21,6 +22,13 @@ public interface ICertificacionService {
      */
     CertificadoResponse crearCertificado(CrearCertificadoRequest request);
     
+    /**
+     * Crea certificados masivos con una sola peticion
+     * @param listAsistenciaIds Conjunto de datos para crear los certificados
+     * @return IdCerttificado, Resultado
+     */
+    Map<String , Boolean> crearCertificadosMasivos(List<String> listAsistenciaIds);
+
     /**
      * Busca un certificado por su código de validación
      * @param codigoValidacion Código único del certificado
@@ -83,4 +91,5 @@ public interface ICertificacionService {
      * @return URL del PDF generado
      */
     String generarPdfCertificado(String codigoValidacion);
+
 }

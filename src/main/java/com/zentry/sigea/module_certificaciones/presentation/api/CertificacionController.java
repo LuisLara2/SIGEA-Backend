@@ -1,6 +1,7 @@
 package com.zentry.sigea.module_certificaciones.presentation.api;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -24,23 +25,30 @@ import com.zentry.sigea.module_certificaciones.presentation.models.requestDTO.Va
 import com.zentry.sigea.module_certificaciones.presentation.models.responseDTO.CertificadoResponse;
 import com.zentry.sigea.module_certificaciones.presentation.models.responseDTO.ValidacionResponse;
 import com.zentry.sigea.module_certificaciones.services.interfaces.ICertificacionService;
-
+import com.zentry.sigea.module_informe.infrastructure.database.mappers.TipoInformeMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 
 @RestController
 @RequestMapping("/api/v1/certificaciones")
 @CrossOrigin(origins = "*")
 public class CertificacionController {
+
+    private final TipoInformeMapper tipoInformeMapper;
     
     private static final Logger log = LoggerFactory.getLogger(CertificacionController.class);
     
     @Autowired
     private ICertificacionService certificacionService;
+
+    CertificacionController(TipoInformeMapper tipoInformeMapper) {
+        this.tipoInformeMapper = tipoInformeMapper;
+    }
     
     /**
      * Crear un nuevo certificado
@@ -70,7 +78,34 @@ public class CertificacionController {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
+
+
+    @PostMapping("/crear/masivo/")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Crear certificados masivos.", 
+        description = "Crea varios certificados en una sola peticion" , 
+        security = @SecurityRequirement(
+            name = "administradorJWT"
+        ) , 
+        tags = {"Crear"}
+    )
+    public ResponseEntity<Map<String , Boolean>> crearCertificadosMasivos(
+        @RequestParam(name = "listAsistenciaIds") @NotEmpty(message = "Debe proporcionar la lista de asistencias") List<String> listAsistenciaIds
+    ) {
+        log.info("Solicitud de creación de certificado para la inscripcion");
+
+        try {
+            Map<String , Boolean> response = certificacionService.crearCertificadosMasivos(listAsistenciaIds);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (Exception e) {
+            log.error("Error al crear los certificados");
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
     
+
     /**
      * Buscar certificado por código de validación
      */

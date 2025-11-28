@@ -1,6 +1,7 @@
 package com.zentry.sigea.module_certificaciones.services;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -10,10 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.zentry.sigea.module_certificaciones.core.entities.CertificadoDomainEntity;
 import com.zentry.sigea.module_certificaciones.core.repositories.IEstadoCertificadoRepository;
+import com.zentry.sigea.module_certificaciones.infrastructure.repository.EstadoCertificadoRepository;
 import com.zentry.sigea.module_certificaciones.presentation.models.requestDTO.CrearCertificadoRequest;
 import com.zentry.sigea.module_certificaciones.presentation.models.responseDTO.CertificadoResponse;
 import com.zentry.sigea.module_certificaciones.services.interfaces.ICertificadoService;
 import com.zentry.sigea.module_certificaciones.services.usecases.certificado.CrearCertificadoUseCase;
+import com.zentry.sigea.module_certificaciones.services.usecases.certificado.CrearCertificadosMasivosUseCase;
 import com.zentry.sigea.module_certificaciones.services.usecases.certificado.GenerarPdfCertificadoUseCase;
 import com.zentry.sigea.module_certificaciones.services.usecases.certificado.ObtenerCertificadoPorCodigoUseCase;
 import com.zentry.sigea.module_certificaciones.services.usecases.certificado.ReactivarCertificadoUseCase;
@@ -23,11 +26,14 @@ import com.zentry.sigea.module_certificaciones.services.usecases.certificado.Rev
 @Service
 @Transactional
 public class CertificadoServiceImpl implements ICertificadoService {
+
+    private final EstadoCertificadoRepository estadoCertificadoRepository_1;
     
     private static final Logger log = LoggerFactory.getLogger(CertificadoServiceImpl.class);
     
     // Use Cases
     private final CrearCertificadoUseCase crearCertificadoUseCase;
+    private final CrearCertificadosMasivosUseCase crearCertificadosMasivosUseCase;
     private final ObtenerCertificadoPorCodigoUseCase obtenerCertificadoPorCodigoUseCase;
     private final RevocarCertificadoUseCase revocarCertificadoUseCase;
     private final ReactivarCertificadoUseCase reactivarCertificadoUseCase;
@@ -38,18 +44,21 @@ public class CertificadoServiceImpl implements ICertificadoService {
     
     public CertificadoServiceImpl(
         CrearCertificadoUseCase crearCertificadoUseCase,
+        CrearCertificadosMasivosUseCase crearCertificadosMasivosUseCase,
         ObtenerCertificadoPorCodigoUseCase obtenerCertificadoPorCodigoUseCase,
         RevocarCertificadoUseCase revocarCertificadoUseCase,
         ReactivarCertificadoUseCase reactivarCertificadoUseCase,
         GenerarPdfCertificadoUseCase generarPdfCertificadoUseCase,
         IEstadoCertificadoRepository estadoCertificadoRepository
-    ) {
+    , EstadoCertificadoRepository estadoCertificadoRepository_1) {
         this.crearCertificadoUseCase = crearCertificadoUseCase;
+        this.crearCertificadosMasivosUseCase = crearCertificadosMasivosUseCase;
         this.obtenerCertificadoPorCodigoUseCase = obtenerCertificadoPorCodigoUseCase;
         this.revocarCertificadoUseCase = revocarCertificadoUseCase;
         this.reactivarCertificadoUseCase = reactivarCertificadoUseCase;
         this.generarPdfCertificadoUseCase = generarPdfCertificadoUseCase;
         this.estadoCertificadoRepository = estadoCertificadoRepository;
+        this.estadoCertificadoRepository_1 = estadoCertificadoRepository_1;
     }
     
     @Override
@@ -66,11 +75,21 @@ public class CertificadoServiceImpl implements ICertificadoService {
             
         } catch (Exception e) {
             log.error("Error al crear certificado para asistencia {}: {}", 
-                     request.getAsistenciaId(), e.getMessage());
+                        request.getAsistenciaId(), e.getMessage());
             throw e;
         }
     }
     
+    @Override
+    public Map<String , Boolean> crearCertificadosMasivos(List<String> listActividadIds){
+        try{
+            return crearCertificadosMasivosUseCase.execute(listActividadIds);
+        } catch (Exception e) {
+            log.error("Error al crear certificado para las asistenciacias");
+            throw e;
+        }
+    }
+
     @Override
     @Transactional(readOnly = true)
     public Optional<CertificadoResponse> buscarCertificadoPorCodigo(String codigoValidacion) {
