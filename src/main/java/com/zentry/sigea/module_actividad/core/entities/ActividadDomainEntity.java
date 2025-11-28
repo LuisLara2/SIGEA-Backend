@@ -2,6 +2,7 @@ package com.zentry.sigea.module_actividad.core.entities;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class ActividadDomainEntity {
     private String actividadId;
@@ -9,6 +10,8 @@ public class ActividadDomainEntity {
     private String descripcion;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
+    private LocalTime horaInicio;
+    private LocalTime horaFin;
 
     // Aqui no seria necesario llamar a una entidad, solo necesitaria esta info para poder operar
     private EstadoActividadDomainEntity estadoActividadDomainEntity;
@@ -20,6 +23,8 @@ public class ActividadDomainEntity {
     private TipoActividadDomainEntity tipoActividadDomainEntity;
     
     private String lugar;
+    private String bannerUrl;
+    private String numeroYape;
     
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -80,6 +85,34 @@ public class ActividadDomainEntity {
         this.lugar = lugar;
     }
 
+    public LocalTime getHoraInicio() {
+        return horaInicio;
+    }
+    public void setHoraInicio(LocalTime horaInicio) {
+        this.horaInicio = horaInicio;
+    }
+
+    public LocalTime getHoraFin() {
+        return horaFin;
+    }
+    public void setHoraFin(LocalTime horaFin) {
+        this.horaFin = horaFin;
+    }
+
+    public String getBannerUrl() {
+        return bannerUrl;
+    }
+    public void setBannerUrl(String bannerUrl) {
+        this.bannerUrl = bannerUrl;
+    }
+
+    public String getNumeroYape() {
+        return numeroYape;
+    }
+    public void setNumeroYape(String numeroYape) {
+        this.numeroYape = numeroYape;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -109,10 +142,14 @@ public class ActividadDomainEntity {
         String descripcion,
         LocalDate fechaInicio, 
         LocalDate fechaFin,
+        LocalTime horaInicio,
+        LocalTime horaFin,
         EstadoActividadDomainEntity estadoActividadDomainEntity, 
         String organizadorId,
         TipoActividadDomainEntity tipoActividadDomainEntity, 
-        String lugar
+        String lugar,
+        String bannerUrl,
+        String numeroYape
     ) {
         
         LocalDateTime now = LocalDateTime.now();
@@ -123,9 +160,14 @@ public class ActividadDomainEntity {
         actividadDomainEntity.setDescripcion(descripcion);
         actividadDomainEntity.setFechaInicio(fechaInicio);
         actividadDomainEntity.setFechaFin(fechaFin);
+        actividadDomainEntity.setHoraInicio(horaInicio);
+        actividadDomainEntity.setHoraFin(horaFin);
         actividadDomainEntity.setEstadoActividadDomainEntity(estadoActividadDomainEntity);
         actividadDomainEntity.setOrganizadorId(organizadorId);
         actividadDomainEntity.setTipoActividadDomainEntity(tipoActividadDomainEntity);
+        actividadDomainEntity.setLugar(lugar);
+        actividadDomainEntity.setBannerUrl(bannerUrl);
+        actividadDomainEntity.setNumeroYape(numeroYape);
         
         actividadDomainEntity.setCreatedAt(now);
         actividadDomainEntity.setUpdatedAt(now);

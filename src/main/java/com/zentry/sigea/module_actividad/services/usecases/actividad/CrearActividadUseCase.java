@@ -45,6 +45,9 @@ public class CrearActividadUseCase {
         
         // Validaciones de negocio específicas del caso de uso
         validateBusinessRules(request);
+
+        // Validar número de Yape si se proporciona
+        validateNumeroYape(request.getNumeroYape());
         
         // Crear la entidad usando el factory method del dominio
         ActividadDomainEntity nuevaActividad = ActividadDomainEntity.create(
@@ -52,10 +55,14 @@ public class CrearActividadUseCase {
             request.getDescripcion(),
             request.getFechaInicio(),
             request.getFechaFin(),
+            request.getHoraInicio(),
+            request.getHoraFin(),
             estado,
             request.getOrganizadorId(),
             tipoActividad,
-            request.getUbicacion()
+            request.getUbicacion(),
+            request.getBannerUrl(),
+            request.getNumeroYape()
         );
         
         // Guardar usando el repositorio directamente
@@ -171,6 +178,23 @@ public class CrearActividadUseCase {
     private boolean datesOverlap(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
         return !end1.isBefore(start2) && !start1.isAfter(end2);
     }
+
+    /**
+     * Valida el número de Yape (formato de Perú: 9 dígitos comenzando con 9)
+     */
+    private void validateNumeroYape(String numeroYape) {
+        if (numeroYape == null || numeroYape.trim().isEmpty()) {
+            return; // El número de Yape es opcional
+        }
+
+        // Eliminar espacios y guiones
+        String cleanNumber = numeroYape.replaceAll("[\\s-]", "");
+
+        // Validar que tenga 9 dígitos y comience con 9 (formato peruano)
+        if (!cleanNumber.matches("^9\\d{8}$")) {
+            throw new IllegalArgumentException(
+                "El número de Yape debe ser un número de celular peruano válido (9 dígitos comenzando con 9)"
+            );
+        }
+    }
 }
-
-

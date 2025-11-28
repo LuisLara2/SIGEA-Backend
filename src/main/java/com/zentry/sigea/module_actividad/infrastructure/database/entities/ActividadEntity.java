@@ -2,7 +2,10 @@ package com.zentry.sigea.module_actividad.infrastructure.database.entities;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.UUID;
+
+import com.zentry.sigea.module_usuarios.infrastructure.database.entities.UsuarioEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,8 +18,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-
-import com.zentry.sigea.module_usuarios.infrastructure.database.entities.UsuarioEntity;
 
 @Entity
 @Table(
@@ -47,12 +48,18 @@ public class ActividadEntity {
     @Column(name = "fecha_fin" , nullable = false , columnDefinition = "DATE")
     private LocalDate fechaFin;
 
+    @Column(name = "hora_inicio" , nullable = true , columnDefinition = "TIME")
+    private LocalTime horaInicio;
+
+    @Column(name = "hora_fin" , nullable = true , columnDefinition = "TIME")
+    private LocalTime horaFin;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "estado_actividad_id" , nullable = false)
     private EstadoActividadEntity estadoActividad;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "organizador_id" , nullable = false)
+    @JoinColumn(name = "id_usuario" , nullable = false)
     private UsuarioEntity organizador;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -61,6 +68,12 @@ public class ActividadEntity {
 
     @Column(name = "lugar" , nullable = true , length = 150)
     private String lugar;
+
+    @Column(name = "banner_url" , nullable = true , length = 500)
+    private String bannerUrl;
+
+    @Column(name = "numero_yape" , nullable = true , length = 15)
+    private String numeroYape;
 
     @Column(name = "created_at" , nullable = false , columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt = LocalDateTime.now();
