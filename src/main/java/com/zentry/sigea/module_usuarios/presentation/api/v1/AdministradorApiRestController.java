@@ -37,6 +37,13 @@ public class AdministradorApiRestController {
     
     private final AdministradorService administradorService;
 
+    private static final Map<String, String> constraintMessages = Map.of(
+        "uk_usuario_correo", "El correo ya está en uso.",
+        "uk_usuario_dni", "El DNI ya está en uso.",
+        "uk_telefono", "El telefono ya esta en uso.",
+        "uk_nombre_rol", "El nombre de rol ya existe."
+    );
+
     public AdministradorApiRestController(
         AdministradorService administradorService
     ){
@@ -94,14 +101,45 @@ public class AdministradorApiRestController {
                     null
                 )
             );
-        } catch (DataIntegrityViolationException d) {
+        } catch (DataIntegrityViolationException ex) {
+
+            Throwable causa = ex.getCause();
+            while (causa != null && !(causa instanceof org.hibernate.exception.ConstraintViolationException)) {
+                causa = causa.getCause();
+            }
+
+            if (causa instanceof org.hibernate.exception.ConstraintViolationException cve) {
+                String constraint = cve.getConstraintName();
+
+                if (constraint != null && constraintMessages.containsKey(constraint)) {
+
+                    // Convertimos usuario_correo_key → correo
+                    String field = constraint.replace("uk_usuario_", "");
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                        new GeneralResponseDTO<>(
+                            false, 
+                            "Error de unicidad", 
+                            Map.of(
+                                "campo" , field , 
+                                "mensaje", constraintMessages.get(constraint)
+                            )
+                        )
+                    );
+                }
+            }
+
             return ResponseEntity.status(HttpStatus.CONFLICT).body(
                 new GeneralResponseDTO<>(
                     false, 
-                    "El correo especificado ya esta en uso.", 
-                    null
+                    ex.getMessage(), 
+                    Map.of(
+                    "Tipo de error", ex.getClass().getName() ,
+                        "Mensaje del error" , ex.getMessage() , 
+                        "Causa del error", ex.getCause()
+                    )
                 )
             );
+
         } catch (RuntimeException r) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(
                 new GeneralResponseDTO<>(
@@ -167,6 +205,44 @@ public class AdministradorApiRestController {
                     true, 
                     crearRolMessage, 
                     null
+                )
+            );
+        } catch (DataIntegrityViolationException ex) {
+
+            Throwable causa = ex.getCause();
+            while (causa != null && !(causa instanceof org.hibernate.exception.ConstraintViolationException)) {
+                causa = causa.getCause();
+            }
+
+            if (causa instanceof org.hibernate.exception.ConstraintViolationException cve) {
+                String constraint = cve.getConstraintName();
+
+                if (constraint != null && constraintMessages.containsKey(constraint)) {
+
+                    // Convertimos usuario_correo_key → correo
+                    String field = constraint.replace("uk_", "");
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                        new GeneralResponseDTO<>(
+                            false, 
+                            "Error de unicidad", 
+                            Map.of(
+                                "campo" , field , 
+                                "mensaje", constraintMessages.get(constraint)
+                            )
+                        )
+                    );
+                }
+            }
+
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                new GeneralResponseDTO<>(
+                    false, 
+                    ex.getMessage(), 
+                    Map.of(
+                    "Tipo de error", ex.getClass().getName() ,
+                        "Mensaje del error" , ex.getMessage() , 
+                        "Causa del error", ex.getCause()
+                    )
                 )
             );
         } catch (Exception e) {
