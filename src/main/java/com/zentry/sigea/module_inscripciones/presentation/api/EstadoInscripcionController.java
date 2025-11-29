@@ -45,7 +45,8 @@ public class EstadoInscripcionController {
         summary = "Crear estado de inscripcion",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Crear"}
     )
     public ResponseEntity<String> crearEstadoInscripcion(
         @RequestBody EstadoInscripcionRequest request
@@ -70,7 +71,8 @@ public class EstadoInscripcionController {
         summary = "Listar estados de inscripcion",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Listar"}
     )
     public ResponseEntity<List<EstadoInscripcionResponse>> listarEstadosInscripcion() {
         List<EstadoInscripcionResponse> estados = estadoInscripcionService.listarEstadosInscripcion();
@@ -86,7 +88,8 @@ public class EstadoInscripcionController {
         summary = "Obtener un estado de inscripcion por su ID.",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Obtener"}
     )
     public ResponseEntity<EstadoInscripcionResponse> obtenerEstadoInscripcionPorId(
         @PathVariable String id
@@ -111,7 +114,8 @@ public class EstadoInscripcionController {
         summary = "Obtener un estado de inscripcion por su codigo.",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Obtener"}
     )
     public ResponseEntity<EstadoInscripcionResponse> obtenerEstadoInscripcionPorCodigo(
         @PathVariable String codigo
@@ -136,7 +140,8 @@ public class EstadoInscripcionController {
         summary = "Eliminar un estado de inscripcion por su ID.",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Eliminar"}
     )
     public ResponseEntity<Void> eliminarEstadoInscripcion(@PathVariable String id) {
         try {
@@ -154,7 +159,8 @@ public class EstadoInscripcionController {
      */
     @GetMapping("/health")
     @Operation(
-        summary = "Verificar el funcionamiento del controlador estado de inscripcion."
+        summary = "Verificar el funcionamiento del controlador estado de inscripcion.",
+        tags = {"Health"}
     )
     public ResponseEntity<String> health() {
         return ResponseEntity.ok("Estados de Inscripción API is running");

@@ -1,6 +1,7 @@
 package com.zentry.sigea.module_certificaciones.presentation.api;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -24,25 +25,30 @@ import com.zentry.sigea.module_certificaciones.presentation.models.requestDTO.Va
 import com.zentry.sigea.module_certificaciones.presentation.models.responseDTO.CertificadoResponse;
 import com.zentry.sigea.module_certificaciones.presentation.models.responseDTO.ValidacionResponse;
 import com.zentry.sigea.module_certificaciones.services.interfaces.ICertificacionService;
-
+import com.zentry.sigea.module_informe.infrastructure.database.mappers.TipoInformeMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 
 @RestController
 @RequestMapping("/api/v1/certificaciones")
-@Tag(name = "Certificaciones", description = "API para gestión de certificados y validaciones")
 @CrossOrigin(origins = "*")
 public class CertificacionController {
+
+    private final TipoInformeMapper tipoInformeMapper;
     
     private static final Logger log = LoggerFactory.getLogger(CertificacionController.class);
     
     @Autowired
     private ICertificacionService certificacionService;
+
+    CertificacionController(TipoInformeMapper tipoInformeMapper) {
+        this.tipoInformeMapper = tipoInformeMapper;
+    }
     
     /**
      * Crear un nuevo certificado
@@ -54,7 +60,8 @@ public class CertificacionController {
         description = "Crea un nuevo certificado para una inscripción" , 
         security = @SecurityRequirement(
             name = "administradorJWT"
-        )
+        ) , 
+        tags = {"Crear"}
     )
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Certificado creado exitosamente"),
@@ -71,20 +78,48 @@ public class CertificacionController {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
+
+
+    @PostMapping("/crear/masivo/")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Crear certificados masivos.", 
+        description = "Crea varios certificados en una sola peticion" , 
+        security = @SecurityRequirement(
+            name = "administradorJWT"
+        ) , 
+        tags = {"Crear"}
+    )
+    public ResponseEntity<Map<String , Boolean>> crearCertificadosMasivos(
+        @RequestParam(name = "listAsistenciaIds") @NotEmpty(message = "Debe proporcionar la lista de asistencias") List<String> listAsistenciaIds
+    ) {
+        log.info("Solicitud de creación de certificado para la inscripcion");
+
+        try {
+            Map<String , Boolean> response = certificacionService.crearCertificadosMasivos(listAsistenciaIds);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (Exception e) {
+            log.error("Error al crear los certificados");
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
     
+
     /**
      * Buscar certificado por código de validación
      */
     @GetMapping("obtener/cod-validacion/{codigoValidacion}")
     @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR' , 'ROLE_PARTICIPANTE' , 'ROLE_ORGANIZADOR')")
     @Operation(
-        summary = "Buscar certificado por código", 
+        summary = "Obtener certificado por código", 
         description = "Obtiene un certificado por su código de validación" , 
         security = {
             @SecurityRequirement(name = "administradorJWT"),
             @SecurityRequirement(name = "participanteJWT"),
             @SecurityRequirement(name = "organizadorJWT")
-        }
+        },
+        tags = {"Obtener"}
     )
     public ResponseEntity<CertificadoResponse> buscarCertificadoPorCodigo(
             @Parameter(description = "Código de validación del certificado") 
@@ -105,11 +140,12 @@ public class CertificacionController {
     @GetMapping("obtener/inscripcion/{inscripcionId}")
     @PreAuthorize("hasRole('ROLE_PARTICIPANTE')")
     @Operation(
-        summary = "Buscar certificado por inscripción", 
+        summary = "Obtener certificado por inscripción", 
         description = "Obtiene el certificado de una inscripción" , 
         security = @SecurityRequirement(
             name = "participanteJWT"
-        )
+        ),
+        tags = {"Obtener"}
     )
     public ResponseEntity<CertificadoResponse> buscarCertificadoPorInscripcion(
             @Parameter(description = "ID de la inscripción") 
@@ -131,11 +167,12 @@ public class CertificacionController {
     @PreAuthorize("hasAnyRole('ROLE_ORGANIZADOR' , 'ROLE_ADMINISTRADOR')")
     @Operation(
         summary = "Listar certificados", 
-        description = "Obtiene todos los certificados" , 
+        description = "Lista todos los certificados" , 
         security = {
             @SecurityRequirement(name = "administradorJWT"),
             @SecurityRequirement(name = "organizadorJWT")
-        }
+        },
+        tags = {"Listar"}
     )
     public ResponseEntity<List<CertificadoResponse>> obtenerTodosCertificados() {
         log.debug("Obteniendo todos los certificados");
@@ -150,13 +187,14 @@ public class CertificacionController {
     @GetMapping("/obtener/estado/{codigoEstado}")
     @PreAuthorize("hasAnyRole('ROLE_ORGANIZADOR' , 'ROLE_ADMINISTRADOR' , 'ROLE_PARTICIPANTE')")
     @Operation(
-        summary = "Buscar certificados por estado", 
+        summary = "Obtener certificados por estado", 
         description = "Obtiene certificados filtrados por estado" , 
         security = {
             @SecurityRequirement(name = "administradorJWT"),
             @SecurityRequirement(name = "participanteJWT"),
             @SecurityRequirement(name = "organizadorJWT")
-        }
+        },
+        tags = {"Obtener"}
     )
     public ResponseEntity<List<CertificadoResponse>> obtenerCertificadosPorEstado(
             @Parameter(description = "Código del estado (EMITIDO, REVOCADO, SUSPENDIDO)") 
@@ -181,7 +219,8 @@ public class CertificacionController {
     @Operation(
         summary = "Validar certificado", 
         description = "Realiza la validación de un certificado" , 
-        security = @SecurityRequirement(name = "administradorJWT")
+        security = @SecurityRequirement(name = "administradorJWT"),
+        tags = {"Validar"}
     )
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Certificado validado exitosamente"),
@@ -211,7 +250,8 @@ public class CertificacionController {
             @SecurityRequirement(name = "administradorJWT"),
             @SecurityRequirement(name = "participanteJWT"),
             @SecurityRequirement(name = "organizadorJWT")
-        }
+        },
+        tags = {"Obtener"}
     )
     public ResponseEntity<List<ValidacionResponse>> obtenerValidacionesCertificado(
             @Parameter(description = "Código de validación del certificado") 
@@ -236,7 +276,8 @@ public class CertificacionController {
     @Operation(
         summary = "Revocar certificado", 
         description = "Revoca un certificado especificando el motivo" , 
-        security = @SecurityRequirement(name = "administradorJWT")
+        security = @SecurityRequirement(name = "administradorJWT"),
+        tags = {"Revocar"}
     )
     public ResponseEntity<CertificadoResponse> revocarCertificado(
             @Parameter(description = "Código de validación del certificado") 
@@ -264,7 +305,8 @@ public class CertificacionController {
     @Operation(
         summary = "Reactivar certificado", 
         description = "Reactiva un certificado suspendido",
-        security = @SecurityRequirement(name = "administradorJWT")
+        security = @SecurityRequirement(name = "administradorJWT"),
+        tags = {"Reactivar"}
     )
     public ResponseEntity<CertificadoResponse> reactivarCertificado(
             @Parameter(description = "Código de validación del certificado") 
@@ -293,7 +335,8 @@ public class CertificacionController {
         security = {
             @SecurityRequirement(name = "organizadorJWT") , 
             @SecurityRequirement(name = "administradorJWT")
-        }
+        },
+        tags = {"Generar"}
     )
     public ResponseEntity<String> generarPdfCertificado(
             @Parameter(description = "Código de validación del certificado") 
@@ -309,5 +352,14 @@ public class CertificacionController {
             log.error("Error al generar PDF: {}", e.getMessage());
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/health")
+    @Operation(
+        summary = "Verificar el funcionamiento del modulo certificaciones.",
+        tags = {"Health"}
+    )
+    public ResponseEntity<String> health() {
+        return ResponseEntity.ok("Asistencias API is running");
     }
 }

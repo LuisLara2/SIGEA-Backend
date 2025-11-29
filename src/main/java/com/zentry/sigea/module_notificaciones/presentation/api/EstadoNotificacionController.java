@@ -46,7 +46,8 @@ public class EstadoNotificacionController {
         summary = "Crear un nuevo estado de notificacion",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Crear"}
     )
     public ResponseEntity<?> crearEstado(@RequestBody EstadoRequest request) {
         try {
@@ -81,7 +82,8 @@ public class EstadoNotificacionController {
         summary = "Listar todos los estados de notificacion.",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Listar"}
     )
     public ResponseEntity<List<EstadoResponse>> listarEstados() {
         try {
@@ -105,7 +107,8 @@ public class EstadoNotificacionController {
         summary = "Obener un estado de notificacion por su ID",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Obtener"}
     )
     public ResponseEntity<?> obtenerEstado(@PathVariable String id) {
         try {
@@ -128,7 +131,8 @@ public class EstadoNotificacionController {
         summary = "Obener un estado de notificacion por su codigo",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Obtener"}
     )
     public ResponseEntity<?> obtenerEstadoPorCodigo(@PathVariable String codigo) {
         try {
@@ -151,7 +155,8 @@ public class EstadoNotificacionController {
         summary = "Eliminar un estado de notificacion por su ID",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Eliminar"}
     )
     public ResponseEntity<?> eliminarEstado(@PathVariable String id) {
         try {
@@ -172,7 +177,8 @@ public class EstadoNotificacionController {
      */
     @GetMapping("/health")
     @Operation(
-        summary = "Verificar el funcionamiento del controlador de estado notificacion."
+        summary = "Verificar el funcionamiento del controlador de estado notificacion.",
+        tags = {"Health"}    
     )
     public ResponseEntity<String> health() {
         return ResponseEntity.ok("Estados Notificación API is running");

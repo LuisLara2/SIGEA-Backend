@@ -40,7 +40,8 @@ public class AsistenciaController {
         summary = "Registrar asistencia.",
         security = @SecurityRequirement(
             name = "organizadorJWT"
-            )
+            ),
+        tags = {"Registro"}
     )
     public ResponseEntity<String> registrarAsistencia(
         @Valid @RequestBody RegistrarAsistenciaRequest request
@@ -63,7 +64,8 @@ public class AsistenciaController {
         security = {
             @SecurityRequirement(name = "administradorJWT"),
             @SecurityRequirement(name = "organizadorJWT")
-        }
+        },
+        tags = {"Obtener"}
     )
     public ResponseEntity<AsistenciaResponse> obtenerAsistencia(@PathVariable String id) {
         try {
@@ -82,7 +84,8 @@ public class AsistenciaController {
         summary = "Actualizar asistencia por ID.",
         security = @SecurityRequirement(
             name = "organizadorJWT"
-            )
+            ),
+        tags = {"Actualizar"}
     )
     public ResponseEntity<AsistenciaResponse> actualizarAsistencia(
         @PathVariable String id,
@@ -107,7 +110,8 @@ public class AsistenciaController {
             @SecurityRequirement(name = "administradorJWT"),
             @SecurityRequirement(name = "organizadorJWT"),
             @SecurityRequirement(name = "participanteJWT")
-        }
+        },
+        tags = {"Listar"}
     )
     public ResponseEntity<List<AsistenciaResponse>> listarPorSesion(
         @PathVariable String sesionId
@@ -127,7 +131,8 @@ public class AsistenciaController {
         summary = "Listar asistencias por ID de inscripcion.",
         security = @SecurityRequirement(
             name = "participanteJWT"
-        )
+        ),
+        tags = {"Listar"}
     )
     public ResponseEntity<List<AsistenciaResponse>> listarPorInscripcion(
         @PathVariable String inscripcionId
@@ -141,14 +146,15 @@ public class AsistenciaController {
         }
     }
 
-    @GetMapping("/sesion/{sesionId}/presentes")
+    @GetMapping("/listar/sesion/{sesionId}/presentes")
     @PreAuthorize("hasAnyRole('ROLE_ORGANIZADOR', 'ROLE_ADMINISTRADOR')")
     @Operation(
         summary = "Listar presentes en una sesion.",
         security = {
             @SecurityRequirement(name = "administradorJWT"),
             @SecurityRequirement(name = "organizadorJWT")
-        }
+        },
+        tags = {"Listar"}
     )
     public ResponseEntity<List<AsistenciaResponse>> listarPresentesPorSesion(
         @PathVariable String sesionId
@@ -164,7 +170,8 @@ public class AsistenciaController {
 
     @GetMapping("/health")
     @Operation(
-        summary = "Verificar el funcionamiento del modulo asistencias."
+        summary = "Verificar el funcionamiento del modulo asistencias.",
+        tags = {"Health"}
     )
     public ResponseEntity<String> health() {
         return ResponseEntity.ok("Asistencias API is running");

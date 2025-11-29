@@ -49,7 +49,8 @@ public class AdministradorApiRestController {
         summary = "Home de administrador",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Home"}
     )
     public ResponseEntity<GeneralResponseDTO<?>> indexAdministrador(
         @AuthenticationPrincipal UsuarioAuthInfo usuarioAuthInfo
@@ -68,13 +69,14 @@ public class AdministradorApiRestController {
         );
     }
 
-    @PostMapping("/auth/register")
+    @PostMapping("/registrar")
     @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     @Operation(
         summary = "Registrar usuario",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Crear"}
     )
     public ResponseEntity<GeneralResponseDTO<?>> registerUsuario(
         @RequestBody RegistrarUsuarioRequestDTO registrarUsuarioRequestDTO
@@ -133,7 +135,8 @@ public class AdministradorApiRestController {
         summary = "Crear roles",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Crear"}
     )
     public ResponseEntity<GeneralResponseDTO<?>> crearRol(
         @Valid @RequestBody CrearRolRequestDTO crearRolRequestDTO , 

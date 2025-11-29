@@ -49,7 +49,8 @@ public class NotificacionController {
             @SecurityRequirement(name = "administradorJWT") , 
             @SecurityRequirement(name = "organizadorJWT") , 
             @SecurityRequirement(name = "participanteJWT")
-        }
+        },
+        tags = {"Crear"}
     )
     public ResponseEntity<String> crearNotificacion(@RequestBody CrearNotificacionRequest request) {
         try {
@@ -74,7 +75,8 @@ public class NotificacionController {
             @SecurityRequirement(name = "administradorJWT") , 
             @SecurityRequirement(name = "organizadorJWT") , 
             @SecurityRequirement(name = "participanteJWT")
-        }
+        },
+        tags = {"Obtener"}
     )
     public ResponseEntity<NotificacionResponse> obtenerNotificacion(@PathVariable String id) {
         try {
@@ -98,7 +100,8 @@ public class NotificacionController {
             @SecurityRequirement(name = "administradorJWT") , 
             @SecurityRequirement(name = "organizadorJWT") , 
             @SecurityRequirement(name = "participanteJWT")
-        }
+        },
+        tags = {"Listar"}
     )
     public ResponseEntity<List<NotificacionResponse>> listarNotificaciones() {
         try {
@@ -120,7 +123,8 @@ public class NotificacionController {
             @SecurityRequirement(name = "administradorJWT") , 
             @SecurityRequirement(name = "organizadorJWT") , 
             @SecurityRequirement(name = "participanteJWT")
-        }
+        },
+        tags = {"Obtener"}
     )
     public ResponseEntity<List<NotificacionResponse>> obtenerNotificacionesPorUsuario(
         @PathVariable String usuarioId
@@ -147,7 +151,8 @@ public class NotificacionController {
             @SecurityRequirement(name = "administradorJWT") , 
             @SecurityRequirement(name = "organizadorJWT") , 
             @SecurityRequirement(name = "participanteJWT")
-        }
+        },
+        tags = {"Obtener"}
     )
     public ResponseEntity<List<NotificacionResponse>> obtenerNotificacionesPorActividad(
         @PathVariable String actividadId
@@ -175,7 +180,8 @@ public class NotificacionController {
             @SecurityRequirement(name = "administradorJWT") , 
             @SecurityRequirement(name = "organizadorJWT") , 
             @SecurityRequirement(name = "participanteJWT")
-        }
+        },
+        tags = {"Obtener"}
     )
     public ResponseEntity<List<NotificacionResponse>> obtenerNotificacionesPorTipo(
         @PathVariable String tipoEvento
@@ -204,7 +210,8 @@ public class NotificacionController {
             @SecurityRequirement(name = "administradorJWT") , 
             @SecurityRequirement(name = "organizadorJWT") , 
             @SecurityRequirement(name = "participanteJWT")
-        }
+        },
+        tags = {"Obtener"}
     )
     public ResponseEntity<List<NotificacionResponse>> obtenerNotificacionesPorUsuarioYTipo(
         @PathVariable String usuarioId,
@@ -232,7 +239,8 @@ public class NotificacionController {
             @SecurityRequirement(name = "administradorJWT") , 
             @SecurityRequirement(name = "organizadorJWT") , 
             @SecurityRequirement(name = "participanteJWT")
-        }
+        },
+        tags = {"Marcar"}
     )
     public ResponseEntity<NotificacionResponse> marcarComoLeida(@PathVariable String id) {
         try {
@@ -256,7 +264,8 @@ public class NotificacionController {
             @SecurityRequirement(name = "administradorJWT") , 
             @SecurityRequirement(name = "organizadorJWT") , 
             @SecurityRequirement(name = "participanteJWT")
-        }
+        },
+        tags = {"Marcar"}
     )
     public ResponseEntity<String> marcarTodasComoLeidas(@PathVariable String usuarioId) {
         try {
@@ -280,7 +289,8 @@ public class NotificacionController {
             @SecurityRequirement(name = "administradorJWT") , 
             @SecurityRequirement(name = "organizadorJWT") , 
             @SecurityRequirement(name = "participanteJWT")
-        }
+        },
+        tags = {"Eliminar"}
     )
     public ResponseEntity<Void> eliminarNotificacionesUsuario(@PathVariable String usuarioId) {
         try {
@@ -304,7 +314,8 @@ public class NotificacionController {
             @SecurityRequirement(name = "administradorJWT") , 
             @SecurityRequirement(name = "organizadorJWT") , 
             @SecurityRequirement(name = "participanteJWT")
-        }
+        },
+        tags = {"Actualizar"}
     )
     public ResponseEntity<NotificacionResponse> actualizarNotificacion(
         @PathVariable String id,
@@ -332,7 +343,8 @@ public class NotificacionController {
             @SecurityRequirement(name = "administradorJWT") , 
             @SecurityRequirement(name = "organizadorJWT") , 
             @SecurityRequirement(name = "participanteJWT")
-        }
+        },
+        tags = {"Eliminar"}
     )
     public ResponseEntity<Void> eliminarNotificacion(@PathVariable String id) {
         try {
@@ -350,7 +362,8 @@ public class NotificacionController {
      */
     @GetMapping("/health")
     @Operation(
-        summary = "Verificar el funcionamiento del controlador notificacion."
+        summary = "Verificar el funcionamiento del controlador notificacion.",
+        tags = {"Health"}
     )
     public ResponseEntity<String> health() {
         return ResponseEntity.ok("Notificaciones API is running");

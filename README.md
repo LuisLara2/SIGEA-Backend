@@ -63,7 +63,7 @@ APPLICATION_NAME=sigea
 SERVER_PORT={Puerto del servidor. def: 16001}
 
 # Hibernate Variables
-HIBERNATE_DDL_AUTO={Puedes colocar: update, create-drop}
+HIBERNATE_DDL_AUTO={update / create-drop}
 
 # PostgreSQL Variables
 DB_URL=jdbc:postgresql://{database host}:{database port: def: 5432}/{Nombre de la base de datos}
@@ -79,14 +79,35 @@ DB_ADMIN_USER_PASSWORD={Contraseña del usuario sysdba de postgreSQL}
 API_DOCS_PATH={def: /v3/api-docs}
 API_UI_PATH={Ruta para la documentacion OpenAPI. def: /swagger-ui/index.html}
 
+# Configuracion de .sql
+# hay 3: always, never, embedded
+SQL_INIT_MODE={always / never / embedded}
+SQL_INIT_DATA_LOCATIONS=classpath:{ruta a tu archivo data.sql desde resources/, def: }
+SQL_INIT_SCHEMA_LOCATIONS=classpath:{ruta a tu archivo schema.sql desde resources/, def: }
+
 # Configuracion de notificaciones
 EMAIL_ENABLED=true
 EMAIL_FROM={Email que enviara los correos}
 EMAIL_NOMBRE_REMITENTE={Nombre con que el que se enviara el email}
 
-# Obtén estas credenciales en: https://app.brevo.com/settings/keys/smtp
+MAIL_HOST={Nombre del host mail}
+MAIL_PORT={Puerto del host mail}
+
+# Puedes obtener estas credenciales en: https://app.brevo.com/settings/keys/smtp
 SMTP_USER={Usuario SMTP}
 SMTP_PASS={Contraseña de usuario SMTP}
+SMTP_AUTH={true / false}
+SMTP_STARTTLS_ENABLE={true / false}
+SMTP_STARTTLS_REQUIRED={true / false}
+SMTP_CONNECTIONTIMEOUT={Tiempo en ms}
+SMTP_TIMEOUT={Tiempo en ms}
+SMTP_WRITETIMEOUT={Tiempo en ms}
+
+SMTP_SSL_TRUST={}
+SMTP_SSL_CHECKSERVERIDENTITY={true / false}
+
+MAIL_DEFAULT_ENCODING={def: UTF-8}
+MAIL_MIME_CHARSET={def: UTF-8}
 
 # Almacenamiento de Medios
 MEDIA_LOCATION={Ubicacion de almacenamiento de medios. def: ./uploads}
@@ -252,6 +273,14 @@ Para ejecutar el proyecto debes usar los siguientes comandos dependiendo de tu S
     ```bash
     ./scripts/run_sigea_linux_mac.sh
     ```
+
+Una vez ejecutado el proyecto accedemos al siguiente link para poder ver la documentacion de la API:
+
+```http
+http://{host}:{port}/swagger-ui/swagger-ui/index.html#/
+```
+
+Ajusta la ruta modificando por tu host y puerto
 
 # VII. Colaboradores
 

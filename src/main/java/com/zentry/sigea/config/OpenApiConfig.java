@@ -2,6 +2,7 @@ package com.zentry.sigea.config;
 
 import java.util.List;
 
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -63,5 +64,101 @@ public class OpenApiConfig {
                                 .scheme("bearer")
                                 .bearerFormat("JWT"))
             );
+    }
+
+    @Bean
+    public GroupedOpenApi asistenciaApi() {
+        return GroupedOpenApi.builder()
+                .group("Modulo Asistencias")
+                .pathsToMatch("/api/v*/asistencias/**")
+                .build();
+    }
+
+
+    @Bean
+    public GroupedOpenApi actividadesApi() {
+        return GroupedOpenApi.builder()
+                .group("Modulo Actividades")
+                .pathsToMatch(
+                    "/api/v*/actividades/**" , 
+                    "/api/v*/estados-actividad/**",
+                    "/api/v*/tipos-actividad/**"
+                )
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi certificacionesApi() {
+        return GroupedOpenApi.builder()
+                .group("Modulo Certificaciones")
+                .pathsToMatch("/api/v*/certificaciones/**")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi informeApi() {
+        return GroupedOpenApi.builder()
+                .group("Modulo Informes")
+                .pathsToMatch(
+                    "/api/v*/informes/**" ,
+                    "/api/v*/tipos-informe"
+                )
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi inscripcionaesApi() {
+        return GroupedOpenApi.builder()
+                .group("Modulo Inscripciones")
+                .pathsToMatch(
+                    "/api/v1/inscripciones",
+                    "/api/v*/estados-inscripcion/**"
+                )
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi notificacionesApi() {
+        return GroupedOpenApi.builder()
+                .group("Modulo Notificaciones")
+                .pathsToMatch(
+                    "/api/v*/notificaciones/**",
+                    "/api/v*/estados-notificacion/**",
+                    "/api/v*/tipos-notificacion/**"
+                )
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi sesionesApi() {
+        return GroupedOpenApi.builder()
+                .group("Modulo Sesiones")
+                .pathsToMatch("/api/v*/sesiones/**")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi usuariosApi() {
+        return GroupedOpenApi.builder()
+                .group("Modulo Usuarios")
+                .pathsToMatch(
+                    "/api/v*/usuarios/**"
+                )
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi openApis() {
+        return GroupedOpenApi.builder()
+                .group("APIs libres")
+                .pathsToMatch(
+                    "/api/v*/usuarios/auth/**",
+                    "/" , 
+                    "/api/v*/actividades/listar" , 
+                    "/api/v*/actividades/obtener/**" , 
+                    "/api/v*/{any}/health",
+                    "/api/v1/usuarios/participante/registrar"
+                )
+                .build();
     }
 }

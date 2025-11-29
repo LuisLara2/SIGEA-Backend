@@ -26,7 +26,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @RequestMapping("/api/v1/tipos-actividad")
-// cabecera para permitir solicitudes desde cualquier origen
 @CrossOrigin(origins = "*")
 public class TipoActividadController {
 
@@ -45,7 +44,8 @@ public class TipoActividadController {
         summary = "Crear un tipo de actividad.",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Crear"}
     )
     public ResponseEntity<String>  createTipoActividad(@RequestBody TipoActividadRequest request) 
     {
@@ -70,7 +70,8 @@ public class TipoActividadController {
         summary = "Listar los tipos de actividad.",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Listar"}
     )
     public ResponseEntity<List<TipoActividadResponse>> listarTiposActividad() {
         List<TipoActividadDomainEntity> tiposActividad = tipoActividadService.listarTiposActividad();
@@ -86,7 +87,8 @@ public class TipoActividadController {
         summary = "Eliminar tipo de actividad por su ID.",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Eliminar"}
     )
     public ResponseEntity<Void> eliminarTipoActividad(@PathVariable String id) {
         try {
@@ -105,7 +107,8 @@ public class TipoActividadController {
         summary = "Actualizar un tipo de actividad.",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Actualizar"}
     )
     public ResponseEntity<TipoActividadResponse> actualizarTipoActividad(@PathVariable String id, @RequestBody TipoActividadRequest request) {
         try {
@@ -118,5 +121,4 @@ public class TipoActividadController {
             return ResponseEntity.status(500).build();
         }
     }
-    
 }

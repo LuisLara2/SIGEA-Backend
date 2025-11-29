@@ -41,7 +41,8 @@ public class OrganizadorApiRestController {
         summary = "Home de organizador",
         security = @SecurityRequirement(
             name = "organizadorJWT"
-            )
+            ),
+        tags = {"Home"}
     )
     public ResponseEntity<GeneralResponseDTO<?>> indexOrganizador(
         @AuthenticationPrincipal UsuarioAuthInfo usuarioAuthInfo
@@ -68,7 +69,8 @@ public class OrganizadorApiRestController {
         summary = "Registrar asistencia de los participantes",
         security = @SecurityRequirement(
             name = "organizadorJWT"
-            )
+            ),
+        tags = {"Registrar"}
     )
     public ResponseEntity<GeneralResponseDTO<?>> registrarAsistenciaMasiva(
         @RequestBody RegistrarAsistenciaRequestDTO registrarAsistenciaRequestDTO

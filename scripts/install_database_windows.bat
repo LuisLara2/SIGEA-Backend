@@ -52,6 +52,9 @@ psql -U %DB_ADMIN_USERNAME% -h %DB_HOST% -p %DB_PORT% -d %DB_NAME% -c "DO $$ BEG
 
 echo Usuario de base de datos listo.
 
+psql -U %DB_ADMIN_USERNAME% -h %DB_HOST% -p %DB_PORT% -d %DB_NAME% -c "CREATE EXTENSION IF NOT EXISTS pgcrypto;"
+echo === Extension pgcrypto instalada correctamente ===
+
 echo === Asignando permisos ===
 
 psql -U %DB_ADMIN_USERNAME% -h %DB_HOST% -p %DB_PORT% -d %DB_NAME% -c "GRANT CONNECT ON DATABASE %DB_NAME% TO %DB_USERNAME%;"

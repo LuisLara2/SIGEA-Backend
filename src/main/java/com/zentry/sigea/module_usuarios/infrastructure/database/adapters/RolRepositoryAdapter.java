@@ -38,4 +38,15 @@ public class RolRepositoryAdapter implements IRolRepository{
         return rolJPARepository.findById(UUID.fromString(id))
             .map(r -> RolMapper.toDomain(r));
     }
+
+    public Optional<RolDomainEntity> findByNombreRol(String nombreRol){
+        return rolJPARepository.findByNombreRol(nombreRol)
+            .map(r -> RolMapper.toDomain(r));
+    }
+
+    public String findIdByNombreRol(String nombreRol){
+        return rolJPARepository.findIdByNombreRol(nombreRol)
+            .map(id -> id.toString())
+            .orElse(null);
+    }
 }

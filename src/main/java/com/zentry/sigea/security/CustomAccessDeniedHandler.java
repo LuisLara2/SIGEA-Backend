@@ -28,7 +28,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
         Map<String, Object> responseBody = Map.of(
             "success", false,
-            "message", "No tienes permisos para acceder a este recurso."
+            "message", "No tienes los permisos suficientes para acceder a este recurso."
         );
 
         ObjectMapper mapper = new ObjectMapper();

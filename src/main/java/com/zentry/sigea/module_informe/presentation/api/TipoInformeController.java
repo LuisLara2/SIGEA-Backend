@@ -33,7 +33,8 @@ public class TipoInformeController {
         summary = "Crear tipo de informe",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Crear"}
     )
     public ResponseEntity<TipoInformeResponse> createTipoInforme(@RequestBody TipoInformeRequest request) {
         try {
@@ -49,13 +50,14 @@ public class TipoInformeController {
     /**
      * Listar todos los tipos de informe
      */
-    @GetMapping
+    @GetMapping("/listar")
     @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     @Operation(
         summary = "Listar los tipos de informe",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Listar"}
     )
     public ResponseEntity<List<TipoInformeResponse>> listarTiposInforme() {
         List<TipoInformeResponse> response = tipoInformeService.listarTiposInforme();
@@ -65,13 +67,14 @@ public class TipoInformeController {
     /**
      * Eliminar un tipo de informe por ID
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("eliminar/{id}")
     @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     @Operation(
         summary = "Eliminar un tipo de informe",
         security = @SecurityRequirement(
             name = "administradorJWT"
-            )
+            ),
+        tags = {"Eliminar"}
     )
     public ResponseEntity<Void> eliminarTipoInforme(@PathVariable String id) {
         try {

@@ -50,7 +50,8 @@ public class InscripcionController {
             @SecurityRequirement(name = "administradorJWT"),
             @SecurityRequirement(name = "organizadorJWT"),
             @SecurityRequirement(name = "participanteJWT")
-        }
+        },
+        tags = {"Obtener"}
     )
     public ResponseEntity<InscripcionResponse> obtenerInscripcion(@PathVariable String id) {
         try {
@@ -73,7 +74,8 @@ public class InscripcionController {
         security = {
             @SecurityRequirement(name = "administradorJWT"),
             @SecurityRequirement(name = "organizadorJWT")
-        }
+        },
+        tags = {"Listar"}
     )
     public ResponseEntity<List<InscripcionResponse>> listarInscripciones() {
         List<InscripcionResponse> inscripciones = inscripcionService.listarInscripciones();
@@ -111,7 +113,8 @@ public class InscripcionController {
         summary = "obtener inscripciones por ID de usuario.",
         security = {
             @SecurityRequirement(name = "participanteJWT")
-        }
+        },
+        tags = {"Obtener"}
     )
     public ResponseEntity<List<InscripcionResponse>> obtenerInscripcionesPorUsuario(
         @PathVariable String usuarioId
@@ -135,7 +138,8 @@ public class InscripcionController {
         security = {
             @SecurityRequirement(name = "administradorJWT"),
             @SecurityRequirement(name = "organizadorJWT")
-        }
+        },
+        tags = {"Obtener"}
     )
     public ResponseEntity<List<InscripcionResponse>> obtenerInscripcionesPorActividad(
         @PathVariable String actividadId
@@ -160,7 +164,8 @@ public class InscripcionController {
             @SecurityRequirement(name = "administradorJWT"),
             @SecurityRequirement(name = "organizadorJWT"),
             @SecurityRequirement(name = "participanteJWT")
-        }
+        },
+        tags = {"Actualizar"}
     )
     public ResponseEntity<InscripcionResponse> actualizarInscripcion(
         @PathVariable String id,
@@ -187,7 +192,8 @@ public class InscripcionController {
             @SecurityRequirement(name = "administradorJWT"),
             @SecurityRequirement(name = "organizadorJWT"),
             @SecurityRequirement(name = "participanteJWT")
-        }
+        },
+        tags = {"Eliminar"}
     )
     public ResponseEntity<Void> eliminarInscripcion(@PathVariable String id) {
         try {
@@ -205,7 +211,8 @@ public class InscripcionController {
      */
     @GetMapping("/health")
     @Operation(
-        summary = "Verificar funcionamiento del controlador de inscripciones."
+        summary = "Verificar funcionamiento del controlador de inscripciones.",
+        tags = {"Health"}
     )
     public ResponseEntity<String> health() {
         return ResponseEntity.ok("Inscripciones API is running");

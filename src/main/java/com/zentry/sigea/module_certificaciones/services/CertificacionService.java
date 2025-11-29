@@ -1,6 +1,7 @@
 package com.zentry.sigea.module_certificaciones.services;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -39,6 +40,12 @@ public class CertificacionService implements ICertificacionService {
         return certificadoService.crearCertificado(request);
     }
     
+    @Override
+    public Map<String , Boolean> crearCertificadosMasivos(List<String> listActividadIds){
+        log.info("Delegando creación de certificados masivos a servicio Clean Architecture");
+        return certificadoService.crearCertificadosMasivos(listActividadIds);
+    }
+
     @Override
     public Optional<CertificadoResponse> buscarCertificadoPorCodigo(String codigoValidacion) {
         log.debug("Delegando búsqueda por código a servicio Clean Architecture");
