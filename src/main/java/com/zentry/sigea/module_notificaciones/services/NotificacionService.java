@@ -85,16 +85,16 @@ public class NotificacionService {
                 boolean emailEnviado = enviarPorEmail(notificacion);
                 if (emailEnviado) {
                     resultado.append(" | EMAIL: OK");
-                    logger.info("✅ Notificación enviada exitosamente por SISTEMA + EMAIL ID: {}", 
+                    logger.info(" Notificación enviada exitosamente por SISTEMA + EMAIL ID: {}", 
                         notificacion.getId());
                 } else {
                     resultado.append(" | EMAIL: FALLÓ");
-                    logger.warn("❌ Email falló para notificación ID: {}, pero se guardó en SISTEMA", 
+                    logger.warn(" Email falló para notificación ID: {}, pero se guardó en SISTEMA", 
                         notificacion.getId());
                 }
             } catch (Exception e) {
                 resultado.append(" | EMAIL: ERROR - ").append(e.getMessage());
-                logger.error("💥 ERROR CRÍTICO enviando email para notificación ID: {}, pero se guardó en SISTEMA. Error: {}", 
+                logger.error(" ERROR CRÍTICO enviando email para notificación ID: {}, pero se guardó en SISTEMA. Error: {}", 
                     notificacion.getId(), e.getMessage(), e);
             }
             
@@ -127,40 +127,40 @@ public class NotificacionService {
      */
     private boolean enviarPorEmail(NotificacionDomainEntity notificacion) {
         try {
-            logger.info("📧 Intentando enviar notificación {} por EMAIL", notificacion.getId());
+            logger.info(" Intentando enviar notificación {} por EMAIL", notificacion.getId());
             
             // Obtener correo del usuario
-            logger.info("🔍 Buscando correo para usuario ID: {}", notificacion.getUsuarioId());
+            logger.info(" Buscando correo para usuario ID: {}", notificacion.getUsuarioId());
             Optional<String> correoOpt = usuarioGateway.obtenerCorreoUsuario(notificacion.getUsuarioId());
             
             if (correoOpt.isEmpty()) {
-                logger.error("❌ No se encontró correo para usuario ID: {}", notificacion.getUsuarioId());
+                logger.error("No se encontró correo para usuario ID: {}", notificacion.getUsuarioId());
                 return false;
             }
             
             String correo = correoOpt.get();
-            logger.info("✅ Correo encontrado: {} para usuario ID: {}", correo, notificacion.getUsuarioId());
+            logger.info(" Correo encontrado: {} para usuario ID: {}", correo, notificacion.getUsuarioId());
             
             // Obtener nombre del usuario para personalizar
             String nombreUsuario = usuarioGateway.obtenerNombreUsuario(notificacion.getUsuarioId())
                 .orElse("Usuario");
-            logger.info("👤 Nombre usuario: {}", nombreUsuario);
+            logger.info(" Nombre usuario: {}", nombreUsuario);
             
             // Enviar email
-            logger.info("📤 Llamando a emailService.enviar() con destino: {}", correo);
+            logger.info(" Llamando a emailService.enviar() con destino: {}", correo);
             boolean enviado = emailService.enviar(notificacion, correo, nombreUsuario);
             
             if (enviado) {
-                logger.info("✅ Email enviado exitosamente a {} para notificación ID: {}", 
+                logger.info(" Email enviado exitosamente a {} para notificación ID: {}", 
                     correo, notificacion.getId());
             } else {
-                logger.error("❌ emailService.enviar() retornó FALSE para correo: {}", correo);
+                logger.error(" emailService.enviar() retornó FALSE para correo: {}", correo);
             }
             
             return enviado;
             
         } catch (Exception e) {
-            logger.error("💥 EXCEPCIÓN al enviar notificación {} por email: {}", 
+            logger.error(" EXCEPCIÓN al enviar notificación {} por email: {}", 
                 notificacion.getId(), e.getMessage(), e);
             return false;
         }

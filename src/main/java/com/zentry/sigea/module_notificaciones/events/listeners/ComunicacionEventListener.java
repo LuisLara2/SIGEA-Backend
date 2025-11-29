@@ -77,13 +77,7 @@ public class ComunicacionEventListener {
      * Obtiene un emoji apropiado según el tipo de comunicación
      */
     private String obtenerIconoPorTipo(ComunicacionPublicadaEvent.TipoComunicacion tipo) {
-        return switch (tipo) {
-            case NUEVA_SESION -> "📅";
-            case CAMBIO_SESION -> "🔄";
-            case CANCELACION_SESION -> "❌";
-            case ANUNCIO_ACTIVIDAD -> "📢";
-            case RECORDATORIO -> "⏰";
-            case COMUNICADO_GENERAL -> "📣";
-        };
+        
+        return "";
     }
 }

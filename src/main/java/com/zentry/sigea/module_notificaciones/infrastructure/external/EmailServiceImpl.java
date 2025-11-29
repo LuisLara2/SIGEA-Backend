@@ -39,22 +39,22 @@ public class EmailServiceImpl implements IEmailService {
 
     @Override
     public boolean enviar(NotificacionDomainEntity notificacion, String destinatario, String nombreDestinatario) {
-        logger.info("🔵 EmailService.enviar() INICIADO - emailEnabled: {}", emailEnabled);
-        logger.info("🔵 Destinatario: {}, Nombre: {}", destinatario, nombreDestinatario);
+        logger.info("EmailService.enviar() INICIADO - emailEnabled: {}", emailEnabled);
+        logger.info("Destinatario: {}, Nombre: {}", destinatario, nombreDestinatario);
         
         if (!emailEnabled) {
-            logger.warn("⚠️ Envío de emails DESHABILITADO en configuración. Email no enviado a: {}", destinatario);
+            logger.warn("Envío de emails DESHABILITADO en configuración. Email no enviado a: {}", destinatario);
             return false;
         }
         
         if (destinatario == null || destinatario.trim().isEmpty()) {
-            logger.error("❌ Destinatario de email vacío para notificación ID: {}", notificacion.getId());
+            logger.error("Destinatario de email vacío para notificación ID: {}", notificacion.getId());
             return false;
         }
         
         try {
-            logger.info("📧 Preparando envío de email a {} para notificación ID: {}", destinatario, notificacion.getId());
-            logger.info("📧 Email FROM configurado: {}", emailFrom);
+            logger.info("Preparando envío de email a {} para notificación ID: {}", destinatario, notificacion.getId());
+            logger.info("Email FROM configurado: {}", emailFrom);
             
             // Crear mensaje HTML para mejor presentación
             MimeMessage message = mailSender.createMimeMessage();
@@ -71,19 +71,19 @@ public class EmailServiceImpl implements IEmailService {
             // Contenido HTML con codificación UTF-8
             helper.setText(construirContenidoHtml(notificacion, nombreDestinatario), true);
             
-            logger.info("📤 Llamando a mailSender.send()...");
+            logger.info("Llamando a mailSender.send()...");
             mailSender.send(message);
             
-            logger.info("✅✅✅ Email enviado EXITOSAMENTE a {} para notificación ID: {}", 
+            logger.info(" Email enviado EXITOSAMENTE a {} para notificación ID: {}", 
                 destinatario, notificacion.getId());
             return true;
             
         } catch (Exception e) {
-            logger.error("💥💥💥 ERROR CRÍTICO al enviar email a {} para notificación ID {}", 
+            logger.error("ERROR CRÍTICO al enviar email a {} para notificación ID {}", 
                 destinatario, notificacion.getId());
-            logger.error("💥 Tipo de excepción: {}", e.getClass().getName());
-            logger.error("💥 Mensaje: {}", e.getMessage());
-            logger.error("💥 Stack trace completo:", e);
+            logger.error("Tipo de excepción: {}", e.getClass().getName());
+            logger.error("Mensaje: {}", e.getMessage());
+            logger.error("Stack trace completo:", e);
             return false;
         }
     }
@@ -218,7 +218,7 @@ public class EmailServiceImpl implements IEmailService {
         texto.append(notificacion.getMensaje()).append("\n\n");
         texto.append("Fecha: ").append(notificacion.getFechaEnvio()).append("\n\n");
         texto.append("---\n");
-        texto.append("SIGEA - Sistema de Gestión de Eventos Académicos\n");
+        texto.append("SIGEA - Sistema Integral de Gestión de Eventos Académicos\n");
         texto.append("Este es un mensaje automático, por favor no responder.");
         
         return texto.toString();

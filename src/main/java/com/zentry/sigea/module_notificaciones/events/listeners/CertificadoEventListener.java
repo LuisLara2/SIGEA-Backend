@@ -34,7 +34,7 @@ public class CertificadoEventListener {
     @Async
     public void onCertificadoGenerado(CertificadoGeneradoEvent event) {
         try {
-            logger.info("🎓 Evento recibido: Certificado generado {} para usuario {} - Código: {}", 
+            logger.info("Evento recibido: Certificado generado {} para usuario {} - Código: {}", 
                 event.getCertificadoId(), event.getUsuarioId(), event.getCodigoValidacion());
             
             // Formatear fecha de emisión
