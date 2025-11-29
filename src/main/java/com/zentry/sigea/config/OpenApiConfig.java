@@ -162,4 +162,14 @@ public class OpenApiConfig {
                 )
                 .build();
     }
+
+    @Bean
+    public GroupedOpenApi bannerApi() {
+        return GroupedOpenApi.builder()
+                .group("Modulo Banners de Actividades")
+                .pathsToMatch(
+                    "/api/v1/actividad/banner/**"
+                )
+                .build();
+    }
 }

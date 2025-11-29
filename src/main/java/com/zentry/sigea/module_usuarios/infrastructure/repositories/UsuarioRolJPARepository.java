@@ -2,6 +2,7 @@ package com.zentry.sigea.module_usuarios.infrastructure.repositories;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,4 +29,8 @@ public interface UsuarioRolJPARepository extends JpaRepository<UsuarioRolEntity 
 
     // Recuerda siempre colocar alias como "ur" para resumir nombres de tablas
     // Y siempre usalas al acceder a propiedades antes y despues
+
+    // Buscar UsuarioRol por usuario ID y nombre del rol
+    @Query("SELECT ur FROM UsuarioRolEntity ur WHERE ur.id.idUsuario = :idUsuario AND ur.rol.nombreRol = :nombreRol")
+    Optional<UsuarioRolEntity> findByUsuarioIdAndRolNombre(@Param("idUsuario") UUID idUsuario, @Param("nombreRol") String nombreRol);
 }

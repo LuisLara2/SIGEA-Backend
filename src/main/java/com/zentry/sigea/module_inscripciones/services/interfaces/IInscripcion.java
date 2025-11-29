@@ -11,6 +11,7 @@ import com.zentry.sigea.module_inscripciones.services.serviceDTO.CrearInscripcio
  */
 public interface IInscripcion {
     String crearInscripcion(CrearInscripcionServiceDTO crearInscripcionServiceDTO);
+    InscripcionResponse crearInscripcion(InscripcionRequest inscripcionRequest);
     List<InscripcionResponse> listarInscripciones();
     InscripcionResponse actualizarInscripcion(String id, InscripcionRequest request);
     InscripcionResponse obtenerInscripcionPorId(String id);

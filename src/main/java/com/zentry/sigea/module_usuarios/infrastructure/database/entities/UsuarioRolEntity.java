@@ -32,7 +32,6 @@ public class UsuarioRolEntity {
 
     @EmbeddedId
     private UsuarioRolId id = new UsuarioRolId(); 
-    // Nota: SIEMPRE INICIALIZA LA CLASE EMBEDDED COMO SE VE ARRIBA.
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("idUsuario")

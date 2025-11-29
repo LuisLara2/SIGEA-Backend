@@ -30,17 +30,27 @@ public class ActividadRepositoryAdapter implements IActividadRespository {
 
     public boolean save(ActividadDomainEntity actividadDomainEntity) {
         try {
-            UsuarioEntity usuarioEntity = usuarioJPARepository.findById(
-                    UUID.fromString(actividadDomainEntity.getOrganizadorId())).orElse(null);
+            // Buscar usuario directamente por usuarioId
+            Optional<UsuarioEntity> usuarioEntity = usuarioJPARepository.findById(
+                    UUID.fromString(actividadDomainEntity.getOrganizadorId())
+            );
+
+            if (usuarioEntity.isEmpty()) {
+                throw new RuntimeException("No se encontró el usuario especificado");
+            }
 
             actividadJPARepository.save(
                     ActividadMapper.toEntity(
                             actividadDomainEntity,
-                            usuarioEntity));
+                            usuarioEntity.get()
+                        ));
 
             return true;
         } catch (Exception e) {
-            return false;
+            // Log del error para debugging
+            System.err.println("Error al guardar actividad: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Error al guardar actividad: " + e.getMessage(), e);
         }
     }
 

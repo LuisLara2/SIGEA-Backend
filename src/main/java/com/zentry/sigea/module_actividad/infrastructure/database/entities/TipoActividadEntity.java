@@ -7,7 +7,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,7 +30,6 @@ public class TipoActividadEntity {
     @Column(name = "nombre_actividad" , nullable = false , length = 50 , unique = true)
     private String nombreActividad;
 
-    @Lob
     @Column(name = "descripcion" , nullable = true , columnDefinition = "TEXT")
     private String descripcion;
 

@@ -60,10 +60,8 @@ public class SecurityConfig {
                             "/" , 
                             // Permitir el acceso libre para ver las actividades en la pagina principal
                             "/api/v*/actividades/listar",
-                            "/api/v*/actividades/obtener/**" , 
-
-                            "/api/v*/{any}/health",
-                            "/api/v1/usuarios/participante/registrar"
+                            "/api/v*/actividades/obtener/**",
+                            "/api/v*/actividad/banner/imagen/**"
                         ).permitAll()
                         .requestMatchers(
                             "/swagger-ui/**", 
