@@ -17,30 +17,35 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.zentry.sigea.module_usuarios.services.TokenUsuarioService;
 import com.zentry.sigea.security.CustomAccessDeniedHandler;
 import com.zentry.sigea.security.CustomAuthenticationEntryPoint;
 import com.zentry.sigea.security.JwtAuthenticationFilter;
+import com.zentry.sigea.security.JwtBlacklistService;
+import com.zentry.sigea.security.JwtUtil;
 
 @Configuration
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
     
-    private final JwtAuthenticationFilter jwtAuthFilter;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     public SecurityConfig(
-        JwtAuthenticationFilter jwtAuthFilter , 
         CustomAuthenticationEntryPoint customAuthenticationEntryPoint,
         CustomAccessDeniedHandler customAccessDeniedHandler
     ){
-        this.jwtAuthFilter = jwtAuthFilter;
         this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
         this.customAccessDeniedHandler = customAccessDeniedHandler;
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public JwtAuthenticationFilter jwtAuthenticationFilter(TokenUsuarioService tokenUsuarioService, JwtUtil jwtUtil , JwtBlacklistService jwtBlacklistService , CustomAuthenticationEntryPoint customAuthenticationEntryPoint){
+        return new JwtAuthenticationFilter(jwtUtil, tokenUsuarioService , jwtBlacklistService , customAuthenticationEntryPoint);
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http , JwtAuthenticationFilter jwtAuthFilter) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -57,7 +62,8 @@ public class SecurityConfig {
                             "/api/v*/actividades/listar",
                             "/api/v*/actividades/obtener/**" , 
 
-                            "/api/v*/{any}/health"
+                            "/api/v*/{any}/health",
+                            "/api/v1/usuarios/participante/registrar"
                         ).permitAll()
                         .requestMatchers(
                             "/swagger-ui/**", 

@@ -34,7 +34,7 @@ public class RegisterUsuarioUseCase {
 
         usuarioRepository.save(usuarioDomainEntity);
 
-        String registeredUsuarioId = usuarioRepository.findByCorreo(usuarioDomainEntity.getCorreo()).map(u -> u.getId().toString()).orElse(null);
+        String registeredUsuarioId = usuarioRepository.findIdByCorreo(usuarioDomainEntity.getCorreo());
 
         if (registeredUsuarioId == null) {
             throw new IOException("No se pudo encontrar el ID del usuario."); // Siempre debes especificar que la funciona puede arrojar un error

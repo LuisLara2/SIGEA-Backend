@@ -69,7 +69,7 @@ public class AdministradorApiRestController {
         );
     }
 
-    @PostMapping("/auth/register")
+    @PostMapping("/registrar")
     @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     @Operation(
         summary = "Registrar usuario",

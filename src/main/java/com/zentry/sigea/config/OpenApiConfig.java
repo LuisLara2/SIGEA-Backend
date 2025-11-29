@@ -142,9 +142,7 @@ public class OpenApiConfig {
         return GroupedOpenApi.builder()
                 .group("Modulo Usuarios")
                 .pathsToMatch(
-                    "/api/v*/usuarios/administrador/**",
-                    "/api/v*/usuarios/organizador/**",
-                    "/api/v*/usuarios/participante/**"
+                    "/api/v*/usuarios/**"
                 )
                 .build();
     }
@@ -158,7 +156,8 @@ public class OpenApiConfig {
                     "/" , 
                     "/api/v*/actividades/listar" , 
                     "/api/v*/actividades/obtener/**" , 
-                    "/api/v*/{any}/health"
+                    "/api/v*/{any}/health",
+                    "/api/v1/usuarios/participante/registrar"
                 )
                 .build();
     }

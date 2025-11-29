@@ -28,7 +28,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
         Map<String, Object> responseBody = Map.of(
             "success", false,
-            "message", "No estas autenticado. Debes iniciar sesion para acceder a este recurso."
+            "message", "No estas autenticado. Debes iniciar sesion o enviar un token valido para acceder a este recurso."
         );
 
         ObjectMapper mapper = new ObjectMapper();
