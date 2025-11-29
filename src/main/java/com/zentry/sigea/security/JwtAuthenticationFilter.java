@@ -76,6 +76,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 setAuthentication(claims);
 
                 if (jwtUtil.willExpireSoon(token)) {
+                    jwtBlacklistService.add(
+                        token,
+                        jwtUtil.extractClaims(token).getExpiration()
+                    );
+
                     String newToken = jwtUtil.generateToken(
                         claims.getSubject(),
                         claims.get("usuarioId", String.class),

@@ -64,9 +64,9 @@ public class UsuarioService {
         TokenUsuarioDomainEntity tokenUsuarioDomainEntity = tokenUsuarioService.createRefreshToken(usuario.getId(), rememberMe);
 
         return Map.of(
-            "Access Token" , accessToken , 
-            "Refresh Token" , tokenUsuarioDomainEntity.getToken() , 
-            "ID Refresh Token" , tokenUsuarioDomainEntity.getId()
+            "accessToken" , accessToken , 
+            "refreshToken" , tokenUsuarioDomainEntity.getToken() , 
+            "idRefreshToken" , tokenUsuarioDomainEntity.getId()
         );
     }
 

@@ -85,8 +85,8 @@ public class UsuarioApiRestController {
                 loginUsuarioRequestDTO.getRememberMe()
             );
 
-            String refreshToken = loginResponse.get("Refresh Token");
-            String idRefreshToken = loginResponse.get("ID Refresh Token");
+            String refreshToken = loginResponse.get("refreshToken");
+            String idRefreshToken = loginResponse.get("idRefreshToken");
             
             Cookie cookieRefreshToken = new Cookie("refreshToken", refreshToken);
             cookieRefreshToken.setHttpOnly(true);
