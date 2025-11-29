@@ -12,4 +12,5 @@ public interface ICodigoVerificacionRepository {
     public Optional<CodigoVerificacionDomainEntity> findByCorreoAndCodigo(String correo , String codigo);
     public List<String> findCodigoByCorreo(String correo);
     public void deleteExpiresCodes(Instant now);
+    public void deleteAllByCorreo(String correo);
 }

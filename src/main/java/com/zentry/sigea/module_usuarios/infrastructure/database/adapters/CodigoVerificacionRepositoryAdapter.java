@@ -51,4 +51,8 @@ public class CodigoVerificacionRepositoryAdapter implements ICodigoVerificacionR
             System.out.println(e.getMessage());
         }
     }
+
+    public void deleteAllByCorreo(String correo){
+        codigoVerificacionJPARepository.deleteAllByCorreo(correo);
+    }
 }

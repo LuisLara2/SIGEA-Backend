@@ -31,4 +31,6 @@ public interface CodigoVerificacionJPARepository extends JpaRepository<CodigoVer
         """
     )
     public void deleteExpiredCodes(@Param("now") Instant now);
+
+    public void deleteAllByCorreo(String correo);
 }

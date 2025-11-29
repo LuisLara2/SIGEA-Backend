@@ -27,6 +27,7 @@ public class ValidarCodigoEnviadoService {
 
         for(String codigoVerficiacion : listCodigosPorCorreo){
             if(passwordEncoder.matches(codigo , codigoVerficiacion)){
+                codigoVerificacionRepository.deleteAllByCorreo(correo);
                 return true;
             }
         }
