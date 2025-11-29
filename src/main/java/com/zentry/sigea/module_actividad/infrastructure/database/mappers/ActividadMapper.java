@@ -2,13 +2,13 @@ package com.zentry.sigea.module_actividad.infrastructure.database.mappers;
 
 import com.zentry.sigea.module_actividad.core.entities.ActividadDomainEntity;
 import com.zentry.sigea.module_actividad.infrastructure.database.entities.ActividadEntity;
-import com.zentry.sigea.module_usuarios.infrastructure.database.entities.UsuarioRolEntity;
+import com.zentry.sigea.module_usuarios.infrastructure.database.entities.UsuarioEntity;
 
 public class ActividadMapper {
 
     public static ActividadEntity toEntity(
         ActividadDomainEntity actividadDomainEntity ,
-        UsuarioRolEntity usuarioRolEntity
+        UsuarioEntity usuarioEntity
     ){
         ActividadEntity actividadEntity = new ActividadEntity();
         
@@ -26,7 +26,7 @@ public class ActividadMapper {
                 actividadDomainEntity.getEstadoActividadDomainEntity()
             )
         );
-        actividadEntity.setOrganizador(usuarioRolEntity);
+        actividadEntity.setOrganizador(usuarioEntity);
         actividadEntity.setTipoActividad(
             TipoActividadMapper.toEntity(
                 actividadDomainEntity.getTipoActividadDomainEntity()
@@ -63,9 +63,9 @@ public class ActividadMapper {
                 actividadEntity.getTipoActividad()
             )
         );
-        // Usamos el usuarioRolId como organizadorId
+        // Usamos el usuarioId como organizadorId
         actividadDomainEntity.setOrganizadorId(
-            actividadEntity.getOrganizador().getUsuarioRolId().toString()
+            actividadEntity.getOrganizador().getId().toString()
         );
         actividadDomainEntity.setLugar(actividadEntity.getLugar());
         actividadDomainEntity.setCoOrganizador(actividadEntity.getCoOrganizador());

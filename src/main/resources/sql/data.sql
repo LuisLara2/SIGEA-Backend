@@ -133,7 +133,7 @@ ON CONFLICT (codigo) DO NOTHING;
 -- 6) Insertar actividad de ejemplo (verifica duplicados antes de insertar)
 INSERT INTO actividad (
     titulo, descripcion, fecha_inicio, fecha_fin, hora_inicio, hora_fin,
-    estado_actividad_id, id_usuario_rol, tipo_actividad_id, lugar, 
+    estado_actividad_id, id_usuario, tipo_actividad_id, lugar, 
     co_organizador, sponsor, banner_url, created_at, updated_at
 )
 SELECT 
@@ -144,7 +144,7 @@ SELECT
     '09:00:00'::TIME,
     '12:00:00'::TIME,
     ea.id_estado_actividad,
-    ur.id_usuario_rol,
+    u.id_usuario,
     ta.id_tipo_actividad,
     'Aula Virtual 101',
     'Co-Organizador Ejemplo',
@@ -153,38 +153,14 @@ SELECT
     NOW(),
     NOW()
 FROM estado_actividad ea
-CROSS JOIN usuario_rol ur
+CROSS JOIN usuario u
 CROSS JOIN tipo_actividad ta
 WHERE ea.codigo = 'BORRADOR'
   AND ta.nombre_actividad = 'CURSO'
-  AND ur.usuario_id = (SELECT id_usuario FROM usuario WHERE correo = 'organizador@sigea.unas.edu.pe')
-  AND ur.rol_id = (SELECT id_rol FROM rol WHERE nombre_rol = 'ORGANIZADOR')
+  AND u.correo = 'organizador@sigea.unas.edu.pe'
   AND NOT EXISTS (
-      SELECT 1 FROM actividad 
-      WHERE titulo = 'Curso de Introducción a la Programación'
-        AND id_usuario_rol = ur.id_usuario_rol
+      SELECT 1 FROM actividad a
+      WHERE a.titulo = 'Curso de Introducción a la Programación'
+        AND a.id_usuario = u.id_usuario
   )
 ON CONFLICT DO NOTHING;
-
--- ============================================
--- VERIFICACIONES
--- ============================================
-
--- Verificar usuarios creados
-SELECT u.id_usuario, u.correo, u.nombres, u.apellidos 
-FROM usuario u 
-WHERE u.correo IN ('administrador@sigea.unas.edu.pe', 'organizador@sigea.unas.edu.pe', 'participante@sigea.unas.edu.pe');
-
--- Verificar relaciones usuario-rol
-SELECT ur.id_usuario_rol, u.correo, r.nombre_rol
-FROM usuario_rol ur
-JOIN usuario u ON ur.usuario_id = u.id_usuario
-JOIN rol r ON ur.rol_id = r.id_rol
-WHERE u.correo IN ('administrador@sigea.unas.edu.pe', 'organizador@sigea.unas.edu.pe', 'participante@sigea.unas.edu.pe');
-
--- Verificar actividades creadas
-SELECT a.id_actividad, a.titulo, u.correo, r.nombre_rol
-FROM actividad a
-JOIN usuario_rol ur ON a.id_usuario_rol = ur.id_usuario_rol
-JOIN usuario u ON ur.usuario_id = u.id_usuario
-JOIN rol r ON ur.rol_id = r.id_rol;
