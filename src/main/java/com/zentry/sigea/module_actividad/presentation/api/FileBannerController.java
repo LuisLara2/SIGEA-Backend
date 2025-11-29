@@ -27,12 +27,10 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1/actividad/banner")
 @CrossOrigin(origins = "*")
-@Tag(name = "Gestión de Banners de Actividades", description = "Endpoints para gestionar banners de actividades")
 public class FileBannerController {
 
     private final FileBannerService fileBannerService;
@@ -51,7 +49,8 @@ public class FileBannerController {
         description = "Sube una imagen de banner para una actividad. Solo se permiten imágenes JPG, PNG, GIF o WEBP con un tamaño máximo de 30MB." ,
         security = @SecurityRequirement(
             name = "administradorJWT"
-        )
+        ),
+        tags = {"Crear"}
     )
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Imagen subida exitosamente"),
@@ -97,7 +96,8 @@ public class FileBannerController {
     @GetMapping("/imagen/{filename}")
     @Operation(
         summary = "Obtener imagen de banner",
-        description = "Retorna la imagen de banner por su nombre de archivo (UUID)"
+        description = "Retorna la imagen de banner por su nombre de archivo (UUID)",
+        tags = {"Leer"}
     )
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Imagen encontrada",

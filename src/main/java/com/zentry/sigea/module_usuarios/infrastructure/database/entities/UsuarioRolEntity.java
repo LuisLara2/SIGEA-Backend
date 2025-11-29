@@ -34,7 +34,7 @@ public class UsuarioRolEntity {
     @EmbeddedId
     private UsuarioRolId id = new UsuarioRolId(); 
     // Nota: SIEMPRE INICIALIZA LA CLASE EMBEDDED COMO SE VE ARRIBA.
-    @Column(name = "id_usuario_rol" , updatable = false , nullable = false , 
+    @Column(name = "id_usuario_rol" , updatable = false , nullable = false , unique = true,
         columnDefinition = "UUID DEFAULT gen_random_uuid()"
     )
     private UUID usuarioRolId;

@@ -77,6 +77,12 @@ public class ActividadEntity {
     @Column(name = "numero_yape" , nullable = true , length = 15)
     private String numeroYape;
 
+    @Column(name = "co_organizador" , nullable = true , length = 150)
+    private String coOrganizador;
+
+    @Column(name = "sponsor" , nullable = true , length = 100)
+    private String sponsor;
+
     @Column(name = "created_at" , nullable = false , columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt = LocalDateTime.now();
     

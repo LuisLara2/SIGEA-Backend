@@ -33,6 +33,8 @@ public class ActividadMapper {
             )
         );
         actividadEntity.setLugar(actividadDomainEntity.getLugar());
+        actividadEntity.setCoOrganizador(actividadDomainEntity.getCoOrganizador());
+        actividadEntity.setSponsor(actividadDomainEntity.getSponsor());
         actividadEntity.setBannerUrl(actividadDomainEntity.getBannerUrl());
         actividadEntity.setNumeroYape(actividadDomainEntity.getNumeroYape());
         actividadEntity.setCreatedAt(actividadDomainEntity.getCreatedAt());
@@ -66,6 +68,8 @@ public class ActividadMapper {
             actividadEntity.getOrganizador().getUsuarioRolId().toString()
         );
         actividadDomainEntity.setLugar(actividadEntity.getLugar());
+        actividadDomainEntity.setCoOrganizador(actividadEntity.getCoOrganizador());
+        actividadDomainEntity.setSponsor(actividadEntity.getSponsor());
         actividadDomainEntity.setBannerUrl(actividadEntity.getBannerUrl());
         actividadDomainEntity.setNumeroYape(actividadEntity.getNumeroYape());
         actividadDomainEntity.setCreatedAt(actividadEntity.getCreatedAt());

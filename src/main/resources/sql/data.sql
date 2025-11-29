@@ -104,30 +104,6 @@ VALUES (
 )
 ON CONFLICT (correo) DO NOTHING;
 
--- 3) Insertar tipos de actividad
-INSERT INTO tipo_actividad (nombre_actividad, descripcion, created_at, updated_at)
-VALUES 
-    ('CURSO', 'Programa de formación estructurado con sesiones programadas y objetivos de aprendizaje definidos.', NOW(), NOW()),
-    ('TALLER', 'Actividad práctica de corta duración enfocada en desarrollar habilidades específicas.', NOW(), NOW()),
-    ('CONFERENCIA', 'Evento donde expertos presentan temas de interés académico o profesional.', NOW(), NOW()),
-    ('SEMINARIO', 'Reunión especializada para el estudio y discusión de temas específicos.', NOW(), NOW()),
-    ('DIPLOMADO', 'Programa de formación continua de larga duración con certificación.', NOW(), NOW()),
-    ('CONGRESO', 'Evento académico de gran escala con múltiples ponencias y actividades.', NOW(), NOW()),
-    ('CHARLA', 'Presentación informal sobre un tema específico de corta duración.', NOW(), NOW()),
-    ('WEBINAR', 'Seminario o conferencia realizada en línea.', NOW(), NOW())
-ON CONFLICT (nombre_actividad) DO NOTHING;
-
--- 4) Insertar estados de actividad
-INSERT INTO estado_actividad (codigo, etiqueta)
-VALUES 
-    ('BORRADOR', 'Borrador'),
-    ('PUBLICADO', 'Publicado'),
-    ('EN_CURSO', 'En Curso'),
-    ('FINALIZADO', 'Finalizado'),
-    ('CANCELADO', 'Cancelado'),
-    ('SUSPENDIDO', 'Suspendido')
-ON CONFLICT (codigo) DO NOTHING;
-
 -- 5) Insertar relaciones usuario-rol (comentado para evitar duplicados)
 INSERT INTO usuario_rol (usuario_id, rol_id, asignado_en)
 SELECT 
@@ -142,10 +118,35 @@ JOIN rol r ON (
     (u.correo = 'participante@sigea.unas.edu.pe' AND r.nombre_rol = 'PARTICIPANTE')
 );
 
--- 6) Insertar actividad de ejemplo
+
+INSERT INTO tipo_actividad (nombre_actividad, descripcion, created_at, updated_at)
+VALUES 
+    ('CURSO', 'Programa de formación estructurado con sesiones programadas y objetivos de aprendizaje definidos.', NOW(), NOW()),
+    ('TALLER', 'Actividad práctica de corta duración enfocada en desarrollar habilidades específicas.', NOW(), NOW()),
+    ('CONFERENCIA', 'Evento donde expertos presentan temas de interés académico o profesional.', NOW(), NOW()),
+    ('SEMINARIO', 'Reunión especializada para el estudio y discusión de temas específicos.', NOW(), NOW()),
+    ('DIPLOMADO', 'Programa de formación continua de larga duración con certificación.', NOW(), NOW()),
+    ('CONGRESO', 'Evento académico de gran escala con múltiples ponencias y actividades.', NOW(), NOW()),
+    ('CHARLA', 'Presentación informal sobre un tema específico de corta duración.', NOW(), NOW()),
+    ('WEBINAR', 'Seminario o conferencia realizada en línea.', NOW(), NOW())
+ON CONFLICT (nombre_actividad) DO NOTHING;
+
+-- 6) Insertar estados de actividad
+INSERT INTO estado_actividad (codigo, etiqueta)
+VALUES 
+    ('BORRADOR', 'Borrador'),
+    ('PUBLICADO', 'Publicado'),
+    ('EN_CURSO', 'En Curso'),
+    ('FINALIZADO', 'Finalizado'),
+    ('CANCELADO', 'Cancelado'),
+    ('SUSPENDIDO', 'Suspendido')
+ON CONFLICT (codigo) DO NOTHING;
+
+-- 7) Insertar actividad de ejemplo (solo si el organizador existe y no tiene duplicados)
 INSERT INTO actividad (
     titulo, descripcion, fecha_inicio, fecha_fin, hora_inicio, hora_fin,
-    estado_actividad_id, id_usuario_rol, tipo_actividad_id, lugar, created_at, updated_at
+    estado_actividad_id, id_usuario_rol, tipo_actividad_id, lugar, 
+    co_organizador, sponsor, banner_url, created_at, updated_at
 )
 SELECT 
     'Curso de Introducción a la Programación',
@@ -158,15 +159,41 @@ SELECT
     ur.id_usuario_rol,
     ta.id_tipo_actividad,
     'Aula Virtual 101',
+    'Co-Organizador Ejemplo',
+    'Sponsor Ejemplo',
+    'https://example.com/banner.jpg',
     NOW(),
     NOW()
-FROM estado_actividad ea, usuario_rol ur, tipo_actividad ta, usuario u, rol r
+FROM estado_actividad ea
+CROSS JOIN usuario_rol ur
+CROSS JOIN tipo_actividad ta
 WHERE ea.codigo = 'BORRADOR'
   AND ta.nombre_actividad = 'CURSO'
-  AND ur.usuario_id = u.id_usuario
-  AND ur.rol_id = r.id_rol
-  AND u.correo = 'organizador@sigea.unas.edu.pe'
-  AND r.nombre_rol = 'ORGANIZADOR'
-LIMIT 1;
+  AND ur.usuario_id = (SELECT id_usuario FROM usuario WHERE correo = 'organizador@sigea.unas.edu.pe')
+  AND ur.rol_id = (SELECT id_rol FROM rol WHERE nombre_rol = 'ORGANIZADOR')
+  AND NOT EXISTS (
+      SELECT 1 FROM actividad 
+      WHERE titulo = 'Curso de Introducción a la Programación'
+        AND id_usuario_rol = ur.id_usuario_rol
+  );
 
 
+-- Verificar usuarios creados
+SELECT u.id_usuario, u.correo, u.nombres, u.apellidos 
+FROM usuario u 
+WHERE u.correo IN ('administrador@sigea.unas.edu.pe', 'organizador@sigea.unas.edu.pe', 'participante@sigea.unas.edu.pe');
+
+-- Verificar relaciones usuario-rol sin duplicados
+SELECT ur.id_usuario_rol, u.correo, r.nombre_rol, COUNT(*) as cantidad
+FROM usuario_rol ur
+JOIN usuario u ON ur.usuario_id = u.id_usuario
+JOIN rol r ON ur.rol_id = r.id_rol
+GROUP BY ur.id_usuario_rol, u.correo, r.nombre_rol
+HAVING COUNT(*) > 1;
+
+-- Verificar actividades creadas
+SELECT a.id_actividad, a.titulo, u.correo, r.nombre_rol
+FROM actividad a
+JOIN usuario_rol ur ON a.id_usuario_rol = ur.id_usuario_rol
+JOIN usuario u ON ur.usuario_id = u.id_usuario
+JOIN rol r ON ur.rol_id = r.id_rol;

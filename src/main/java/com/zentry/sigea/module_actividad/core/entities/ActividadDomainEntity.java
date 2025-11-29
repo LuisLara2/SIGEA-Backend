@@ -12,6 +12,8 @@ public class ActividadDomainEntity {
     private LocalDate fechaFin;
     private LocalTime horaInicio;
     private LocalTime horaFin;
+    private String coOrganizador;
+    private String sponsor;
 
     // Aqui no seria necesario llamar a una entidad, solo necesitaria esta info para poder operar
     private EstadoActividadDomainEntity estadoActividadDomainEntity;
@@ -148,6 +150,8 @@ public class ActividadDomainEntity {
         String organizadorId,
         TipoActividadDomainEntity tipoActividadDomainEntity, 
         String lugar,
+        String coOrganizador,
+        String sponsor, 
         String bannerUrl,
         String numeroYape
     ) {
@@ -166,9 +170,10 @@ public class ActividadDomainEntity {
         actividadDomainEntity.setOrganizadorId(organizadorId);
         actividadDomainEntity.setTipoActividadDomainEntity(tipoActividadDomainEntity);
         actividadDomainEntity.setLugar(lugar);
+        actividadDomainEntity.setCoOrganizador(coOrganizador);
+        actividadDomainEntity.setSponsor(sponsor);
         actividadDomainEntity.setBannerUrl(bannerUrl);
         actividadDomainEntity.setNumeroYape(numeroYape);
-        
         actividadDomainEntity.setCreatedAt(now);
         actividadDomainEntity.setUpdatedAt(now);
 
@@ -214,6 +219,22 @@ public class ActividadDomainEntity {
 
     public long getDurationInDays() {
         return java.time.temporal.ChronoUnit.DAYS.between(fechaInicio, fechaFin) + 1;
+    }
+
+    public String getCoOrganizador() {
+        return coOrganizador;
+    }
+
+    public void setCoOrganizador(String coOrganizador) {
+        this.coOrganizador = coOrganizador;
+    }
+
+    public String getSponsor() {
+        return sponsor;
+    }
+
+    public void setSponsor(String sponsor) {
+        this.sponsor = sponsor;
     }
 
 }

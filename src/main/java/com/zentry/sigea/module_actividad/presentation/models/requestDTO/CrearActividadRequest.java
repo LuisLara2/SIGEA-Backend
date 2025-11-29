@@ -29,6 +29,8 @@ public class CrearActividadRequest {
     private String organizadorId;
     private String tipoActividadId;
     private String ubicacion;
+    private String coOrganizador;
+    private String sponsor;
     private String bannerUrl;
     private String numeroYape;
 
@@ -46,6 +48,8 @@ public class CrearActividadRequest {
         String organizadorId, 
         String tipoActividadId, 
         String ubicacion,
+        String coOrganizador,
+        String sponsor,
         String bannerUrl,
         String numeroYape
     ) {
@@ -59,6 +63,8 @@ public class CrearActividadRequest {
         this.organizadorId = organizadorId;
         this.tipoActividadId = tipoActividadId;
         this.ubicacion = ubicacion;
+        this.coOrganizador = coOrganizador;
+        this.sponsor = sponsor;
         this.bannerUrl = bannerUrl;
         this.numeroYape = numeroYape;
     }
@@ -155,5 +161,21 @@ public class CrearActividadRequest {
 
     public void setNumeroYape(String numeroYape) {
         this.numeroYape = numeroYape;
+    }
+
+    public String getCoOrganizador() {
+        return coOrganizador;
+    }
+
+    public void setCoOrganizador(String coOrganizador) {
+        this.coOrganizador = coOrganizador;
+    }
+
+    public String getSponsor() {
+        return sponsor;
+    }
+
+    public void setSponsor(String sponsor) {
+        this.sponsor = sponsor;
     }
 }

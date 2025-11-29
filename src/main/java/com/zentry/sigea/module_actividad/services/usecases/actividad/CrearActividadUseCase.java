@@ -61,6 +61,8 @@ public class CrearActividadUseCase {
             request.getOrganizadorId(),
             tipoActividad,
             request.getUbicacion(),
+            request.getCoOrganizador(),
+            request.getSponsor(),
             request.getBannerUrl(),
             request.getNumeroYape()
         );

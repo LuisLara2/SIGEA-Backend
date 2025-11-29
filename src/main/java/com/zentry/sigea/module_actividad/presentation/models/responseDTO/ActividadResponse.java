@@ -30,6 +30,8 @@ public class ActividadResponse {
     private String organizadorId;
     private TipoActividadResponse tipoActividad;
     private String ubicacion;
+    private String coOrganizador;
+    private String sponsor;
     private String bannerUrl;
     private String numeroYape;
     private LocalDateTime fechaCreacion;
@@ -56,6 +58,8 @@ public class ActividadResponse {
         String organizadorId, 
         TipoActividadResponse tipoActividad, 
         String ubicacion,
+        String coOrganizador,
+        String sponsor,
         String bannerUrl,
         String numeroYape,
         LocalDateTime fechaCreacion, 
@@ -76,6 +80,8 @@ public class ActividadResponse {
         this.organizadorId = organizadorId;
         this.tipoActividad = tipoActividad;
         this.ubicacion = ubicacion;
+        this.coOrganizador = coOrganizador;
+        this.sponsor = sponsor;
         this.bannerUrl = bannerUrl;
         this.numeroYape = numeroYape;
         this.fechaCreacion = fechaCreacion;
@@ -102,6 +108,8 @@ public class ActividadResponse {
             actividadDomainEntity.getOrganizadorId(),
             TipoActividadResponse.fromEntity(actividadDomainEntity.getTipoActividadDomainEntity()),
             actividadDomainEntity.getLugar(),
+            actividadDomainEntity.getCoOrganizador(),
+            actividadDomainEntity.getSponsor(),
             actividadDomainEntity.getBannerUrl(),
             actividadDomainEntity.getNumeroYape(),
             actividadDomainEntity.getCreatedAt(),
@@ -262,5 +270,21 @@ public class ActividadResponse {
 
     public void setDuracionEnDias(long duracionEnDias) {
         this.duracionEnDias = duracionEnDias;
+    }
+
+    public String getSponsor() {
+        return sponsor;
+    }
+
+    public void setSponsor(String sponsor) {
+        this.sponsor = sponsor;
+    }
+
+    public String getCoOrganizador() {
+        return coOrganizador;
+    }
+
+    public void setCoOrganizador(String coOrganizador) {
+        this.coOrganizador = coOrganizador;
     }
 }

@@ -13,6 +13,8 @@ public class ActividadRequest {
     private String descripcion;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
+    private String coOrganizador;
+    private String sponsor;
     private EstadoActividadDomainEntity estado;
     private String organizadorId;
     private TipoActividadDomainEntity tipoActividad;
@@ -26,6 +28,8 @@ public class ActividadRequest {
         String descripcion, 
         LocalDate fechaInicio, 
         LocalDate fechaFin, 
+        String coOrganizador,
+        String sponsor,
         EstadoActividadDomainEntity estado, 
         String organizadorId, 
         TipoActividadDomainEntity tipoActividad, 
@@ -103,5 +107,21 @@ public class ActividadRequest {
 
     public void setUbicacion(String ubicacion) {
         this.ubicacion = ubicacion;
+    }
+
+    public String getCoOrganizador() {
+        return coOrganizador;
+    }
+
+    public void setCoOrganizador(String coOrganizador) {
+        this.coOrganizador = coOrganizador;
+    }
+
+    public String getSponsor() {
+        return sponsor;
+    }
+
+    public void setSponsor(String sponsor) {
+        this.sponsor = sponsor;
     }
 }
