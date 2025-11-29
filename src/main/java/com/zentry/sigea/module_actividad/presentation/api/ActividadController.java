@@ -55,9 +55,10 @@ public class ActividadController {
             return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
 
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("Error de validación: " + e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error interno: " + e.getMessage());
         }
     }
 
@@ -69,9 +70,20 @@ public class ActividadController {
         summary = "Obtener una actividad por su ID"
     )
     public ResponseEntity<ActividadResponse> obtenerActividad(@PathVariable String id) {
-        return actividadService.obtenerActividadPorId(id) != null ? 
-                    ResponseEntity.ok(actividadService.obtenerActividadPorId(id)) : 
-                    ResponseEntity.notFound().build();
+
+        // Lista todas las actividades y filtra por ID
+        List<ActividadResponse> actividad = actividadService.listarActividades();
+
+        try {
+            ActividadResponse actividadEncontrada = actividad.stream()
+            .filter(a -> a.getId().equals(id))
+            .findFirst()
+            .orElse(null);
+            return ResponseEntity.ok(actividadEncontrada); 
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }   
+
     }
 
     /**
@@ -117,7 +129,7 @@ public class ActividadController {
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        } 
     }
 
     /**
@@ -131,14 +143,15 @@ public class ActividadController {
             name = "administradorJWT"
             )
     )
-    public ResponseEntity<ActividadResponse> actualizarActividad(@PathVariable String id, @RequestBody ActividadRequest request) {
+    public ResponseEntity<String> actualizarActividad(@PathVariable String id, @RequestBody ActividadRequest request) {
         try {
-            ActividadResponse actividadActualizada = actividadService.actualizarActividad(id, request);
+            String actividadActualizada = actividadService.actualizarActividad(id, request);
             return ResponseEntity.ok(actividadActualizada);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error interno: " + e.getMessage());
         }
     }
 }

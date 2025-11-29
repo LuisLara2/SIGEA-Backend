@@ -1,6 +1,7 @@
 package com.zentry.sigea.module_usuarios.infrastructure.database.entities;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import com.zentry.sigea.module_usuarios.infrastructure.database.embedded.UsuarioRolId;
 
@@ -33,6 +34,10 @@ public class UsuarioRolEntity {
     @EmbeddedId
     private UsuarioRolId id = new UsuarioRolId(); 
     // Nota: SIEMPRE INICIALIZA LA CLASE EMBEDDED COMO SE VE ARRIBA.
+    @Column(name = "id_usuario_rol" , updatable = false , nullable = false , 
+        columnDefinition = "UUID DEFAULT gen_random_uuid()"
+    )
+    private UUID usuarioRolId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("idUsuario")

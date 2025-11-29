@@ -3,6 +3,7 @@ package com.zentry.sigea.security;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -31,17 +32,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         HttpServletResponse response , 
         FilterChain filterChain
     ) throws ServletException , IOException{        
-        // Saltar validación JWT para rutas públicas
-        String path = request.getRequestURI();
-        if (path.startsWith("/api/v1/actividades") || 
-            path.startsWith("/api/v1/notificaciones") ||
-            path.startsWith("/api/v1/inscripciones") ||
-            path.startsWith("/api/v1/sesiones") ||
-            path.contains("/auth/")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-        
         String header = request.getHeader("Authorization");
 
         if(header != null && header.startsWith("Bearer ")){
@@ -64,8 +54,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } catch (Exception e) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED , "Token invalido");
-                return;
+                // No enviar error aquí, dejar que Spring Security maneje la autenticación
+                // El token puede ser inválido pero la ruta puede ser pública
             }
         }
 

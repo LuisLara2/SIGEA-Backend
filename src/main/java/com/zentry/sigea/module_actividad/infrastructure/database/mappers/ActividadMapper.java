@@ -2,13 +2,13 @@ package com.zentry.sigea.module_actividad.infrastructure.database.mappers;
 
 import com.zentry.sigea.module_actividad.core.entities.ActividadDomainEntity;
 import com.zentry.sigea.module_actividad.infrastructure.database.entities.ActividadEntity;
-import com.zentry.sigea.module_usuarios.infrastructure.database.entities.UsuarioEntity;
+import com.zentry.sigea.module_usuarios.infrastructure.database.entities.UsuarioRolEntity;
 
 public class ActividadMapper {
 
     public static ActividadEntity toEntity(
         ActividadDomainEntity actividadDomainEntity ,
-        UsuarioEntity usuarioEntity
+        UsuarioRolEntity usuarioRolEntity
     ){
         ActividadEntity actividadEntity = new ActividadEntity();
         
@@ -26,7 +26,7 @@ public class ActividadMapper {
                 actividadDomainEntity.getEstadoActividadDomainEntity()
             )
         );
-        actividadEntity.setOrganizador(usuarioEntity);
+        actividadEntity.setOrganizador(usuarioRolEntity);
         actividadEntity.setTipoActividad(
             TipoActividadMapper.toEntity(
                 actividadDomainEntity.getTipoActividadDomainEntity()
@@ -61,8 +61,9 @@ public class ActividadMapper {
                 actividadEntity.getTipoActividad()
             )
         );
+        // Usamos el usuarioRolId como organizadorId
         actividadDomainEntity.setOrganizadorId(
-            actividadEntity.getOrganizador().getId().toString()
+            actividadEntity.getOrganizador().getUsuarioRolId().toString()
         );
         actividadDomainEntity.setLugar(actividadEntity.getLugar());
         actividadDomainEntity.setBannerUrl(actividadEntity.getBannerUrl());

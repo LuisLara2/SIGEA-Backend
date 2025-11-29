@@ -5,15 +5,14 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.hibernate.id.uuid.UuidValueGenerator;
 import org.springframework.stereotype.Repository;
 
+import com.zentry.sigea.module_actividad.infrastructure.database.entities.ActividadEntity;
+import com.zentry.sigea.module_actividad.infrastructure.repository.ActividadJPARepository;
 import com.zentry.sigea.module_inscripciones.core.entities.InscripcionDomainEntity;
 import com.zentry.sigea.module_inscripciones.core.repositories.IInscripcionRepository;
 import com.zentry.sigea.module_inscripciones.infrastructure.database.mappers.InscripcionMapper;
 import com.zentry.sigea.module_inscripciones.infrastructure.repository.InscripcionJPARepository;
-import com.zentry.sigea.module_actividad.infrastructure.database.entities.ActividadEntity;
-import com.zentry.sigea.module_actividad.infrastructure.repository.ActividadJPARepository;
 import com.zentry.sigea.module_usuarios.infrastructure.database.entities.UsuarioEntity;
 import com.zentry.sigea.module_usuarios.infrastructure.repositories.UsuarioJPARepository;
 

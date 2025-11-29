@@ -5,7 +5,10 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.UUID;
 
-import com.zentry.sigea.module_usuarios.infrastructure.database.entities.UsuarioEntity;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import com.zentry.sigea.module_usuarios.infrastructure.database.entities.UsuarioRolEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,7 +16,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -38,7 +40,6 @@ public class ActividadEntity {
     @Column(name = "titulo" , nullable = false , length = 150)
     private String titulo;
 
-    @Lob
     @Column(name = "descripcion" , columnDefinition = "TEXT" , nullable = true)
     private String descripcion;
 
@@ -59,8 +60,9 @@ public class ActividadEntity {
     private EstadoActividadEntity estadoActividad;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_usuario" , nullable = false)
-    private UsuarioEntity organizador;
+    @JoinColumn(name = "id_usuario_rol", referencedColumnName = "id_usuario_rol", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private UsuarioRolEntity organizador;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tipo_actividad_id" , nullable = false)

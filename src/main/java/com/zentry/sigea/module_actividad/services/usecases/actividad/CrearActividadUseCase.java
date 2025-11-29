@@ -181,19 +181,25 @@ public class CrearActividadUseCase {
 
     /**
      * Valida el número de Yape (formato de Perú: 9 dígitos comenzando con 9)
+     * Acepta formatos: 932720078, 9 3272 0078, +51932720078, +51 932720078
      */
     private void validateNumeroYape(String numeroYape) {
         if (numeroYape == null || numeroYape.trim().isEmpty()) {
             return; // El número de Yape es opcional
         }
 
-        // Eliminar espacios y guiones
-        String cleanNumber = numeroYape.replaceAll("[\\s-]", "");
+        // Eliminar espacios, guiones y el prefijo +51
+        String cleanNumber = numeroYape.replaceAll("[\\s\\-+]", "");
+        
+        // Si comienza con 51 (código de Perú), quitarlo
+        if (cleanNumber.startsWith("51") && cleanNumber.length() == 11) {
+            cleanNumber = cleanNumber.substring(2);
+        }
 
         // Validar que tenga 9 dígitos y comience con 9 (formato peruano)
         if (!cleanNumber.matches("^9\\d{8}$")) {
             throw new IllegalArgumentException(
-                "El número de Yape debe ser un número de celular peruano válido (9 dígitos comenzando con 9)"
+                "El número de Yape debe ser un número de celular peruano válido (9 dígitos comenzando con 9). Ejemplo: 932720078 o +51932720078"
             );
         }
     }
