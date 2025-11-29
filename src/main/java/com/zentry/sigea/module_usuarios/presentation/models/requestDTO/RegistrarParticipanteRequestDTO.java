@@ -18,6 +18,10 @@ public class RegistrarParticipanteRequestDTO {
     
     @NotBlank(message = "Debe colocar una contraseña.")
     private String password;
+
+    @NotBlank(message = "Debe especificar el DNI.")
+    @Size(max = 25 , message = "El DNI no debe tener mas de 25 caracteres.")
+    private String dni;
     
     @NotBlank(message = "Debe especificar un numero de telefono.")
     @Size(max = 25 , message = "El numero de telefono no debe tener mas de 25 caracteres.")

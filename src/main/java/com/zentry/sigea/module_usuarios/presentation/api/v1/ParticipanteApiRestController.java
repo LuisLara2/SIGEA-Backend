@@ -106,8 +106,8 @@ public class ParticipanteApiRestController {
 
     @PostMapping("/registrar")
     @Operation(
-        summary = "Registrar un usuario participante.",
-        tags = {"Registrar"}
+        summary = "Crear un usuario participante.",
+        tags = {"Crear"}
     )
     public ResponseEntity<GeneralResponseDTO<?>> registrarParticipante(
         @Valid @RequestBody RegistrarParticipanteRequestDTO registrarParticipanteRequestDTO , 

@@ -9,6 +9,7 @@ public class UsuarioDomainEntity {
     private String apellidos;
     private String correo;
     private String passwordHash;
+    private String dni;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     
@@ -48,6 +49,13 @@ public class UsuarioDomainEntity {
     }
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
+    }
+
+    public String getDni() {
+        return dni;
+    }
+    public void setDni(String dni) {
+        this.dni = dni;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -93,6 +101,7 @@ public class UsuarioDomainEntity {
         String apellidos,
         String correo,
         String passwordHash,
+        String dni,
         String telefono,
         String extensionTelefonica
     ) {
@@ -104,6 +113,7 @@ public class UsuarioDomainEntity {
         usuarioDomainEntity.setApellidos(apellidos);
         usuarioDomainEntity.setCorreo(correo); 
         usuarioDomainEntity.setPasswordHash(passwordHash);
+        usuarioDomainEntity.setDni(dni);
         usuarioDomainEntity.setCreatedAt(nowDateTime);
         usuarioDomainEntity.setUpdatedAt(nowDateTime);
         usuarioDomainEntity.setTelefono(telefono);

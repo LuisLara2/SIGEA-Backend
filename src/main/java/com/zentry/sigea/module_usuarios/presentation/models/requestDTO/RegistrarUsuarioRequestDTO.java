@@ -3,6 +3,7 @@ package com.zentry.sigea.module_usuarios.presentation.models.requestDTO;
 import java.util.List;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -25,6 +26,10 @@ public class RegistrarUsuarioRequestDTO {
     @NotNull(message = "Debe colocar una contraseña.")
     @Size(min = 8 , max = 100 , message = "La contraseña debe tener entre 8 y 100 caracteres de longitud.")
     private String password;
+
+    @NotBlank(message = "Debe especificar el DNI.")
+    @Size(max = 25 , message = "El DNI no debe tener mas de 25 caracteres.")
+    private String dni;
 
     @NotNull(message = "Debe proporcionar un numero de telefono.")
     @Size(min = 7 , max = 25 , message = "El numero de telefono debe tener entre 7 y 25 digitos.")
@@ -63,6 +68,13 @@ public class RegistrarUsuarioRequestDTO {
     }
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getDni() {
+        return dni;
+    }
+    public void setDni(String dni) {
+        this.dni = dni;
     }
 
     public String getTelefono() {

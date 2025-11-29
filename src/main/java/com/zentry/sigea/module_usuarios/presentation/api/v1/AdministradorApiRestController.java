@@ -72,7 +72,7 @@ public class AdministradorApiRestController {
     @PostMapping("/registrar")
     @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     @Operation(
-        summary = "Registrar usuario",
+        summary = "Crear usuario con cualquier rol",
         security = @SecurityRequirement(
             name = "administradorJWT"
             ),

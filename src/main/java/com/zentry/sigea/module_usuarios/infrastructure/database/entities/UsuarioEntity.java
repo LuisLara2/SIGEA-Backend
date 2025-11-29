@@ -1,5 +1,7 @@
 package com.zentry.sigea.module_usuarios.infrastructure.database.entities;
 
+import static org.junit.Assert.fail;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -38,6 +40,9 @@ public class UsuarioEntity {
     
     @Column(name = "password_hash" , nullable = false , length = 255)
     private String passwordHash;
+
+    @Column(name = "dni" , nullable = false , unique = true , length = 25)
+    private String dni;
 
     @Column(name = "created_at" , nullable = false , columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt = LocalDateTime.now();

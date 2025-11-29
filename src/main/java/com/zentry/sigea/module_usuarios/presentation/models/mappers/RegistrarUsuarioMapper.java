@@ -9,7 +9,8 @@ public class RegistrarUsuarioMapper {
             registrarUsuarioRequestDTO.getNombres(), 
             registrarUsuarioRequestDTO.getApellidos(), 
             registrarUsuarioRequestDTO.getCorreo(), 
-            registrarUsuarioRequestDTO.getPassword(), 
+            registrarUsuarioRequestDTO.getPassword(),
+            registrarUsuarioRequestDTO.getDni(),
             registrarUsuarioRequestDTO.getTelefono(), 
             registrarUsuarioRequestDTO.getExtensionTelefonica()
         );
