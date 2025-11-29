@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.zentry.sigea.module_actividad.services.usecases.actividad.EliminarActividadUseCase;
 import com.zentry.sigea.module_inscripciones.presentation.models.mappers.CrearInscripcionMapper;
@@ -25,15 +23,12 @@ import com.zentry.sigea.module_inscripciones.services.InscripcionService;
 import com.zentry.sigea.module_usuarios.presentation.models.mappers.RegistrarParticipanteMapper;
 import com.zentry.sigea.module_usuarios.presentation.models.requestDTO.RegistrarParticipanteRequestDTO;
 import com.zentry.sigea.module_usuarios.presentation.models.responseDTO.GeneralResponseDTO;
-import com.zentry.sigea.module_usuarios.services.EnviarCodigoVerificacionPorEmailService;
 import com.zentry.sigea.module_usuarios.services.ParticipanteService;
-import com.zentry.sigea.module_usuarios.services.ValidarCodigoEnviadoService;
 import com.zentry.sigea.security.UsuarioAuthInfo;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 
 import org.springframework.web.bind.annotation.GetMapping;
 

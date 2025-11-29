@@ -66,10 +66,4 @@ public class TokenUsuarioService {
             throw new RuntimeException("El token enviado no coincide con el actual en la BD.");
         }
     }
-
-    public void deleteExpiredTokens() {
-        Instant now = Instant.now();
-
-        tokenUsuarioRepository.deleteExpiredTokens(now);
-    }
 }

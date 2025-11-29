@@ -20,9 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.zentry.sigea.module_informe.config.InformeMappingConfig;
 import com.zentry.sigea.module_usuarios.presentation.models.requestDTO.LoginUsuarioRequestDTO;
 import com.zentry.sigea.module_usuarios.presentation.models.responseDTO.GeneralResponseDTO;
-import com.zentry.sigea.module_usuarios.services.EnviarCodigoVerificacionPorEmailService;
 import com.zentry.sigea.module_usuarios.services.UsuarioService;
-import com.zentry.sigea.module_usuarios.services.ValidarCodigoEnviadoService;
 import com.zentry.sigea.security.UsuarioAuthInfo;
 
 import io.swagger.v3.oas.annotations.Operation;
