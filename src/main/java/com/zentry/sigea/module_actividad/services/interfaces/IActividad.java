@@ -8,7 +8,7 @@ import com.zentry.sigea.module_actividad.presentation.models.responseDTO.Activid
 
 public interface IActividad {
     public String crearActividad(CrearActividadRequest request);
-    public ActividadResponse actualizarActividad(String id, ActividadRequest request);
+    public String actualizarActividad(String id, ActividadRequest request);
     public void eliminarActividad(String id);
     public ActividadResponse obtenerActividadPorId(String id);
     public List<ActividadResponse> obtenerActividadesPorTipo(String tipoActividadId);
