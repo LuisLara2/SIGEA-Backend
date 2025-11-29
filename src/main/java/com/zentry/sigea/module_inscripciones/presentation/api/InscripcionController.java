@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,8 @@ import com.zentry.sigea.module_inscripciones.services.InscripcionService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 
 /**
  * Controlador REST para gestionar inscripciones
@@ -28,6 +31,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 @RestController
 @RequestMapping("/api/v1/inscripciones")
 @CrossOrigin(origins = "*")
+@Tag(name = "Inscripciones", description = "Operaciones relacionadas con inscripciones")
 public class InscripcionController {
     private final InscripcionService inscripcionService;
 
@@ -76,6 +80,28 @@ public class InscripcionController {
     public ResponseEntity<List<InscripcionResponse>> listarInscripciones() {
         List<InscripcionResponse> inscripciones = inscripcionService.listarInscripciones();
         return ResponseEntity.ok(inscripciones);
+    }
+
+    /*
+    * Crear inscripcion se maneja desde el servicio de actividades
+    */
+    @PostMapping("/create")
+    @PreAuthorize("hasAnyRole('ROLE_PARTICIPANTE', 'ROLE_ORGANIZADOR', 'ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Crear una nueva inscipcion.",
+        security = {
+            @SecurityRequirement(name = "administradorJWT"),
+            @SecurityRequirement(name = "organizadorJWT"),
+            @SecurityRequirement(name = "participanteJWT")
+        }
+    )
+    public ResponseEntity<InscripcionResponse> crearInscripcion(@RequestBody InscripcionRequest inscripcionRequest) {
+        try {
+            InscripcionResponse inscripcion = inscripcionService.crearInscripcion(inscripcionRequest);
+            return ResponseEntity.status(HttpStatus.CREATED).body(inscripcion);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     /**

@@ -3,6 +3,7 @@ package com.zentry.sigea.security;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

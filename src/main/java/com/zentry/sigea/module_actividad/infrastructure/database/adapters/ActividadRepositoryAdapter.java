@@ -12,35 +12,42 @@ import com.zentry.sigea.module_actividad.core.entities.ActividadDomainEntity;
 import com.zentry.sigea.module_actividad.core.repositories.IActividadRespository;
 import com.zentry.sigea.module_actividad.infrastructure.database.mappers.ActividadMapper;
 import com.zentry.sigea.module_actividad.infrastructure.repository.ActividadJPARepository;
-import com.zentry.sigea.module_usuarios.infrastructure.database.entities.UsuarioEntity;
-import com.zentry.sigea.module_usuarios.infrastructure.repositories.UsuarioJPARepository;
+import com.zentry.sigea.module_usuarios.infrastructure.database.entities.UsuarioRolEntity;
+import com.zentry.sigea.module_usuarios.infrastructure.repositories.UsuarioRolJPARepository;
 
 @Repository
 public class ActividadRepositoryAdapter implements IActividadRespository {
 
     private final ActividadJPARepository actividadJPARepository;
-    private final UsuarioJPARepository usuarioJPARepository;
+    private final UsuarioRolJPARepository usuarioRolJPARepository;
 
     public ActividadRepositoryAdapter(
             ActividadJPARepository actividadJPARepository,
-            UsuarioJPARepository usuarioJPARepository) {
+            UsuarioRolJPARepository usuarioRolJPARepository) {
         this.actividadJPARepository = actividadJPARepository;
-        this.usuarioJPARepository = usuarioJPARepository;
+        this.usuarioRolJPARepository = usuarioRolJPARepository;
     }
 
     public boolean save(ActividadDomainEntity actividadDomainEntity) {
         try {
-            UsuarioEntity usuarioEntity = usuarioJPARepository.findById(
+            UsuarioRolEntity usuarioRolEntity = usuarioRolJPARepository.findByUsuarioRolId(
                     UUID.fromString(actividadDomainEntity.getOrganizadorId())).orElse(null);
+
+            if (usuarioRolEntity == null) {
+                throw new RuntimeException("No se encontró el usuario con rol especificado");
+            }
 
             actividadJPARepository.save(
                     ActividadMapper.toEntity(
                             actividadDomainEntity,
-                            usuarioEntity));
+                            usuarioRolEntity));
 
             return true;
         } catch (Exception e) {
-            return false;
+            // Log del error para debugging
+            System.err.println("Error al guardar actividad: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Error al guardar actividad: " + e.getMessage(), e);
         }
     }
 
@@ -50,7 +57,7 @@ public class ActividadRepositoryAdapter implements IActividadRespository {
     }
 
     public List<ActividadDomainEntity> findByOrganizadorId(String organizadorId) {
-        return actividadJPARepository.findByOrganizadorId(
+        return actividadJPARepository.findByOrganizadorUsuarioRolId(
                 UUID.fromString(organizadorId)).stream()
                 .map(ActividadMapper::toDomain)
                 .collect(Collectors.toList());

@@ -2,6 +2,7 @@ package com.zentry.sigea.module_usuarios.infrastructure.repositories;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +14,9 @@ import com.zentry.sigea.module_usuarios.infrastructure.database.entities.Usuario
 
 public interface UsuarioRolJPARepository extends JpaRepository<UsuarioRolEntity , UsuarioRolId>{
     public List<UsuarioRolEntity> findById_IdUsuario(UUID id);
+    
+    // Buscar por el UUID único de usuario_rol
+    public Optional<UsuarioRolEntity> findByUsuarioRolId(UUID usuarioRolId);
 
     // El naming se basa en los nombres de los atributos
     // Spring Data JPA genera consultas basándose en la estructura de tus clases de entidad, 

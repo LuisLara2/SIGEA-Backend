@@ -20,12 +20,15 @@ import com.zentry.sigea.module_inscripciones.services.EstadoInscripcionService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 /**
  * Controlador REST para gestionar estados de inscripción
  */
 @RestController
 @RequestMapping("/api/v1/estados-inscripcion")
 @CrossOrigin(origins = "*")
+@Tag(name = "Estados de Inscripción", description = "Operaciones relacionadas con estados de inscripción")
 public class EstadoInscripcionController {
     private final EstadoInscripcionService estadoInscripcionService;
 

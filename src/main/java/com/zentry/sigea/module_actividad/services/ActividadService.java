@@ -9,16 +9,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.zentry.sigea.module_actividad.core.entities.ActividadDomainEntity;
-import com.zentry.sigea.module_notificaciones.events.domain.ComunicacionPublicadaEvent;
-import com.zentry.sigea.module_notificaciones.events.domain.ActividadCreadaEvent;
 import com.zentry.sigea.module_actividad.core.repositories.IActividadRespository;
 import com.zentry.sigea.module_actividad.presentation.models.requestDTO.ActividadRequest;
 import com.zentry.sigea.module_actividad.presentation.models.requestDTO.CrearActividadRequest;
 import com.zentry.sigea.module_actividad.presentation.models.responseDTO.ActividadResponse;
 import com.zentry.sigea.module_actividad.services.interfaces.IActividad;
-import com.zentry.sigea.module_actividad.services.usecases.actividad.CrearActividadUseCase;
 import com.zentry.sigea.module_actividad.services.usecases.actividad.ActualizarActividadUseCase;
+import com.zentry.sigea.module_actividad.services.usecases.actividad.CrearActividadUseCase;
 import com.zentry.sigea.module_actividad.services.usecases.actividad.EliminarActividadUseCase;
+import com.zentry.sigea.module_notificaciones.events.domain.ActividadCreadaEvent;
+import com.zentry.sigea.module_notificaciones.events.domain.ComunicacionPublicadaEvent;
 import com.zentry.sigea.module_usuarios.infrastructure.repositories.UsuarioJPARepository;
 
 /**
@@ -82,7 +82,7 @@ public class ActividadService implements IActividad {
                     LocalDateTime.now()
                 ));
             }
-        }
+        } 
         
         return actividadId;
     }
@@ -103,9 +103,12 @@ public class ActividadService implements IActividad {
 
     @Override
     @Transactional
-    public ActividadResponse actualizarActividad(String id, ActividadRequest request) {
+    public String actualizarActividad(String id, ActividadRequest request) {
         ActividadDomainEntity actividad = actualizarActividadUseCase.execute(id, request);
-        return ActividadResponse.fromEntity(actividad);
+        if (actividad == null) {
+            throw new IllegalArgumentException("Actividad no encontrada con ID: " + id);
+        }
+        return actividad.getActividadId() != null ? actividad.getActividadId() : null;
     }
 
     @Override
