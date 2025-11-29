@@ -60,6 +60,8 @@ public class ActividadMappingConfig {
                 request.getDescripcion(),
                 request.getFechaInicio(),
                 request.getFechaFin(),
+                request.getCoOrganizador(),
+                request.getSponsor(),
                 estado,
                 request.getOrganizadorId(),
                 tipoActividad,
