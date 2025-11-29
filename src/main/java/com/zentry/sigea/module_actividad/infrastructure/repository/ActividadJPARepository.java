@@ -20,7 +20,10 @@ public interface ActividadJPARepository extends JpaRepository<ActividadEntity , 
         """
     )
     public List<UUID> findAllIds();
-    public List<ActividadEntity> findByOrganizadorId(UUID organizadorId);
+    
+    // Buscar por el id del usuario organizador
+    public List<ActividadEntity> findByOrganizadorId(UUID usuarioId);
+    
     public List<ActividadEntity> findByEstadoActividadId(UUID estadoActividadId);
     public List<ActividadEntity> findByTipoActividadId(UUID tipoActividadId);
     public List<ActividadEntity> findByFechaInicioBetween(LocalDate fechaInicio , LocalDate fechaFin);

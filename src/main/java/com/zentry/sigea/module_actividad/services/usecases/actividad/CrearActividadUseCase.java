@@ -45,6 +45,9 @@ public class CrearActividadUseCase {
         
         // Validaciones de negocio específicas del caso de uso
         validateBusinessRules(request);
+
+        // Validar número de Yape si se proporciona
+        validateNumeroYape(request.getNumeroYape());
         
         // Crear la entidad usando el factory method del dominio
         ActividadDomainEntity nuevaActividad = ActividadDomainEntity.create(
@@ -52,10 +55,16 @@ public class CrearActividadUseCase {
             request.getDescripcion(),
             request.getFechaInicio(),
             request.getFechaFin(),
+            request.getHoraInicio(),
+            request.getHoraFin(),
             estado,
             request.getOrganizadorId(),
             tipoActividad,
-            request.getUbicacion()
+            request.getUbicacion(),
+            request.getCoOrganizador(),
+            request.getSponsor(),
+            request.getBannerUrl(),
+            request.getNumeroYape()
         );
         
         // Guardar usando el repositorio directamente
@@ -107,9 +116,9 @@ public class CrearActividadUseCase {
         validateDateConflicts(request);
         
         // Validar que la fecha de inicio no sea muy lejana en el futuro
-        if (request.getFechaInicio().isAfter(LocalDate.now().plusYears(2))) {
+        if (request.getFechaInicio().isAfter(LocalDate.now().plusYears(1))) {
             throw new IllegalArgumentException(
-                "No se pueden crear actividades con más de 2 años de anticipación"
+                "No se pueden crear actividades con más de 1 año de anticipación"
             );
         }
     }
@@ -168,9 +177,37 @@ public class CrearActividadUseCase {
         }
     }
 
+
+    /*
+        *Permitir que se toquen en las fechas límite
+        *Solo hay conflicto si una actividad comienza ANTES de que termine la otra
+    */
     private boolean datesOverlap(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
-        return !end1.isBefore(start2) && !start1.isAfter(end2);
+    return start1.isEqual(start2) || (start1.isBefore(start2) && end1.isAfter(start2));
+    }
+
+    /**
+     * Valida el número de Yape (formato de Perú: 9 dígitos comenzando con 9)
+     * Acepta formatos: 932720078, 9 3272 0078, +51932720078, +51 932720078
+     */
+    private void validateNumeroYape(String numeroYape) {
+        if (numeroYape == null || numeroYape.trim().isEmpty()) {
+            return; // El número de Yape es opcional
+        }
+
+        // Eliminar espacios, guiones y el prefijo +51
+        String cleanNumber = numeroYape.replaceAll("[\\s\\-+]", "");
+        
+        // Si comienza con 51 (código de Perú), quitarlo
+        if (cleanNumber.startsWith("51") && cleanNumber.length() == 11) {
+            cleanNumber = cleanNumber.substring(2);
+        }
+
+        // Validar que tenga 9 dígitos y comience con 9 (formato peruano)
+        if (!cleanNumber.matches("^9\\d{8}$")) {
+            throw new IllegalArgumentException(
+                "El número de Yape debe ser un número de celular peruano válido (9 dígitos comenzando con 9). Ejemplo: 932720078 o +51932720078"
+            );
+        }
     }
 }
-
-

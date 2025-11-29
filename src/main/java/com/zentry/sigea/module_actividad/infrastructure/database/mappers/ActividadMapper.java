@@ -19,6 +19,8 @@ public class ActividadMapper {
         actividadEntity.setDescripcion(actividadDomainEntity.getDescripcion());
         actividadEntity.setFechaInicio(actividadDomainEntity.getFechaInicio());
         actividadEntity.setFechaFin(actividadDomainEntity.getFechaFin());
+        actividadEntity.setHoraInicio(actividadDomainEntity.getHoraInicio());
+        actividadEntity.setHoraFin(actividadDomainEntity.getHoraFin());
         actividadEntity.setEstadoActividad(
             EstadoActividadMapper.toEntity(
                 actividadDomainEntity.getEstadoActividadDomainEntity()
@@ -31,6 +33,10 @@ public class ActividadMapper {
             )
         );
         actividadEntity.setLugar(actividadDomainEntity.getLugar());
+        actividadEntity.setCoOrganizador(actividadDomainEntity.getCoOrganizador());
+        actividadEntity.setSponsor(actividadDomainEntity.getSponsor());
+        actividadEntity.setBannerUrl(actividadDomainEntity.getBannerUrl());
+        actividadEntity.setNumeroYape(actividadDomainEntity.getNumeroYape());
         actividadEntity.setCreatedAt(actividadDomainEntity.getCreatedAt());
         actividadEntity.setUpdatedAt(actividadDomainEntity.getUpdatedAt());
 
@@ -45,6 +51,8 @@ public class ActividadMapper {
         actividadDomainEntity.setDescripcion(actividadEntity.getDescripcion());
         actividadDomainEntity.setFechaInicio(actividadEntity.getFechaInicio());
         actividadDomainEntity.setFechaFin(actividadEntity.getFechaFin());
+        actividadDomainEntity.setHoraInicio(actividadEntity.getHoraInicio());
+        actividadDomainEntity.setHoraFin(actividadEntity.getHoraFin());
         actividadDomainEntity.setEstadoActividadDomainEntity(
             EstadoActividadMapper.toDomain(
                 actividadEntity.getEstadoActividad()
@@ -55,10 +63,15 @@ public class ActividadMapper {
                 actividadEntity.getTipoActividad()
             )
         );
+        // Usamos el usuarioId como organizadorId
         actividadDomainEntity.setOrganizadorId(
             actividadEntity.getOrganizador().getId().toString()
         );
         actividadDomainEntity.setLugar(actividadEntity.getLugar());
+        actividadDomainEntity.setCoOrganizador(actividadEntity.getCoOrganizador());
+        actividadDomainEntity.setSponsor(actividadEntity.getSponsor());
+        actividadDomainEntity.setBannerUrl(actividadEntity.getBannerUrl());
+        actividadDomainEntity.setNumeroYape(actividadEntity.getNumeroYape());
         actividadDomainEntity.setCreatedAt(actividadEntity.getCreatedAt());
         actividadDomainEntity.setUpdatedAt(actividadEntity.getUpdatedAt());
 

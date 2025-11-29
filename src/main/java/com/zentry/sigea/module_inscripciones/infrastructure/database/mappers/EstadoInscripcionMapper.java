@@ -34,6 +34,7 @@ public class EstadoInscripcionMapper {
 
         EstadoInscripcionDomainEntity estadoInscripcionDomainEntity = new EstadoInscripcionDomainEntity();
 
+        estadoInscripcionDomainEntity.setId(estadoInscripcionEntity.getId().toString());
         estadoInscripcionDomainEntity.setCodigo(estadoInscripcionEntity.getCodigo());
         estadoInscripcionDomainEntity.setEtiqueta(estadoInscripcionEntity.getEtiqueta());
         

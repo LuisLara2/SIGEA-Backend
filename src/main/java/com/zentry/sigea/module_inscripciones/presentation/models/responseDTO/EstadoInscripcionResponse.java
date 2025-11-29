@@ -6,13 +6,15 @@ import com.zentry.sigea.module_inscripciones.core.entities.EstadoInscripcionDoma
  * DTO para enviar datos de estado de inscripción al frontend
  */
 public class EstadoInscripcionResponse {
+    private String id;
     private String codigo;
     private String etiqueta;
 
     // Constructor vacío para Jackson
     public EstadoInscripcionResponse() {}
 
-    public EstadoInscripcionResponse(String codigo, String etiqueta) {
+    public EstadoInscripcionResponse(String id, String codigo, String etiqueta) {
+        this.id = id;
         this.codigo = codigo;
         this.etiqueta = etiqueta;
     }
@@ -22,6 +24,7 @@ public class EstadoInscripcionResponse {
      */
     public static EstadoInscripcionResponse fromEntity(EstadoInscripcionDomainEntity estadoInscripcionDomainEntity) {
         return new EstadoInscripcionResponse(
+            estadoInscripcionDomainEntity.getId(),
             estadoInscripcionDomainEntity.getCodigo(),
             estadoInscripcionDomainEntity.getEtiqueta()
         );
@@ -42,6 +45,14 @@ public class EstadoInscripcionResponse {
 
     public void setEtiqueta(String etiqueta) {
         this.etiqueta = etiqueta;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
 

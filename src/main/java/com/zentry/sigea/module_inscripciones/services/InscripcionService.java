@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.zentry.sigea.module_inscripciones.core.entities.InscripcionDomainEntity;
-import com.zentry.sigea.module_notificaciones.events.domain.InscripcionCreadaEvent;
 import com.zentry.sigea.module_inscripciones.core.repositories.IInscripcionRepository;
 import com.zentry.sigea.module_inscripciones.presentation.models.requestDTO.InscripcionRequest;
 import com.zentry.sigea.module_inscripciones.presentation.models.responseDTO.InscripcionResponse;
@@ -19,6 +18,7 @@ import com.zentry.sigea.module_inscripciones.services.usecases.inscripcion.Actua
 import com.zentry.sigea.module_inscripciones.services.usecases.inscripcion.CrearInscripcionUseCase;
 import com.zentry.sigea.module_inscripciones.services.usecases.inscripcion.EliminarInscripcionUseCase;
 import com.zentry.sigea.module_inscripciones.services.usecases.inscripcion.ObtenerInscripcionPorIdUseCase;
+import com.zentry.sigea.module_notificaciones.events.domain.InscripcionCreadaEvent;
 
 /**
  * Servicio de aplicación que orquesta casos de uso de inscripciones
@@ -67,6 +67,31 @@ public class InscripcionService implements IInscripcion {
         ));
         
         return inscripcionId;
+    }
+
+    /**
+     * Crea una nueva inscripción usando InscripcionRequest
+     * Convierte el request a ServiceDTO y retorna la inscripción creada
+     */
+    @Override
+    public InscripcionResponse crearInscripcion(InscripcionRequest inscripcionRequest) {
+        CrearInscripcionServiceDTO serviceDTO = new CrearInscripcionServiceDTO();
+        serviceDTO.setFechaInscripcion(inscripcionRequest.getFechaInscripcion());
+        serviceDTO.setEstadoId(inscripcionRequest.getEstadoId());
+        serviceDTO.setUsuarioId(inscripcionRequest.getUsuarioId());
+        serviceDTO.setActividadId(inscripcionRequest.getActividadId());
+        
+        crearInscripcion(serviceDTO);
+        
+        // Buscar la inscripción recién creada
+        Optional<InscripcionDomainEntity> inscripcionOpt = inscripcionRepository
+            .findByUsuarioIdAndActividadId(inscripcionRequest.getUsuarioId(), inscripcionRequest.getActividadId());
+        
+        if (inscripcionOpt.isEmpty()) {
+            throw new IllegalStateException("No se pudo encontrar la inscripción creada");
+        }
+        
+        return InscripcionResponse.fromEntity(inscripcionOpt.get());
     }
 
     /**
