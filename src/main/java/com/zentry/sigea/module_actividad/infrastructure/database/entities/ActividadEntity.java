@@ -8,7 +8,7 @@ import java.util.UUID;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import com.zentry.sigea.module_usuarios.infrastructure.database.entities.UsuarioRolEntity;
+import com.zentry.sigea.module_usuarios.infrastructure.database.entities.UsuarioEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -60,9 +60,9 @@ public class ActividadEntity {
     private EstadoActividadEntity estadoActividad;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_usuario_rol", referencedColumnName = "id_usuario_rol", nullable = false)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private UsuarioRolEntity organizador;
+    private UsuarioEntity organizador;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tipo_actividad_id" , nullable = false)

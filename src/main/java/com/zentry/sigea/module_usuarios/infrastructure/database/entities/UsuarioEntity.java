@@ -50,4 +50,7 @@ public class UsuarioEntity {
 
     @Column(name = "extension_telefonica" , nullable = false , length = 8)
     private String extensionTelefonica;
+
+    @Column(name = "dni" , nullable = true , length = 20)
+    private String dni;
 }

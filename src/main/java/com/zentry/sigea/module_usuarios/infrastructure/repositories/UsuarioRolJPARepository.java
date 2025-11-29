@@ -14,9 +14,6 @@ import com.zentry.sigea.module_usuarios.infrastructure.database.entities.Usuario
 
 public interface UsuarioRolJPARepository extends JpaRepository<UsuarioRolEntity , UsuarioRolId>{
     public List<UsuarioRolEntity> findById_IdUsuario(UUID id);
-    
-    // Buscar por el UUID único de usuario_rol
-    public Optional<UsuarioRolEntity> findByUsuarioRolId(UUID usuarioRolId);
 
     // El naming se basa en los nombres de los atributos
     // Spring Data JPA genera consultas basándose en la estructura de tus clases de entidad, 
@@ -32,4 +29,8 @@ public interface UsuarioRolJPARepository extends JpaRepository<UsuarioRolEntity 
 
     // Recuerda siempre colocar alias como "ur" para resumir nombres de tablas
     // Y siempre usalas al acceder a propiedades antes y despues
+
+    // Buscar UsuarioRol por usuario ID y nombre del rol
+    @Query("SELECT ur FROM UsuarioRolEntity ur WHERE ur.id.idUsuario = :idUsuario AND ur.rol.nombreRol = :nombreRol")
+    Optional<UsuarioRolEntity> findByUsuarioIdAndRolNombre(@Param("idUsuario") UUID idUsuario, @Param("nombreRol") String nombreRol);
 }

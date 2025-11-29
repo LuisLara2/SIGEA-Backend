@@ -12,35 +12,38 @@ import com.zentry.sigea.module_actividad.core.entities.ActividadDomainEntity;
 import com.zentry.sigea.module_actividad.core.repositories.IActividadRespository;
 import com.zentry.sigea.module_actividad.infrastructure.database.mappers.ActividadMapper;
 import com.zentry.sigea.module_actividad.infrastructure.repository.ActividadJPARepository;
-import com.zentry.sigea.module_usuarios.infrastructure.database.entities.UsuarioRolEntity;
-import com.zentry.sigea.module_usuarios.infrastructure.repositories.UsuarioRolJPARepository;
+import com.zentry.sigea.module_usuarios.infrastructure.database.entities.UsuarioEntity;
+import com.zentry.sigea.module_usuarios.infrastructure.repositories.UsuarioJPARepository;
 
 @Repository
 public class ActividadRepositoryAdapter implements IActividadRespository {
 
     private final ActividadJPARepository actividadJPARepository;
-    private final UsuarioRolJPARepository usuarioRolJPARepository;
+    private final UsuarioJPARepository usuarioJPARepository;
 
     public ActividadRepositoryAdapter(
             ActividadJPARepository actividadJPARepository,
-            UsuarioRolJPARepository usuarioRolJPARepository) {
+            UsuarioJPARepository usuarioJPARepository) {
         this.actividadJPARepository = actividadJPARepository;
-        this.usuarioRolJPARepository = usuarioRolJPARepository;
+        this.usuarioJPARepository = usuarioJPARepository;
     }
 
     public boolean save(ActividadDomainEntity actividadDomainEntity) {
         try {
-            UsuarioRolEntity usuarioRolEntity = usuarioRolJPARepository.findByUsuarioRolId(
-                    UUID.fromString(actividadDomainEntity.getOrganizadorId())).orElse(null);
+            // Buscar usuario directamente por usuarioId
+            Optional<UsuarioEntity> usuarioEntity = usuarioJPARepository.findById(
+                    UUID.fromString(actividadDomainEntity.getOrganizadorId())
+            );
 
-            if (usuarioRolEntity == null) {
-                throw new RuntimeException("No se encontró el usuario con rol especificado");
+            if (usuarioEntity.isEmpty()) {
+                throw new RuntimeException("No se encontró el usuario especificado");
             }
 
             actividadJPARepository.save(
                     ActividadMapper.toEntity(
                             actividadDomainEntity,
-                            usuarioRolEntity));
+                            usuarioEntity.get()
+                        ));
 
             return true;
         } catch (Exception e) {
@@ -57,7 +60,7 @@ public class ActividadRepositoryAdapter implements IActividadRespository {
     }
 
     public List<ActividadDomainEntity> findByOrganizadorId(String organizadorId) {
-        return actividadJPARepository.findByOrganizadorUsuarioRolId(
+        return actividadJPARepository.findByOrganizadorId(
                 UUID.fromString(organizadorId)).stream()
                 .map(ActividadMapper::toDomain)
                 .collect(Collectors.toList());
