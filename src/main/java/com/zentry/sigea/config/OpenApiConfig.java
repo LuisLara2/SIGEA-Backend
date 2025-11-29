@@ -157,7 +157,8 @@ public class OpenApiConfig {
                     "/api/v*/actividades/listar" , 
                     "/api/v*/actividades/obtener/**" , 
                     "/api/v*/{any}/health",
-                    "/api/v1/usuarios/participante/registrar"
+                    "/api/v1/usuarios/participante/registrar",
+                    "/api/v1/usuarios/validar-correo/**"
                 )
                 .build();
     }

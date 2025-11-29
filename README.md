@@ -18,8 +18,9 @@
       - [6.2.2.2. En Linux (Ubuntu, Debian, etc.)](#6222-en-linux-ubuntu-debian-etc)
       - [6.2.2.3. En macOS](#6223-en-macos)
   - [6.3. Ejecutar el proyecto](#63-ejecutar-el-proyecto)
-- [VII. Colaboradores](#vii-colaboradores)
-- [VIII. Licencia](#viii-licencia)
+- [VII. Uso de las API´s](#vii-uso-de-las-apis)
+- [VIII. Colaboradores](#viii-colaboradores)
+- [IX. Licencia](#ix-licencia)
 
 
 # I. Descripcion
@@ -84,6 +85,9 @@ API_UI_PATH={Ruta para la documentacion OpenAPI. def: /swagger-ui/index.html}
 SQL_INIT_MODE={always / never / embedded}
 SQL_INIT_DATA_LOCATIONS=classpath:{ruta a tu archivo data.sql desde resources/, def: }
 SQL_INIT_SCHEMA_LOCATIONS=classpath:{ruta a tu archivo schema.sql desde resources/, def: }
+
+# SecretKey para validacion de tokens
+SECURITY_JWT_SECRET={Coloca aqui un string de minimo 32 caracteres}
 
 # Configuracion de notificaciones
 EMAIL_ENABLED=true
@@ -282,8 +286,10 @@ http://{host}:{port}/swagger-ui/swagger-ui/index.html#/
 
 Ajusta la ruta modificando por tu host y puerto
 
-# VII. Colaboradores
+# VII. Uso de las API´s
 
-# VIII. Licencia
+# VIII. Colaboradores
+
+# IX. Licencia
 
 Este proyecto esta bajo la licencia del 

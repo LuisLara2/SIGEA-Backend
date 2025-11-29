@@ -8,12 +8,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Table(
-    name = "rol"
+    name = "rol" , 
+    uniqueConstraints = {
+        @UniqueConstraint(name = "uk_nombre_rol", columnNames = "nombre_rol"),
+    }
 )
 @Getter
 @Setter

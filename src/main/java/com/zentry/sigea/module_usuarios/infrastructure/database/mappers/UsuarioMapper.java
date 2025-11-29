@@ -12,6 +12,7 @@ public class UsuarioMapper{
         usuarioEntity.setApellidos(usuarioDomainEntity.getApellidos());
         usuarioEntity.setCorreo(usuarioDomainEntity.getCorreo());
         usuarioEntity.setPasswordHash(usuarioDomainEntity.getPasswordHash());
+        usuarioEntity.setDni(usuarioDomainEntity.getDni());
         usuarioEntity.setTelefono(usuarioDomainEntity.getTelefono());
         usuarioEntity.setExtensionTelefonica(usuarioDomainEntity.getExtensionTelefonica());
         usuarioEntity.setCreatedAt(usuarioDomainEntity.getCreatedAt());
@@ -27,6 +28,7 @@ public class UsuarioMapper{
         usuarioDomainEntity.setApellidos(usuarioEntity.getApellidos());
         usuarioDomainEntity.setCorreo(usuarioEntity.getCorreo());
         usuarioDomainEntity.setPasswordHash(usuarioEntity.getPasswordHash());
+        usuarioDomainEntity.setDni(usuarioEntity.getDni());
         usuarioDomainEntity.setCreatedAt(usuarioEntity.getCreatedAt());
         usuarioDomainEntity.setUpdatedAt(usuarioEntity.getUpdatedAt());
         usuarioDomainEntity.setTelefono(usuarioEntity.getTelefono());

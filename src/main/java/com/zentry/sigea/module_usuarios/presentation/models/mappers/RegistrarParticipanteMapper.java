@@ -10,6 +10,7 @@ public class RegistrarParticipanteMapper {
             registrarParticipanteRequestDTO.getApellidos(), 
             registrarParticipanteRequestDTO.getCorreo(), 
             registrarParticipanteRequestDTO.getPassword(), 
+            registrarParticipanteRequestDTO.getDni(),
             registrarParticipanteRequestDTO.getTelefono(), 
             registrarParticipanteRequestDTO.getExtensionTelefonica()
         );

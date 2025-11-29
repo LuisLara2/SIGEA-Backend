@@ -26,9 +26,10 @@ INSERT INTO usuario (
     apellidos, 
     correo, 
     password_hash, 
-    created_at, 
-    updated_at, 
-    telefono, 
+    dni,
+    created_at , 
+    updated_at , 
+    telefono , 
     extension_telefonica
 )
 VALUES (
@@ -36,9 +37,10 @@ VALUES (
     'Ordoñez', 
     'administrador@sigea.unas.edu.pe', 
     crypt('12345678', gen_salt('bf', 10)), 
-    NOW(), 
-    NOW(),
-    '900800701', 
+    '80787898' , 
+    now(), 
+    now(),
+    '900800701' , 
     '+51'
 )
 ON CONFLICT (correo) DO NOTHING;
@@ -48,9 +50,10 @@ INSERT INTO usuario (
     apellidos, 
     correo, 
     password_hash, 
-    created_at, 
-    updated_at, 
-    telefono, 
+    dni , 
+    created_at , 
+    updated_at , 
+    telefono , 
     extension_telefonica
 )
 VALUES (
@@ -58,9 +61,10 @@ VALUES (
     'Castro', 
     'organizador@sigea.unas.edu.pe', 
     crypt('12345678', gen_salt('bf', 10)), 
-    NOW(), 
-    NOW(),
-    '976879800', 
+    '67987989' , 
+    now(), 
+    now(),
+    '976879800' , 
     '+51'
 )
 ON CONFLICT (correo) DO NOTHING;
@@ -70,9 +74,10 @@ INSERT INTO usuario (
     apellidos, 
     correo, 
     password_hash, 
-    created_at, 
-    updated_at, 
-    telefono, 
+    dni , 
+    created_at , 
+    updated_at , 
+    telefono , 
     extension_telefonica
 )
 VALUES (
@@ -80,9 +85,10 @@ VALUES (
     'Escaly', 
     'participante@sigea.unas.edu.pe', 
     crypt('12345678', gen_salt('bf', 10)), 
-    NOW(), 
-    NOW(),
-    '987600799', 
+    '70897889' , 
+    now(), 
+    now(),
+    '987600799' , 
     '+51'
 )
 ON CONFLICT (correo) DO NOTHING;

@@ -22,7 +22,7 @@ public class UsuarioRepositoryAdapter implements IUsuarioRepository {
     }
 
     public void save(UsuarioDomainEntity usuario){
-        usuarioJPARepository.save(
+        usuarioJPARepository.saveAndFlush(
             UsuarioMapper.toEntity(usuario)
         );
     }

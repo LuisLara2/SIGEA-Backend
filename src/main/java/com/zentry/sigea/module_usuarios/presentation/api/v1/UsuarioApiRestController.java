@@ -3,6 +3,7 @@ package com.zentry.sigea.module_usuarios.presentation.api.v1;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -85,8 +86,8 @@ public class UsuarioApiRestController {
                 loginUsuarioRequestDTO.getRememberMe()
             );
 
-            String refreshToken = loginResponse.get("Refresh Token");
-            String idRefreshToken = loginResponse.get("ID Refresh Token");
+            String refreshToken = loginResponse.get("refreshToken");
+            String idRefreshToken = loginResponse.get("idRefreshToken");
             
             Cookie cookieRefreshToken = new Cookie("refreshToken", refreshToken);
             cookieRefreshToken.setHttpOnly(true);

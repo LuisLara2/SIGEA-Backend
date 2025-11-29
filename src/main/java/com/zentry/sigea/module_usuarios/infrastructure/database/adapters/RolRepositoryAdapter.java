@@ -22,7 +22,7 @@ public class RolRepositoryAdapter implements IRolRepository{
     }
 
     public void save(RolDomainEntity rolDomainEntity){
-        rolJPARepository.save(
+        rolJPARepository.saveAndFlush(
             RolMapper.toEntity(rolDomainEntity)
         );
     }

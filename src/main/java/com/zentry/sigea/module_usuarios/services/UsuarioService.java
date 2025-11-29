@@ -6,8 +6,11 @@ import java.util.stream.Collectors;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.zentry.sigea.module_notificaciones.core.ports.IEmailService;
+import com.zentry.sigea.module_usuarios.core.entities.CodigoVerificacionDomainEntity;
 import com.zentry.sigea.module_usuarios.core.entities.TokenUsuarioDomainEntity;
 import com.zentry.sigea.module_usuarios.core.entities.UsuarioDomainEntity;
+import com.zentry.sigea.module_usuarios.core.repositories.ICodigoVerificacionRepository;
 import com.zentry.sigea.module_usuarios.core.repositories.IUsuarioRepository;
 import com.zentry.sigea.module_usuarios.core.repositories.IUsuarioRolRepository;
 import com.zentry.sigea.security.JwtBlacklistService;
@@ -16,6 +19,7 @@ import com.zentry.sigea.security.JwtUtil;
 import io.jsonwebtoken.Claims;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class UsuarioService {
@@ -32,8 +36,10 @@ public class UsuarioService {
         IUsuarioRolRepository usuarioRolRepository,
         PasswordEncoder passwordEncoder,
         TokenUsuarioService tokenUsuarioService , 
-        JwtUtil jwtUtil
-    , JwtBlacklistService jwtBlacklistService){
+        JwtUtil jwtUtil , 
+        JwtBlacklistService jwtBlacklistService
+
+    ){
         this.usuarioRepository = usuarioRepository;
         this.usuarioRolRepository = usuarioRolRepository;
         this.passwordEncoder = passwordEncoder;
@@ -64,9 +70,9 @@ public class UsuarioService {
         TokenUsuarioDomainEntity tokenUsuarioDomainEntity = tokenUsuarioService.createRefreshToken(usuario.getId(), rememberMe);
 
         return Map.of(
-            "Access Token" , accessToken , 
-            "Refresh Token" , tokenUsuarioDomainEntity.getToken() , 
-            "ID Refresh Token" , tokenUsuarioDomainEntity.getId()
+            "accessToken" , accessToken , 
+            "refreshToken" , tokenUsuarioDomainEntity.getToken() , 
+            "idRefreshToken" , tokenUsuarioDomainEntity.getId()
         );
     }
 
