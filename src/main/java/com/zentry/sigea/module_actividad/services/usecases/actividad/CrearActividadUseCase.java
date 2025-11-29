@@ -116,9 +116,9 @@ public class CrearActividadUseCase {
         validateDateConflicts(request);
         
         // Validar que la fecha de inicio no sea muy lejana en el futuro
-        if (request.getFechaInicio().isAfter(LocalDate.now().plusYears(2))) {
+        if (request.getFechaInicio().isAfter(LocalDate.now().plusYears(1))) {
             throw new IllegalArgumentException(
-                "No se pueden crear actividades con más de 2 años de anticipación"
+                "No se pueden crear actividades con más de 1 año de anticipación"
             );
         }
     }
@@ -177,8 +177,13 @@ public class CrearActividadUseCase {
         }
     }
 
+
+    /*
+        *Permitir que se toquen en las fechas límite
+        *Solo hay conflicto si una actividad comienza ANTES de que termine la otra
+    */
     private boolean datesOverlap(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
-        return !end1.isBefore(start2) && !start1.isAfter(end2);
+    return start1.isEqual(start2) || (start1.isBefore(start2) && end1.isAfter(start2));
     }
 
     /**
