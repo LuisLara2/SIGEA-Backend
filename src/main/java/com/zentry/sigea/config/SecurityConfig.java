@@ -58,6 +58,8 @@ public class SecurityConfig {
                         .requestMatchers(
                             "/api/v*/usuarios/auth/**", 
                             "/" , 
+                            "/v3/api-docs.yaml",
+
                             // Permitir el acceso libre para ver las actividades en la pagina principal
                             "/api/v*/actividades/listar",
                             "/api/v*/actividades/obtener/**",
