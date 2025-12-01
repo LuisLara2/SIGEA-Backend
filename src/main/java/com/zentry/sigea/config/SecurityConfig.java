@@ -58,18 +58,20 @@ public class SecurityConfig {
                         .requestMatchers(
                             "/api/v*/usuarios/auth/**", 
                             "/" , 
+                            "/v*/api-docs.yaml",
+
                             // Permitir el acceso libre para ver las actividades en la pagina principal
                             "/api/v*/actividades/listar",
                             "/api/v*/actividades/obtener/**",
                             "/api/v*/{any}/health",
-                            "/api/v1/usuarios/participante/registrar",
+                            "/api/v*/usuarios/participante/registrar",
                             "/api/v*/actividad/banner/imagen/**",
-                            "/api/v1/usuarios/validar-correo/**"
+                            "/api/v*/usuarios/validar-correo/**"
                         ).permitAll()
                         .requestMatchers(
                             "/swagger-ui/**", 
                             "/swagger-ui.html", 
-                            "/v3/api-docs/**", 
+                            "/v*/api-docs/**", 
                             "/webjars/**"
                         ).permitAll()
                         .anyRequest().authenticated()
