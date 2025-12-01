@@ -21,8 +21,6 @@ import com.zentry.sigea.module_inscripciones.services.InscripcionService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
-
 
 /**
  * Controlador REST para gestionar inscripciones
@@ -31,7 +29,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @RequestMapping("/api/v1/inscripciones")
 @CrossOrigin(origins = "*")
-@Tag(name = "Inscripciones", description = "Operaciones relacionadas con inscripciones")
 public class InscripcionController {
     private final InscripcionService inscripcionService;
 
