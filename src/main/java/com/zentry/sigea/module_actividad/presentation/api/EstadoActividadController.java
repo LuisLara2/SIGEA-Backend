@@ -37,11 +37,11 @@ public class EstadoActividadController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasRole('ROLE_ORGANIZADOR')")
     @Operation(
         summary = "Crear un estado de actividad",
         security = @SecurityRequirement(
-            name = "administradorJWT"
+            name = "organizadorJWT"
             ),
         tags = {"Crear"}
     )
@@ -58,11 +58,11 @@ public class EstadoActividadController {
     }
 
     @GetMapping("/listar")
-    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasRole('ROLE_ORGANIZADOR')")
     @Operation(
         summary = "Listar estados de actividad",
         security = @SecurityRequirement(
-            name = "administradorJWT"
+            name = "organizadorJWT"
             ),
         tags = {"Listar"}
     )
@@ -77,11 +77,11 @@ public class EstadoActividadController {
     }
 
     @DeleteMapping("/eliminar/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasRole('ROLE_ORGANIZADOR')")
     @Operation(
         summary = "Obtener un estado de actividad por su ID",
         security = @SecurityRequirement(
-            name = "administradorJWT"
+            name = "organizadorJWT"
             ),
         tags = {"Eliminar"}
     )
@@ -97,11 +97,11 @@ public class EstadoActividadController {
     }
 
     @PutMapping("/actualizar/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasRole('ROLE_ORGANIZADOR')")
     @Operation(
         summary = "Actualizar un estado de actividad por su ID",
         security = @SecurityRequirement(
-            name = "administradorJWT"
+            name = "organizadorJWT"
             ),
         tags = {"Actualizar"}
     )

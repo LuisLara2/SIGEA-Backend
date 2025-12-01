@@ -39,11 +39,11 @@ public class TipoActividadController {
      * Crear un nuevo tipo de actividad
      */
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasRole('ROLE_ORGANIZADOR')")
     @Operation(
         summary = "Crear un tipo de actividad.",
         security = @SecurityRequirement(
-            name = "administradorJWT"
+            name = "organizadorJWT"
             ),
         tags = {"Crear"}
     )
@@ -65,11 +65,11 @@ public class TipoActividadController {
      * Listar todos los tipos de actividad
     */
     @GetMapping("/listar")
-    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasRole('ROLE_ORGANIZADOR')")
     @Operation(
         summary = "Listar los tipos de actividad.",
         security = @SecurityRequirement(
-            name = "administradorJWT"
+            name = "organizadorJWT"
             ),
         tags = {"Listar"}
     )
@@ -82,11 +82,11 @@ public class TipoActividadController {
     }
 
     @DeleteMapping("/eliminar/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasRole('ROLE_ORGANIZADOR')")
     @Operation(
         summary = "Eliminar tipo de actividad por su ID.",
         security = @SecurityRequirement(
-            name = "administradorJWT"
+            name = "organizadorJWT"
             ),
         tags = {"Eliminar"}
     )
@@ -102,11 +102,11 @@ public class TipoActividadController {
     }
 
     @PutMapping("/actualizar/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasRole('ROLE_ORGANIZADOR')")
     @Operation(
         summary = "Actualizar un tipo de actividad.",
         security = @SecurityRequirement(
-            name = "administradorJWT"
+            name = "organizadorJWT"
             ),
         tags = {"Actualizar"}
     )
