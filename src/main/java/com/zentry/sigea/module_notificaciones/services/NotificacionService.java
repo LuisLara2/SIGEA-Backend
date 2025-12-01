@@ -29,6 +29,12 @@ import com.zentry.sigea.module_notificaciones.services.usecases.notificacion.Obt
  */
 @Service
 public class NotificacionService {
+        /**
+         * Obtiene el nombre real del usuario por su ID usando el gateway
+         */
+        public String obtenerNombreUsuarioPorId(String usuarioId) {
+            return usuarioGateway.obtenerNombreUsuario(usuarioId).orElse("Usuario");
+        }
     
     private static final Logger logger = LoggerFactory.getLogger(NotificacionService.class);
     

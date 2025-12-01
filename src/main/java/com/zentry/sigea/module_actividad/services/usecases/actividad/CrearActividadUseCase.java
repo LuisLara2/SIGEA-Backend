@@ -68,8 +68,12 @@ public class CrearActividadUseCase {
         );
         
         // Guardar usando el repositorio directamente
-        
-        return  actividadRepository.save(nuevaActividad) ? "Actividad Registrada con exito" : "Algo salio mal al guardar la Actividad";
+        ActividadDomainEntity saved = actividadRepository.save(nuevaActividad);
+        if (saved != null && saved.getActividadId() != null) {
+            return saved.getActividadId();
+        } else {
+            throw new RuntimeException("Algo salió mal al guardar la Actividad");
+        }
     }
 
     /**

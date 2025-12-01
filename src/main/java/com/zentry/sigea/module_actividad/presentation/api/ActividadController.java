@@ -49,18 +49,21 @@ public class ActividadController {
             ),
         tags = {"Crear"}
     )
-    public ResponseEntity<String> crearActividad(@RequestBody CrearActividadRequest request) {
+    public ResponseEntity<ActividadResponse> crearActividad(@RequestBody CrearActividadRequest request) {
         try {
-            // Ejecutar el caso de uso a través del servicio pasando el request con IDs
-            String responseMessage = actividadService.crearActividad(request);
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
-
+            String actividadId = actividadService.crearActividad(request);
+            ActividadResponse response = new ActividadResponse();
+            response.setId(actividadId);
+            response.setDescripcion("Actividad registrada con éxito");
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("Error de validación: " + e.getMessage());
+            ActividadResponse errorResponse = new ActividadResponse();
+            errorResponse.setDescripcion("Error de validación: " + e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error interno: " + e.getMessage());
+            ActividadResponse errorResponse = new ActividadResponse();
+            errorResponse.setDescripcion("Error interno: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 

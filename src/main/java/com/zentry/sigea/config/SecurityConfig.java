@@ -57,6 +57,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                             "/api/v*/usuarios/auth/**", 
+                            "/api/v*/usuarios/validar-correo/**", // <-- Permitir validación de correo sin autenticación
                             "/" , 
                             // Permitir el acceso libre para ver las actividades en la pagina principal
                             "/api/v*/actividades/listar",

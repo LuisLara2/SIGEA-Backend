@@ -9,65 +9,67 @@ import org.springframework.stereotype.Component;
 import com.zentry.sigea.module_notificaciones.events.domain.ActividadCreadaEvent;
 import com.zentry.sigea.module_notificaciones.presentation.models.requestDTO.CrearNotificacionRequest;
 import com.zentry.sigea.module_notificaciones.services.NotificacionService;
+import com.zentry.sigea.module_usuarios.services.UsuarioService;
 
-/**
- * Listener que escucha eventos de actividades creadas y genera notificaciones automáticas
- * Principio: Single Responsibility - Solo maneja notificaciones de nuevas actividades
- */
 @Component
 public class ActividadEventListener {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(ActividadEventListener.class);
     private static final String TIPO_NOTIFICACION_ACTIVIDAD = "COMUNICACION";
-    
+
     private final NotificacionService notificacionService;
-    
-    public ActividadEventListener(NotificacionService notificacionService) {
+    private final UsuarioService usuarioService;
+
+    public ActividadEventListener(
+            NotificacionService notificacionService,
+            UsuarioService usuarioService
+    ) {
         this.notificacionService = notificacionService;
+        this.usuarioService = usuarioService;
     }
-    
-    /**
-     * Escucha el evento de actividad creada y genera notificaciones automáticas
-     * Envía notificación a todos los usuarios especificados en el evento
-     * @Async permite que las notificaciones se procesen en segundo plano
-     */
+
     @EventListener
     @Async
     public void onActividadCreada(ActividadCreadaEvent event) {
         try {
-            logger.info("Evento recibido: Nueva actividad creada '{}' con {} destinatarios", 
-                event.getTitulo(), event.getUsuariosIds().size());
-            
-            // Enviar notificación a cada usuario
+            logger.info("Evento recibido: Nueva actividad '{}' enviada a {} destinatarios",
+                    event.getTitulo(), event.getUsuariosIds().size());
+
             for (String usuarioId : event.getUsuariosIds()) {
                 try {
-                    // Constructor: usuarioId, actividadId, tipoNotificacionId, mensaje, estadoNotificacionId, canal
+                    String nombreUsuario = notificacionService.obtenerNombreUsuarioPorId(usuarioId);
+
+                    // MENSAJE LIMPIO Y PROFESIONAL 
+                    String mensaje = String.format(
+                        "<strong>Nueva actividad:</strong> %s<br>"
+                        + "<strong>Descripción:</strong> %s<br>"
+                        + "<strong>¡Inscríbete ahora!</strong>",
+                        event.getTitulo(),
+                        event.getDescripcion()
+                        
+                    );
+
                     CrearNotificacionRequest notificacionRequest = new CrearNotificacionRequest(
                         usuarioId,
                         event.getActividadId(),
                         TIPO_NOTIFICACION_ACTIVIDAD,
-                        String.format("🎯 Se ha publicado una nueva actividad: \"%s\"\n\n" +
-                                     "📝 %s\n\n" +
-                                     "¡No te la pierdas! Inscribete ahora.", 
-                            event.getTitulo(), event.getDescripcion()),
-                        null, // estadoNotificacionId (el service lo asigna)
+                        mensaje,
+                        null,
                         "SISTEMA"
                     );
-                    
+
                     String resultado = notificacionService.crearNotificacion(notificacionRequest);
-                    logger.info("Notificación de nueva actividad enviada a usuario {}: {}", usuarioId, resultado);
-                    
+                    logger.info("Notificación enviada a usuario {}: {}", usuarioId, resultado);
+
                 } catch (Exception e) {
-                    logger.error("Error al enviar notificación a usuario {}: {}", usuarioId, e.getMessage());
-                    // Continuar con los demás usuarios aunque falle uno
+                    logger.error("Error notificando al usuario {}: {}", usuarioId, e.getMessage());
                 }
             }
-            
-            logger.info("Proceso de notificaciones de actividad completado");
-            
+
+            logger.info("Proceso de notificaciones completado.");
+
         } catch (Exception e) {
-            logger.error("Error al procesar notificaciones de actividad creada: {}", e.getMessage(), e);
-            // No lanzamos la excepción para no afectar el flujo principal
+            logger.error("Error general en listener de actividad creada: {}", e.getMessage(), e);
         }
     }
 }

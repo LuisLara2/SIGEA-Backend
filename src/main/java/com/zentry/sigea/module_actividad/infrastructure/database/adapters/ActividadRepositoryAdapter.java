@@ -1,4 +1,5 @@
 package com.zentry.sigea.module_actividad.infrastructure.database.adapters;
+import com.zentry.sigea.module_actividad.infrastructure.database.entities.ActividadEntity;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -28,26 +29,21 @@ public class ActividadRepositoryAdapter implements IActividadRespository {
         this.usuarioJPARepository = usuarioJPARepository;
     }
 
-    public boolean save(ActividadDomainEntity actividadDomainEntity) {
+    public ActividadDomainEntity save(ActividadDomainEntity actividadDomainEntity) {
         try {
-            // Buscar usuario directamente por usuarioId
             Optional<UsuarioEntity> usuarioEntity = usuarioJPARepository.findById(
                     UUID.fromString(actividadDomainEntity.getOrganizadorId())
             );
-
             if (usuarioEntity.isEmpty()) {
                 throw new RuntimeException("No se encontró el usuario especificado");
             }
-
-            actividadJPARepository.save(
-                    ActividadMapper.toEntity(
-                            actividadDomainEntity,
-                            usuarioEntity.get()
-                        ));
-
-            return true;
+            ActividadEntity entityToSave = ActividadMapper.toEntity(
+                    actividadDomainEntity,
+                    usuarioEntity.get()
+            );
+            ActividadEntity savedEntity = actividadJPARepository.save(entityToSave);
+            return ActividadMapper.toDomain(savedEntity);
         } catch (Exception e) {
-            // Log del error para debugging
             System.err.println("Error al guardar actividad: " + e.getMessage());
             e.printStackTrace();
             throw new RuntimeException("Error al guardar actividad: " + e.getMessage(), e);
