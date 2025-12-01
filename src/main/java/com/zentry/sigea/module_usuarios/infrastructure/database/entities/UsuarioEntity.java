@@ -50,6 +50,9 @@ public class UsuarioEntity {
     @Column(name = "dni" , nullable = false , unique = true , length = 25)
     private String dni;
 
+    @Column(name = "correo_verificado" , nullable = false)
+    private Boolean correoVerificado = false;
+
     @Column(name = "created_at" , nullable = false , columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt = LocalDateTime.now();
 

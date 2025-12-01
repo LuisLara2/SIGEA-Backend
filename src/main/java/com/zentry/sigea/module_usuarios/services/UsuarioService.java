@@ -6,20 +6,17 @@ import java.util.stream.Collectors;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.zentry.sigea.module_notificaciones.core.ports.IEmailService;
-import com.zentry.sigea.module_usuarios.core.entities.CodigoVerificacionDomainEntity;
 import com.zentry.sigea.module_usuarios.core.entities.TokenUsuarioDomainEntity;
 import com.zentry.sigea.module_usuarios.core.entities.UsuarioDomainEntity;
-import com.zentry.sigea.module_usuarios.core.repositories.ICodigoVerificacionRepository;
 import com.zentry.sigea.module_usuarios.core.repositories.IUsuarioRepository;
 import com.zentry.sigea.module_usuarios.core.repositories.IUsuarioRolRepository;
+import com.zentry.sigea.module_usuarios.presentation.models.responseDTO.LoginResponseDTO;
 import com.zentry.sigea.security.JwtBlacklistService;
 import com.zentry.sigea.security.JwtUtil;
 
 import io.jsonwebtoken.Claims;
 
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class UsuarioService {
@@ -48,7 +45,7 @@ public class UsuarioService {
         this.jwtBlacklistService = jwtBlacklistService;
     }
 
-    public Map<String , String> login(String correo , String password , Boolean rememberMe){
+    public LoginResponseDTO login(String correo , String password , Boolean rememberMe){
         UsuarioDomainEntity usuario = usuarioRepository.findByCorreo(correo)
             .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
@@ -69,11 +66,14 @@ public class UsuarioService {
 
         TokenUsuarioDomainEntity tokenUsuarioDomainEntity = tokenUsuarioService.createRefreshToken(usuario.getId(), rememberMe);
 
-        return Map.of(
-            "accessToken" , accessToken , 
-            "refreshToken" , tokenUsuarioDomainEntity.getToken() , 
-            "idRefreshToken" , tokenUsuarioDomainEntity.getId()
-        );
+        LoginResponseDTO loginResponseDTO = new LoginResponseDTO();
+
+        loginResponseDTO.setAccessToken(accessToken);
+        loginResponseDTO.setCorreoVerificado(usuario.getCorreoVerificado());
+        loginResponseDTO.setRefreshToken(tokenUsuarioDomainEntity.getToken());
+        loginResponseDTO.setIdRefreshToken(tokenUsuarioDomainEntity.getId());
+
+        return loginResponseDTO;
     }
 
     public String logout(String usuarioId , String accessToken){
