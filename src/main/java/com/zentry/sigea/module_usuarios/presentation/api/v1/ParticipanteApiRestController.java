@@ -168,7 +168,7 @@ public class ParticipanteApiRestController {
             );
 
             
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+            return ResponseEntity.status(HttpStatus.CREATED).body(
                 new GeneralResponseDTO<>(
                     true, 
                     registrarParticipanteMessage, 

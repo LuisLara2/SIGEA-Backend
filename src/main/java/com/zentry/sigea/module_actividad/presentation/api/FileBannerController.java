@@ -43,12 +43,12 @@ public class FileBannerController {
      * Subir imagen de banner
      */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasRole('ROLE_ORGANIZADOR')")
     @Operation(
         summary = "Subir imagen de banner",
         description = "Sube una imagen de banner para una actividad. Solo se permiten imágenes JPG, PNG, GIF o WEBP con un tamaño máximo de 30MB." ,
         security = @SecurityRequirement(
-            name = "administradorJWT"
+            name = "organizadorJWT"
         ),
         tags = {"Crear"}
     )
@@ -135,12 +135,12 @@ public class FileBannerController {
      * Eliminar imagen de banner
      */
     @DeleteMapping
-    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasRole('ROLE_ORGANIZADOR')")
     @Operation(
         summary = "Eliminar imagen de banner",
         description = "Elimina una imagen de banner existente usando su nombre de archivo",
         security = @SecurityRequirement(
-            name = "administradorJWT"
+            name = "organizadorJWT"
         )
     )
     @ApiResponses(value = {

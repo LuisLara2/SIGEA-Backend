@@ -21,7 +21,6 @@ import com.zentry.sigea.module_actividad.services.ActividadService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * Controlador REST para gestionar actividades
@@ -41,11 +40,11 @@ public class ActividadController {
      * Crear una nueva actividad
      */
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasRole('ROLE_ORGANIZADOR')")
     @Operation(
         summary = "Crear actividad",
         security = @SecurityRequirement(
-            name = "administradorJWT"
+            name = "organizadorJWT"
             ),
         tags = {"Crear"}
     )
@@ -122,11 +121,11 @@ public class ActividadController {
     }
 
     @DeleteMapping("/eliminar/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasRole('ROLE_ORGANIZADOR')")
     @Operation(
         summary = "Eliminar una actividad por su ID",
         security = @SecurityRequirement(
-            name = "administradorJWT"
+            name = "organizadorJWT"
             ),
         tags = {"Eliminar"}
     )
@@ -145,11 +144,11 @@ public class ActividadController {
      * Actualizar una actividad existente
      */
     @PutMapping("/actualizar/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasRole('ROLE_ORGANIZADOR')")
     @Operation(
         summary = "Actualizar una actividad por su ID",
         security = @SecurityRequirement(
-            name = "administradorJWT"
+            name = "organizadorJWT"
             ),
         tags = {"Actualizar"}
     )

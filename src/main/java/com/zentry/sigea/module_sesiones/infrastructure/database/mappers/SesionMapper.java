@@ -4,7 +4,7 @@ import com.zentry.sigea.module_actividad.infrastructure.database.entities.Activi
 import com.zentry.sigea.module_sesiones.core.entities.SesionDomainEntity;
 import com.zentry.sigea.module_sesiones.infrastructure.database.entities.SesionEntity;
 
-import java.util.UUID;  
+import java.util.UUID;
 
 /**
  * Mapper entre entidad de dominio y entidad JPA
@@ -12,47 +12,41 @@ import java.util.UUID;
  */
 public class SesionMapper {
 
-    public static SesionEntity toEntity(
-        SesionDomainEntity sesionDomainEntity, 
-        ActividadEntity actividadEntity
-    ) {
-        if (sesionDomainEntity == null) {
-            return null;
-        }
-
-        SesionEntity sesionEntity = new SesionEntity();
-        
-        if (sesionDomainEntity.getId() != null) {
-            sesionEntity.setId(UUID.fromString(sesionDomainEntity.getId()));
-        }
-        
-        sesionEntity.setActividad(actividadEntity);
-        sesionEntity.setFechaSesion(sesionDomainEntity.getFechaSesion());
-        sesionEntity.setTitulo(sesionDomainEntity.getTitulo());
-        
-        return sesionEntity;
+    public static SesionEntity toEntity(SesionDomainEntity domain, ActividadEntity actividad) {
+        SesionEntity entity = new SesionEntity();
+        entity.setId(domain.getId() != null ? UUID.fromString(domain.getId()) : null);
+        entity.setActividad(actividad);
+        entity.setTitulo(domain.getTitulo());
+        entity.setDescripcion(domain.getDescripcion());
+        entity.setFechaSesion(domain.getFechaSesion());
+        entity.setHoraInicio(domain.getHoraInicio());
+        entity.setHoraFin(domain.getHoraFin());
+        entity.setPonente(domain.getPonente());
+        entity.setModalidad(domain.getModalidad()); 
+        entity.setLugarSesion(domain.getLugarSesion() != null ? domain.getLugarSesion() : "");
+        entity.setLinkVirtual(domain.getLinkVirtual() != null ? domain.getLinkVirtual() : "");
+        entity.setOrden(domain.getOrden());
+        return entity;
     }
 
     public static SesionDomainEntity toDomain(SesionEntity entity) {
-        if (entity == null) {
-            return null;
-        }
-
-        String actividadId = null;
-        if (entity.getActividad() != null) {
-            actividadId = entity.getActividad().getId().toString();
-        }
-
         return SesionDomainEntity.reconstruct(
-            entity.getId().toString(),
-            actividadId,
-            entity.getFechaSesion(),
+            entity.getId() != null ? entity.getId().toString() : null,
+            entity.getActividad() != null ? entity.getActividad().getId().toString() : null,
             entity.getTitulo(),
-            null, 
-            null  
+            entity.getDescripcion(),
+            entity.getFechaSesion(),
+            entity.getHoraInicio(),
+            entity.getHoraFin(),
+            entity.getPonente(),
+            entity.getModalidad(),
+            entity.getLugarSesion(),
+            entity.getLinkVirtual(),
+            entity.getOrden(),
+            entity.getCreatedAt(),
+            entity.getUpdatedAt()
         );
     }
-
 
     public static void updateEntity(
         SesionEntity entity, 
@@ -60,11 +54,19 @@ public class SesionMapper {
         ActividadEntity actividadEntity
     ) {
         if (entity == null || domain == null) {
-            return;
+            throw new IllegalArgumentException("La entidad o el dominio no pueden ser nulos");
         }
 
         entity.setActividad(actividadEntity);
-        entity.setFechaSesion(domain.getFechaSesion());
         entity.setTitulo(domain.getTitulo());
+        entity.setDescripcion(domain.getDescripcion());
+        entity.setFechaSesion(domain.getFechaSesion());
+        entity.setHoraInicio(domain.getHoraInicio());
+        entity.setHoraFin(domain.getHoraFin());
+        entity.setPonente(domain.getPonente());
+        entity.setModalidad(domain.getModalidad());
+        entity.setLugarSesion(domain.getLugarSesion() != null ? domain.getLugarSesion() : "");
+        entity.setLinkVirtual(domain.getLinkVirtual() != null ? domain.getLinkVirtual() : "");
+        entity.setOrden(domain.getOrden());
     }
 }

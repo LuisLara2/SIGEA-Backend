@@ -29,8 +29,16 @@ public class CrearSesionUseCase {
         // Crear la entidad de dominio usando el factory method
         SesionDomainEntity nuevaSesion = SesionDomainEntity.create(
             request.getActividadId(),
+            request.getTitulo(), 
+            request.getDescripcion(),
             request.getFechaSesion(),
-            request.getTitulo()
+            request.getHoraInicio(),
+            request.getHoraFin(),
+            request.getPonente(),
+            request.getModalidad(),
+            request.getLugarSesion(),
+            request.getLinkVirtual(),
+            request.getOrden()
         );
         return sesionRepository.save(nuevaSesion);
     }

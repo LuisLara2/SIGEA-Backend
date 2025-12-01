@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 /**
- * Caso de uso para actualizar una sesión existente
+ * Caso de uso para actualizar una sesión existente.
  */
 @Component
 public class ActualizarSesionUseCase {
@@ -19,15 +19,32 @@ public class ActualizarSesionUseCase {
     }
 
     public Optional<SesionDomainEntity> execute(String id, SesionDomainEntity datosActualizados) {
-        if (id == null) {
-            throw new IllegalArgumentException("El ID debe ser un número positivo");
+        if (id == null || id.isEmpty()) {
+            throw new IllegalArgumentException("El ID de la sesión no puede ser nulo o vacío.");
         }
-        
+
+        if (datosActualizados == null) {
+            throw new IllegalArgumentException("Los datos actualizados no pueden ser nulos.");
+        }
+
+        // Validación adicional de campos importantes
+        if (datosActualizados.getTitulo() == null || datosActualizados.getTitulo().isEmpty()) {
+            throw new IllegalArgumentException("El título no puede ser nulo o vacío.");
+        }
+
         return sesionRepository.findById(id).map(sesionExistente -> {
-            // Usar el método de dominio para actualizar
             sesionExistente.updateInfo(
+                datosActualizados.getActividadId(),
+                datosActualizados.getTitulo(),
+                datosActualizados.getDescripcion(),
                 datosActualizados.getFechaSesion(),
-                datosActualizados.getTitulo()
+                datosActualizados.getHoraInicio(),
+                datosActualizados.getHoraFin(),
+                datosActualizados.getPonente(),
+                datosActualizados.getModalidad(),
+                datosActualizados.getLugarSesion(),
+                datosActualizados.getLinkVirtual(),
+                datosActualizados.getOrden()
             );
             
             return sesionRepository.save(sesionExistente);
