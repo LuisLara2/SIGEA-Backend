@@ -70,31 +70,6 @@ public class InscripcionService implements IInscripcion {
     }
 
     /**
-     * Crea una nueva inscripción usando InscripcionRequest
-     * Convierte el request a ServiceDTO y retorna la inscripción creada
-     */
-    @Override
-    public InscripcionResponse crearInscripcion(InscripcionRequest inscripcionRequest) {
-        CrearInscripcionServiceDTO serviceDTO = new CrearInscripcionServiceDTO();
-        serviceDTO.setFechaInscripcion(inscripcionRequest.getFechaInscripcion());
-        serviceDTO.setEstadoId(inscripcionRequest.getEstadoId());
-        serviceDTO.setUsuarioId(inscripcionRequest.getUsuarioId());
-        serviceDTO.setActividadId(inscripcionRequest.getActividadId());
-        
-        crearInscripcion(serviceDTO);
-        
-        // Buscar la inscripción recién creada
-        Optional<InscripcionDomainEntity> inscripcionOpt = inscripcionRepository
-            .findByUsuarioIdAndActividadId(inscripcionRequest.getUsuarioId(), inscripcionRequest.getActividadId());
-        
-        if (inscripcionOpt.isEmpty()) {
-            throw new IllegalStateException("No se pudo encontrar la inscripción creada");
-        }
-        
-        return InscripcionResponse.fromEntity(inscripcionOpt.get());
-    }
-
-    /**
      * Lista todas las inscripciones
      */
     @Override

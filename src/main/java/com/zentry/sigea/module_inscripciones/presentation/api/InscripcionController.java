@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.zentry.sigea.module_inscripciones.presentation.models.requestDTO.InscripcionRequest;
 import com.zentry.sigea.module_inscripciones.presentation.models.responseDTO.InscripcionResponse;
 import com.zentry.sigea.module_inscripciones.services.InscripcionService;
+import com.zentry.sigea.module_inscripciones.services.serviceDTO.CrearInscripcionServiceDTO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 
 /**
@@ -31,7 +31,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @RequestMapping("/api/v1/inscripciones")
 @CrossOrigin(origins = "*")
-@Tag(name = "Inscripciones", description = "Operaciones relacionadas con inscripciones")
 public class InscripcionController {
     private final InscripcionService inscripcionService;
 
@@ -92,14 +91,28 @@ public class InscripcionController {
         security = {
             @SecurityRequirement(name = "administradorJWT"),
             @SecurityRequirement(name = "organizadorJWT"),
-            @SecurityRequirement(name = "participanteJWT")
-        }
+            @SecurityRequirement(name= "participanteJWT")
+        },
+        tags = {"Crear"}
     )
     public ResponseEntity<InscripcionResponse> crearInscripcion(@RequestBody InscripcionRequest inscripcionRequest) {
         try {
-            InscripcionResponse inscripcion = inscripcionService.crearInscripcion(inscripcionRequest);
-            return ResponseEntity.status(HttpStatus.CREATED).body(inscripcion);
+            // Convertir InscripcionRequest a CrearInscripcionServiceDTO
+            CrearInscripcionServiceDTO serviceDTO = new CrearInscripcionServiceDTO();
+            serviceDTO.setUsuarioId(inscripcionRequest.getUsuarioId());
+            serviceDTO.setActividadId(inscripcionRequest.getActividadId());
+            serviceDTO.setFechaInscripcion(inscripcionRequest.getFechaInscripcion());
+            serviceDTO.setEstadoId(inscripcionRequest.getEstadoId());
+            
+            String inscripcionId = inscripcionService.crearInscripcion(serviceDTO);
+            
+            // Obtener la inscripción creada para devolver la respuesta completa
+            InscripcionResponse response = inscripcionService.obtenerInscripcionPorId(inscripcionId);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

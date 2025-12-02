@@ -53,9 +53,9 @@ public class CrearInscripcionUseCase {
         
         InscripcionDomainEntity nuevaInscripcion = InscripcionDomainEntity.create(
             fechaInscripcion,
-            crearInscripcionServiceDTO.getUsuarioId(),
             crearInscripcionServiceDTO.getActividadId(),
-            estado
+            estado,
+            crearInscripcionServiceDTO.getUsuarioId()
         );
         
         // Guardar usando el repositorio

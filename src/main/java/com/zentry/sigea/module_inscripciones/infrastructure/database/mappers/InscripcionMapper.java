@@ -46,6 +46,10 @@ public class InscripcionMapper {
 
         InscripcionDomainEntity inscripcionDomainEntity = new InscripcionDomainEntity();
 
+        inscripcionDomainEntity.setId(
+            inscripcionEntity.getId() != null ? 
+            inscripcionEntity.getId().toString() : null
+        );
         inscripcionDomainEntity.setFechaInscripcion(inscripcionEntity.getFechaInscripcion());
         inscripcionDomainEntity.setUsuarioId(
             inscripcionEntity.getUsuario() != null ? 

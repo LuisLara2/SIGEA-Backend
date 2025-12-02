@@ -91,7 +91,10 @@ public class OpenApiConfig {
     public GroupedOpenApi certificacionesApi() {
         return GroupedOpenApi.builder()
                 .group("Modulo Certificaciones")
-                .pathsToMatch("/api/v*/certificaciones/**")
+                .pathsToMatch(
+                    "/api/v*/certificaciones/**",
+                    "/api/v*/estado-certificado/**"
+                )
                 .build();
     }
 
@@ -111,7 +114,7 @@ public class OpenApiConfig {
         return GroupedOpenApi.builder()
                 .group("Modulo Inscripciones")
                 .pathsToMatch(
-                    "/api/v1/inscripciones",
+                    "/api/v*/inscripciones/**",
                     "/api/v*/estados-inscripcion/**"
                 )
                 .build();

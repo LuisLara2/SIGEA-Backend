@@ -28,7 +28,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @RequestMapping("/api/v1/estados-inscripcion")
 @CrossOrigin(origins = "*")
-@Tag(name = "Estados de Inscripción", description = "Operaciones relacionadas con estados de inscripción")
 public class EstadoInscripcionController {
     private final EstadoInscripcionService estadoInscripcionService;
 

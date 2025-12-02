@@ -8,12 +8,20 @@ import java.time.LocalDateTime;
  * Representa la relación entre un usuario y una actividad
  */
 public class InscripcionDomainEntity {
+    private String id;
     private LocalDate fechaInscripcion;
     private String usuarioId;
     private String actividadId;
     private EstadoInscripcionDomainEntity estadoInscripcionDomainEntity;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public LocalDate getFechaInscripcion() {
         return fechaInscripcion;
@@ -64,9 +72,9 @@ public class InscripcionDomainEntity {
      */
     public static InscripcionDomainEntity create(
         LocalDate fechaInscripcion,
-        String usuarioId,
         String actividadId,
-        EstadoInscripcionDomainEntity estadoInscripcionDomainEntity
+        EstadoInscripcionDomainEntity estadoInscripcionDomainEntity,
+        String usuarioId
     ) {
         LocalDateTime now = LocalDateTime.now();
 
