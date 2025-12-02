@@ -53,6 +53,7 @@ public class CodigoVerificacionRepositoryAdapter implements ICodigoVerificacionR
         }
     }
 
+    @Transactional
     public void deleteAllByCorreo(String correo){
         codigoVerificacionJPARepository.deleteAllByCorreo(correo);
     }
