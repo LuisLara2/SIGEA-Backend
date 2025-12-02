@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class CrearInscripcionServiceDTO {
     private LocalDate fechaInscripcion;
-    private String usuarioId;
     private String actividadId;
     private String estadoId;
+    private String usuarioId;
 }
