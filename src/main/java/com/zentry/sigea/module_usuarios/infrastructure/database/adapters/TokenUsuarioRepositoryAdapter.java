@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import com.zentry.sigea.module_usuarios.services.ParticipanteService;
 
 import org.springframework.transaction.annotation.Transactional;
 

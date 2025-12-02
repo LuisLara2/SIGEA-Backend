@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +25,9 @@ public class CodigoVerificacionRepositoryAdapter implements ICodigoVerificacionR
     }
 
     public void save(CodigoVerificacionDomainEntity codigoVerificacionDomainEntity){
-
+        codigoVerificacionJPARepository.saveAndFlush(
+            CodigoVerificacionMapper.toEntity(codigoVerificacionDomainEntity)
+        );
     }
 
     public Optional<CodigoVerificacionDomainEntity> findById(String id){
