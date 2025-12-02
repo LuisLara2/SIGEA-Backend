@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.zentry.sigea.module_inscripciones.core.repositories.IInscripcionRepository;
 import com.zentry.sigea.module_notificaciones.events.domain.SesionCreadaEvent;
 import com.zentry.sigea.module_sesiones.core.entities.SesionDomainEntity;
+import com.zentry.sigea.module_sesiones.infrastructure.database.entities.SesionEntity;
+import com.zentry.sigea.module_sesiones.infrastructure.database.entities.SesionEntity.Modalidad;
 import com.zentry.sigea.module_sesiones.presentacion.models.CrearSesionRequest;
 import com.zentry.sigea.module_sesiones.presentacion.models.SesionRequest;
 import com.zentry.sigea.module_sesiones.presentacion.models.SesionResponse;
@@ -56,21 +58,18 @@ public class SesionService implements ISesionService {
     @Override
     public SesionResponse crearSesion(CrearSesionRequest request) {
         try {
-            // Crear la sesión
             SesionDomainEntity sesionCreada = crearSesionUseCase.execute(request);
-            
+
             if (sesionCreada == null || sesionCreada.getId() == null) {
                 throw new IllegalStateException("La sesión no fue creada correctamente - ID es null");
             }
-            
-            // Obtener usuarios inscritos en la actividad para notificarles
+
             List<String> usuariosInscritos = inscripcionRepository
                 .findByActividadId(request.getActividadId())
                 .stream()
                 .map(inscripcion -> inscripcion.getUsuarioId())
                 .collect(Collectors.toList());
-            
-            // Solo publicar evento si hay usuarios inscritos
+
             if (!usuariosInscritos.isEmpty()) {
                 eventPublisher.publishEvent(new SesionCreadaEvent(
                     sesionCreada.getId(),
@@ -81,11 +80,10 @@ public class SesionService implements ISesionService {
                     LocalDateTime.now()
                 ));
             }
-            
+
             return SesionResponse.fromDomain(sesionCreada);
         } catch (Exception e) {
-            // Log detallado del error
-            throw new RuntimeException("Error al crear sesión: " + e.getMessage(), e);
+            throw new SesionCreationException("Error al crear sesión: " + e.getMessage(), e);
         }
     }
 
@@ -101,6 +99,10 @@ public class SesionService implements ISesionService {
     @Override
     @Transactional(readOnly = true)
     public List<SesionResponse> listarSesionesPorActividad(String actividadId) {
+        if (actividadId == null || actividadId.isEmpty()) {
+            throw new IllegalArgumentException("El ID de la actividad no puede ser nulo o vacío.");
+        }
+
         return listarSesionesUseCase.executeByActividad(actividadId)
             .stream()
             .map(SesionResponse::fromDomain)
@@ -124,13 +126,30 @@ public class SesionService implements ISesionService {
 
     @Override
     public SesionResponse actualizarSesion(String id, SesionRequest request) {
-        // Crear entidad de dominio temporal con los datos a actualizar
+        if (id == null || id.isEmpty()) {
+            throw new IllegalArgumentException("El ID de la sesión no puede ser nulo o vacío.");
+        }
+
+        if (request.getTitulo() == null || request.getTitulo().isEmpty()) {
+            throw new IllegalArgumentException("El título no puede ser nulo o vacío.");
+        }
+
+        SesionEntity.Modalidad modalidad = SesionEntity.Modalidad.valueOf(request.getModalidad().toUpperCase());
+
         SesionDomainEntity datosActualizados = SesionDomainEntity.create(
             null,
+            request.getTitulo(),
+            request.getDescripcion(),
             request.getFechaSesion(),
-            request.getTitulo()
+            request.getHoraInicio(),
+            request.getHoraFin(),
+            request.getPonente(),
+            modalidad,
+            request.getLugarSesion(),
+            request.getLinkVirtual(),
+            request.getOrden()
         );
-        
+
         return actualizarSesionUseCase.execute(id, datosActualizados)
             .map(SesionResponse::fromDomain)
             .orElseThrow(() -> new IllegalArgumentException("Sesión no encontrada con ID: " + id));
@@ -138,6 +157,44 @@ public class SesionService implements ISesionService {
 
     @Override
     public void eliminarSesion(String id) {
+        if (id == null || id.isEmpty()) {
+            throw new IllegalArgumentException("El ID de la sesión no puede ser nulo o vacío.");
+        }
+
         eliminarSesionUseCase.execute(id);
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public List<SesionResponse> listarSesiones(String actividadId, Modalidad modalidad) {
+        if (actividadId == null && modalidad == null) {
+            // Si no hay filtros, listar todas las sesiones
+            return listarSesiones();
+        }
+
+        if (actividadId != null && modalidad != null) {
+            // Si ambos filtros están presentes, listar por actividad y modalidad
+            return listarSesionesUseCase.executeByActividadAndModalidad(actividadId, modalidad)
+                .stream()
+                .map(SesionResponse::fromDomain)
+                .collect(Collectors.toList());
+        }
+
+        if (actividadId != null) {
+            // Si solo se filtra por actividad
+            return listarSesionesPorActividad(actividadId);
+        }
+
+        // Si solo se filtra por modalidad
+        return listarSesionesUseCase.executeByModalidad(modalidad)
+            .stream()
+            .map(SesionResponse::fromDomain)
+            .collect(Collectors.toList());
+    }
+
+    public class SesionCreationException extends RuntimeException {
+        public SesionCreationException(String message, Throwable cause) {
+            super(message, cause);
+        }
     }
 }

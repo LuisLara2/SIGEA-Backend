@@ -69,7 +69,7 @@ public class EmailServiceImpl implements IEmailService {
             helper.setSubject(asunto);
             
             // Contenido HTML con codificación UTF-8
-            helper.setText(construirContenidoHtml(notificacion, nombreDestinatario), true);
+            helper.setText(construirContenidoHtml(notificacion.getMensaje(), nombreDestinatario), true);
             
             logger.info("📤 Llamando a mailSender.send()...");
             mailSender.send(message);
@@ -123,7 +123,7 @@ public class EmailServiceImpl implements IEmailService {
     /**
      * Construye el contenido HTML del email
      */
-    private String construirContenidoHtml(NotificacionDomainEntity notificacion, String nombreDestinatario) {
+    private String construirContenidoHtml(String messageNotificacion, String nombreDestinatario) {
         StringBuilder html = new StringBuilder();
         
         html.append("<!DOCTYPE html>");
@@ -163,7 +163,7 @@ public class EmailServiceImpl implements IEmailService {
         
         // Mensaje principal (limpio, sin decoraciones extras)
         html.append("<div class='message-box'>");
-        html.append("<p>").append(notificacion.getMensaje()).append("</p>");
+        html.append("<p>").append(messageNotificacion).append("</p>");
         html.append("</div>");
         
         html.append("</div>");
@@ -222,5 +222,52 @@ public class EmailServiceImpl implements IEmailService {
         texto.append("Este es un mensaje automático, por favor no responder.");
         
         return texto.toString();
+    }
+
+    public boolean enviarCodigoVerificacion(String destinatario , String nombreDestinatario , Integer codigoVerificacion){
+        logger.info("🔵 EmailService.enviar() INICIADO - emailEnabled: {}", emailEnabled);
+        logger.info("🔵 Destinatario: {}, Nombre: {}", destinatario, nombreDestinatario);
+
+        if (!emailEnabled) {
+            logger.warn("⚠️ Envío de emails DESHABILITADO en configuración. Email no enviado a: {}", destinatario);
+            throw new RuntimeException("Envío de emails DESHABILITADO en configuración");
+        }
+        
+        if (destinatario == null || destinatario.trim().isEmpty()) {
+            logger.error("❌ Destinatario de email vacío");
+            throw new RuntimeException("Destinatario de email vacío");
+        }
+        
+        try {
+            logger.info("📧 Preparando envío de email a {}", destinatario);
+            logger.info("📧 Email FROM configurado: {}", emailFrom);
+            
+            // Crear mensaje HTML para mejor presentación
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            
+            // Configurar remitente con codificación UTF-8 explícita
+            helper.setFrom(emailFrom, nombreRemitente);
+            helper.setTo(destinatario);
+            
+            String mensajeCodigoValidacion = "Hola, Tu código de verificacion es el siguiente (no lo compartas con nadie): " + Integer.toString(codigoVerificacion);
+            // Contenido HTML con codificación UTF-8
+            helper.setText(construirContenidoHtml(mensajeCodigoValidacion , nombreDestinatario), true);
+            
+            logger.info("Llamando a mailSender.send()...");
+            mailSender.send(message);
+            
+            logger.info("✅✅✅ Email de verificacion enviado EXITOSAMENTE a {}: {}", 
+                destinatario);
+            return true;
+            
+        } catch (Exception e) {
+            logger.error("💥💥💥 ERROR CRÍTICO al enviar email de verificacion a {}", 
+                destinatario);
+            logger.error("💥 Tipo de excepción: {}", e.getClass().getName());
+            logger.error("💥 Mensaje: {}", e.getMessage());
+            logger.error("💥 Stack trace completo:", e);
+            throw new RuntimeException("Mensaje de error critico: " + e.getMessage());
+        }
     }
 }

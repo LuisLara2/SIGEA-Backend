@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import com.zentry.sigea.module_usuarios.services.ParticipanteService;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +20,6 @@ import com.zentry.sigea.module_usuarios.infrastructure.repositories.UsuarioJPARe
 
 @Repository
 public class TokenUsuarioRepositoryAdapter implements ITokenUsuarioRepository {
-
-    private final ParticipanteService participanteService;
     
     private final TokenUsuarioJPARepository tokenUsuarioJPARepository;
     private final UsuarioJPARepository usuarioJPARepository;
@@ -30,10 +27,9 @@ public class TokenUsuarioRepositoryAdapter implements ITokenUsuarioRepository {
     public TokenUsuarioRepositoryAdapter(
         TokenUsuarioJPARepository tokenUsuarioJPARepository , 
         UsuarioJPARepository usuarioJPARepository
-    , ParticipanteService participanteService){
+    ){
         this.tokenUsuarioJPARepository = tokenUsuarioJPARepository;
         this.usuarioJPARepository = usuarioJPARepository;
-        this.participanteService = participanteService;
     }
 
     public Optional<TokenUsuarioDomainEntity> findById(String id){
@@ -55,7 +51,7 @@ public class TokenUsuarioRepositoryAdapter implements ITokenUsuarioRepository {
     public TokenUsuarioDomainEntity save(TokenUsuarioDomainEntity tokenUsuarioDomainEntity){
         UsuarioEntity usuarioEntity = usuarioJPARepository.findById(UUID.fromString(tokenUsuarioDomainEntity.getUsuarioId())).orElse(null);
 
-        TokenUsuarioEntity tokenUsuarioEntity = tokenUsuarioJPARepository.save(
+        TokenUsuarioEntity tokenUsuarioEntity = tokenUsuarioJPARepository.saveAndFlush(
             TokenUsuarioMapper.toEntity(tokenUsuarioDomainEntity, usuarioEntity)
         );
 

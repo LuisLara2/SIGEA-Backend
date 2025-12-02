@@ -3,6 +3,7 @@ package com.zentry.sigea.module_usuarios.presentation.api.v1;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.zentry.sigea.module_actividad.services.usecases.actividad.EliminarActividadUseCase;
 import com.zentry.sigea.module_inscripciones.presentation.models.mappers.CrearInscripcionMapper;
 import com.zentry.sigea.module_inscripciones.presentation.models.requestDTO.CrearInscripcionRequest;
 import com.zentry.sigea.module_inscripciones.services.InscripcionService;
@@ -36,15 +37,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 @CrossOrigin(origins = "*")
 public class ParticipanteApiRestController {
 
+    private final EliminarActividadUseCase eliminarActividadUseCase;
+
     private final InscripcionService inscripcionService;
     private final ParticipanteService participanteService;
+
+
+    private static final Map<String, String> constraintMessages = Map.of(
+        "uk_usuario_correo", "El correo ya está en uso.",
+        "uk_usuario_dni", "El DNI ya está en uso.",
+        "uk_telefono", "El telefono ya esta en uso."
+    );
 
     public ParticipanteApiRestController(
         InscripcionService inscripcionService , 
         ParticipanteService participanteService
-    ){
+    , EliminarActividadUseCase eliminarActividadUseCase){
         this.inscripcionService = inscripcionService;
         this.participanteService = participanteService;
+        this.eliminarActividadUseCase = eliminarActividadUseCase;
     }
 
     @GetMapping("/home")
@@ -81,14 +92,26 @@ public class ParticipanteApiRestController {
             ),
         tags = {"Registrar"}
     )
-    public ResponseEntity<String> registrarInscripcion(@RequestBody CrearInscripcionRequest crearInscripcionRequest) {
+    public ResponseEntity<GeneralResponseDTO<?>> registrarInscripcion(@RequestBody CrearInscripcionRequest crearInscripcionRequest) {
         try {
             inscripcionService.crearInscripcion(
                 CrearInscripcionMapper.requestToService(crearInscripcionRequest)
             );
-            return ResponseEntity.status(HttpStatus.OK).body("Inscripcion realizada con exito!.");
+            return ResponseEntity.status(HttpStatus.OK).body(
+                new GeneralResponseDTO<>(
+                    true, 
+                    "Inscripcion realizada con exito!.", 
+                    null
+                )
+            );
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                new GeneralResponseDTO<>(
+                    false, 
+                    e.getMessage(), 
+                    null
+                )
+            );
         }
     }
 
@@ -140,19 +163,57 @@ public class ParticipanteApiRestController {
         }
 
         try {
-            
             String registrarParticipanteMessage = participanteService.registrarParticipante(
                 RegistrarParticipanteMapper.requestToDomain(registrarParticipanteRequestDTO)
             );
 
             
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+            return ResponseEntity.status(HttpStatus.CREATED).body(
                 new GeneralResponseDTO<>(
                     true, 
                     registrarParticipanteMessage, 
                     null
                 )
             );
+        } catch (DataIntegrityViolationException ex) {
+
+            Throwable causa = ex.getCause();
+            while (causa != null && !(causa instanceof org.hibernate.exception.ConstraintViolationException)) {
+                causa = causa.getCause();
+            }
+
+            if (causa instanceof org.hibernate.exception.ConstraintViolationException cve) {
+                String constraint = cve.getConstraintName();
+
+                if (constraint != null && constraintMessages.containsKey(constraint)) {
+
+                    // Convertimos usuario_correo_key → correo
+                    String field = constraint.replace("uk_usuario_", "");
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                        new GeneralResponseDTO<>(
+                            false, 
+                            "Error de unicidad", 
+                            Map.of(
+                                "campo" , field , 
+                                "mensaje", constraintMessages.get(constraint)
+                            )
+                        )
+                    );
+                }
+            }
+
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                new GeneralResponseDTO<>(
+                    false, 
+                    ex.getMessage(), 
+                    Map.of(
+                    "Tipo de error", ex.getClass().getName() ,
+                        "Mensaje del error" , ex.getMessage() , 
+                        "Causa del error", ex.getCause()
+                    )
+                )
+            );
+
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 new GeneralResponseDTO<>(
@@ -171,5 +232,4 @@ public class ParticipanteApiRestController {
             );
         }
     } 
-
 }

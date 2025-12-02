@@ -3,6 +3,7 @@ package com.zentry.sigea.module_sesiones.services.interfaces;
 import com.zentry.sigea.module_sesiones.presentacion.models.CrearSesionRequest;
 import com.zentry.sigea.module_sesiones.presentacion.models.SesionRequest;
 import com.zentry.sigea.module_sesiones.presentacion.models.SesionResponse;
+import com.zentry.sigea.module_sesiones.infrastructure.database.entities.SesionEntity.Modalidad;
 
 import java.util.List;
 
@@ -14,6 +15,8 @@ public interface ISesionService {
     SesionResponse crearSesion(CrearSesionRequest request);
     
     List<SesionResponse> listarSesiones();
+    
+    List<SesionResponse> listarSesiones(String actividadId, Modalidad modalidad); 
     
     List<SesionResponse> listarSesionesPorActividad(String actividadId);
     

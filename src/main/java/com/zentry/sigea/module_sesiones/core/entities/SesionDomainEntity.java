@@ -1,7 +1,9 @@
 package com.zentry.sigea.module_sesiones.core.entities;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
+import com.zentry.sigea.module_sesiones.infrastructure.database.entities.SesionEntity.Modalidad;
 /**
  * Entidad de dominio para Sesión
  * Representa una sesión dentro de una actividad
@@ -9,8 +11,18 @@ import java.time.LocalDateTime;
 public class SesionDomainEntity {
     private String id;
     private String actividadId;
-    private LocalDateTime fechaSesion;
     private String titulo;
+    private String descripcion;
+    private LocalDateTime fecha_sesion;
+    private LocalTime hora_inicio;
+    private LocalTime hora_fin;
+    private String ponente;
+
+    private Modalidad modalidad;
+    private String lugar_sesion;
+    private String link_virtual;
+    private String orden;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -32,18 +44,78 @@ public class SesionDomainEntity {
         this.actividadId = actividadId;
     }
 
-    public LocalDateTime getFechaSesion() { 
-        return fechaSesion; 
-    }
-    public void setFechaSesion(LocalDateTime fechaSesion) { 
-        this.fechaSesion = fechaSesion; 
-    }
-
     public String getTitulo() { 
         return titulo; 
     }
     public void setTitulo(String titulo) { 
         this.titulo = titulo; 
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public LocalDateTime getFechaSesion() { 
+        return fecha_sesion; 
+    }
+    public void setFechaSesion(LocalDateTime fecha_sesion) { 
+        this.fecha_sesion = fecha_sesion; 
+    }
+
+    public LocalTime getHoraInicio() {
+        return hora_inicio;
+    }
+    public void setHoraInicio(LocalTime hora_inicio) {
+        this.hora_inicio = hora_inicio;
+    }
+
+    public LocalTime getHoraFin() {
+        return hora_fin;
+    }
+    public void setHoraFin(LocalTime hora_fin) {
+        this.hora_fin = hora_fin;
+    }
+
+    public String getPonente() {
+        return ponente;
+    }
+    public void setPonente(String ponente) {
+        this.ponente = ponente;
+    }
+
+    public Modalidad getModalidad() {
+        return modalidad;
+    }
+    public void setModalidad(Modalidad modalidad) {
+        if (modalidad == null) {
+            throw new IllegalArgumentException("La modalidad no puede ser nula");
+        }
+        this.modalidad = modalidad;
+    }
+
+
+    public String getLugarSesion() {
+        return lugar_sesion;
+    }
+    public void setLugarSesion(String lugar_sesion) {
+        this.lugar_sesion = lugar_sesion;
+    }
+
+    public String getLinkVirtual() {
+        return link_virtual;
+    }
+    public void setLinkVirtual(String link_virtual) {
+        this.link_virtual = link_virtual;
+    }
+
+    public String getOrden() {
+        return orden;
+    }
+    public void setOrden(String orden) {
+        this.orden = orden;
     }
 
     public LocalDateTime getCreatedAt() { 
@@ -66,18 +138,34 @@ public class SesionDomainEntity {
      * Factory method para crear una nueva sesión
      */
     public static SesionDomainEntity create(
-        String actividadId,  
-        LocalDateTime fechaSesion,
-        String titulo
+        String actividadId,
+        String titulo,
+        String descripcion,
+        LocalDateTime fecha_sesion,
+        LocalTime hora_inicio,
+        LocalTime hora_fin,
+        String ponente,
+        Modalidad modalidad,
+        String lugar_sesion,
+        String link_virtual,
+        String orden
     ) {
-        validateCreationParams(actividadId, fechaSesion, titulo);
+        validateCreationParams(actividadId, titulo, descripcion, fecha_sesion, hora_inicio, hora_fin, ponente, modalidad, lugar_sesion, link_virtual, orden);
         
         LocalDateTime now = LocalDateTime.now();
-        
+
         SesionDomainEntity sesion = new SesionDomainEntity();
         sesion.setActividadId(actividadId);
-        sesion.setFechaSesion(fechaSesion);
         sesion.setTitulo(titulo);
+        sesion.setDescripcion(descripcion);
+        sesion.setFechaSesion(fecha_sesion);
+        sesion.setHoraInicio(hora_inicio);
+        sesion.setHoraFin(hora_fin);
+        sesion.setPonente(ponente);
+        sesion.setModalidad(modalidad);
+        sesion.setLugarSesion(lugar_sesion);
+        sesion.setLinkVirtual(link_virtual);
+        sesion.setOrden(orden);
         sesion.setCreatedAt(now);
         sesion.setUpdatedAt(now);
         
@@ -90,32 +178,56 @@ public class SesionDomainEntity {
     public static SesionDomainEntity reconstruct(
         String id,
         String actividadId,
-        LocalDateTime fechaSesion,
         String titulo,
+        String descripcion,
+        LocalDateTime fecha_sesion,
+        LocalTime hora_inicio,
+        LocalTime hora_fin,
+        String ponente,
+        Modalidad modalidad,
+        String lugar_sesion,
+        String link_virtual,
+        String orden,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
     ) {
         SesionDomainEntity sesion = new SesionDomainEntity();
         sesion.setId(id);
         sesion.setActividadId(actividadId);
-        sesion.setFechaSesion(fechaSesion);
         sesion.setTitulo(titulo);
+        sesion.setDescripcion(descripcion);
+        sesion.setFechaSesion(fecha_sesion);
+        sesion.setHoraInicio(hora_inicio);
+        sesion.setHoraFin(hora_fin);
+        sesion.setPonente(ponente);
+        sesion.setModalidad(modalidad);
+        sesion.setLugarSesion(lugar_sesion);
+        sesion.setLinkVirtual(link_virtual);
+        sesion.setOrden(orden);
         sesion.setCreatedAt(createdAt);
         sesion.setUpdatedAt(updatedAt);
         
         return sesion;
     }
-
     /* MÉTODOS DE NEGOCIO */
 
     /**
      * Actualiza la información de la sesión
      */
-    public void updateInfo(LocalDateTime fechaSesion, String titulo) {
-        validateUpdateParams(fechaSesion, titulo);
+    public void updateInfo(String actividadId, String titulo, String descripcion, LocalDateTime fecha_sesion, LocalTime hora_inicio, LocalTime hora_fin, String ponente, Modalidad modalidad, String lugar_sesion, String link_virtual, String orden) {
+        validateUpdateParams(actividadId, titulo, fecha_sesion, hora_inicio, hora_fin, ponente);
         
-        this.fechaSesion = fechaSesion;
+        this.actividadId = actividadId;
         this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.fecha_sesion = fecha_sesion;
+        this.hora_inicio = hora_inicio;
+        this.hora_fin = hora_fin;
+        this.ponente = ponente;
+        this.modalidad = modalidad;
+        this.lugar_sesion = lugar_sesion;
+        this.link_virtual = link_virtual;
+        this.orden = orden;
         this.updatedAt = LocalDateTime.now();
     }
 
@@ -130,7 +242,7 @@ public class SesionDomainEntity {
             throw new IllegalArgumentException("No se puede reprogramar a una fecha pasada");
         }
         
-        this.fechaSesion = nuevaFecha;
+        this.fecha_sesion = nuevaFecha;
         this.updatedAt = LocalDateTime.now();
     }
 
@@ -139,55 +251,79 @@ public class SesionDomainEntity {
      */
     public boolean estaEnProgreso() {
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime finEstimado = fechaSesion.plusHours(2); // Asumiendo 2 horas de duración
-        return now.isAfter(fechaSesion) && now.isBefore(finEstimado);
+        LocalDateTime inicio = LocalDateTime.of(fecha_sesion.toLocalDate(), hora_inicio);
+        LocalDateTime fin = LocalDateTime.of(fecha_sesion.toLocalDate(), hora_fin);
+        return now.isAfter(inicio) && now.isBefore(fin);
     }
 
     /**
      * Verifica si la sesión ya finalizó
      */
     public boolean yaFinalizo() {
-        LocalDateTime finEstimado = fechaSesion.plusHours(2);
-        return LocalDateTime.now().isAfter(finEstimado);
+        LocalDateTime fin = LocalDateTime.of(fecha_sesion.toLocalDate(), hora_fin);
+        return LocalDateTime.now().isAfter(fin);
     }
-
     /**
      * Verifica si la sesión es próxima (dentro de las próximas 24 horas)
      */
     public boolean esProxima() {
         LocalDateTime ahora = LocalDateTime.now();
         LocalDateTime limite = ahora.plusHours(24);
-        return fechaSesion.isAfter(ahora) && fechaSesion.isBefore(limite);
+        return fecha_sesion.isAfter(ahora) && fecha_sesion.isBefore(limite);
     }
 
     /* VALIDACIONES PRIVADAS */
 
-    private static void validateCreationParams(String actividadId, LocalDateTime fechaSesion, String titulo) {
+    private static void validateCreationParams(String actividadId, String titulo, String descripcion, LocalDateTime fecha_sesion, LocalTime hora_inicio, LocalTime hora_fin, String ponente, Modalidad modalidad, String lugar_sesion, String link_virtual, String orden) {
         if (actividadId == null) {
-            throw new IllegalArgumentException("El ID de actividad debe ser un número positivo");
-        }
-        if (fechaSesion == null) {
-            throw new IllegalArgumentException("La fecha de sesión no puede ser nula");
+            throw new IllegalArgumentException("El ID de actividad no puede ser nulo");
         }
         if (titulo == null || titulo.trim().isEmpty()) {
             throw new IllegalArgumentException("El título no puede estar vacío");
         }
         if (titulo.length() > 150) {
             throw new IllegalArgumentException("El título no puede exceder 150 caracteres");
+        }
+        if (descripcion != null && descripcion.length() > 500) {
+            throw new IllegalArgumentException("La descripción no puede exceder 500 caracteres");
+        }
+        if (fecha_sesion == null) {
+            throw new IllegalArgumentException("La fecha de sesión no puede ser nula");
+        }
+        if (hora_inicio == null) {
+            throw new IllegalArgumentException("La hora de inicio no puede ser nula");
+        }
+        if (hora_fin == null) {
+            throw new IllegalArgumentException("La hora de fin no puede ser nula");
+        }
+        if (ponente == null) {
+            throw new IllegalArgumentException("El ID del ponente no puede ser nulo");
+        }
+    }
+    private static void validateUpdateParams(String actividadId, String titulo, LocalDateTime fecha_sesion, LocalTime hora_inicio, LocalTime hora_fin, String ponente) {
+        if (actividadId == null) {
+            throw new IllegalArgumentException("El ID de actividad no puede ser nulo");
+        }
+        if (titulo == null || titulo.trim().isEmpty()) {
+            throw new IllegalArgumentException("El título no puede estar vacío");
+        }
+        if (titulo.length() > 150) {
+            throw new IllegalArgumentException("El título no puede exceder 150 caracteres");
+        }
+        if (fecha_sesion == null) {
+            throw new IllegalArgumentException("La fecha de sesión no puede ser nula");
+        }
+        if (hora_inicio == null) {
+            throw new IllegalArgumentException("La hora de inicio no puede ser nula");
+        }
+        if (hora_fin == null) {
+            throw new IllegalArgumentException("La hora de fin no puede ser nula");
+        }
+        if (ponente == null) {
+            throw new IllegalArgumentException("El ID del ponente no puede ser nulo");
         }
     }
 
-    private static void validateUpdateParams(LocalDateTime fechaSesion, String titulo) {
-        if (fechaSesion == null) {
-            throw new IllegalArgumentException("La fecha de sesión no puede ser nula");
-        }
-        if (titulo == null || titulo.trim().isEmpty()) {
-            throw new IllegalArgumentException("El título no puede estar vacío");
-        }
-        if (titulo.length() > 150) {
-            throw new IllegalArgumentException("El título no puede exceder 150 caracteres");
-        }
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -207,7 +343,7 @@ public class SesionDomainEntity {
         return "SesionDomainEntity{" +
                 "id=" + id +
                 ", actividadId=" + actividadId +
-                ", fechaSesion=" + fechaSesion +
+                ", fecha_sesion=" + fecha_sesion +
                 ", titulo='" + titulo + '\'' +
                 '}';
     }

@@ -10,12 +10,18 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Table(
-    name = "usuario"
+    name = "usuario",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "uk_usuario_correo", columnNames = "correo"),
+        @UniqueConstraint(name = "uk_usuario_dni", columnNames = "dni"),
+        @UniqueConstraint(name = "uk_telefono", columnNames = "telefono")
+    }
 )
 @Getter
 @Setter
@@ -44,16 +50,18 @@ public class UsuarioEntity {
     @Column(name = "dni" , nullable = false , unique = true , length = 25)
     private String dni;
 
+    @Column(name = "correo_verificado" , nullable = false)
+    private Boolean correoVerificado = false;
+
     @Column(name = "created_at" , nullable = false , columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(name = "updated_at" , nullable = false , columnDefinition = "TIMESTAMP")
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    @Column(name = "telefono" , nullable = false , length = 25)
+    @Column(name = "telefono" , nullable = false , length = 25 , unique = true)
     private String telefono;
 
     @Column(name = "extension_telefonica" , nullable = false , length = 8)
     private String extensionTelefonica;
-
 }

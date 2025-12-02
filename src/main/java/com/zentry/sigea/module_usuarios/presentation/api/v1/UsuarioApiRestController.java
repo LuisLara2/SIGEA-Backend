@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.zentry.sigea.module_informe.config.InformeMappingConfig;
 import com.zentry.sigea.module_usuarios.presentation.models.requestDTO.LoginUsuarioRequestDTO;
 import com.zentry.sigea.module_usuarios.presentation.models.responseDTO.GeneralResponseDTO;
+import com.zentry.sigea.module_usuarios.presentation.models.responseDTO.LoginResponseDTO;
 import com.zentry.sigea.module_usuarios.services.UsuarioService;
 import com.zentry.sigea.security.UsuarioAuthInfo;
 
@@ -79,14 +80,14 @@ public class UsuarioApiRestController {
         }
 
         try {
-            Map<String , String> loginResponse = usuarioService.login(
+            LoginResponseDTO loginResponseDTO = usuarioService.login(
                 loginUsuarioRequestDTO.getCorreo(), 
                 loginUsuarioRequestDTO.getPassword(), 
                 loginUsuarioRequestDTO.getRememberMe()
             );
 
-            String refreshToken = loginResponse.get("refreshToken");
-            String idRefreshToken = loginResponse.get("idRefreshToken");
+            String refreshToken = loginResponseDTO.getRefreshToken();
+            String idRefreshToken = loginResponseDTO.getIdRefreshToken();
             
             Cookie cookieRefreshToken = new Cookie("refreshToken", refreshToken);
             cookieRefreshToken.setHttpOnly(true);
@@ -110,10 +111,13 @@ public class UsuarioApiRestController {
             response.addCookie(cookieIdRefreshToken);
             
             return ResponseEntity.status(HttpStatus.OK).body(
-                new GeneralResponseDTO<Map<String , String>>(
+                new GeneralResponseDTO<Map<String , ?>>(
                     true , 
                     "Inicio de sesion exitoso", 
-                    loginResponse
+                    Map.of(
+                        "accessToken" , loginResponseDTO.getAccessToken() , 
+                        "emailVerificado" , loginResponseDTO.getCorreoVerificado()
+                    )
                 )
             );
         } catch (RuntimeException e) {

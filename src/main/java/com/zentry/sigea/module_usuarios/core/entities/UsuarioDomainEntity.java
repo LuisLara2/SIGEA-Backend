@@ -1,5 +1,7 @@
 package com.zentry.sigea.module_usuarios.core.entities;
 
+import static org.junit.Assert.fail;
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -58,6 +60,13 @@ public class UsuarioDomainEntity {
         this.dni = dni;
     }
 
+    public Boolean getCorreoVerificado() {
+        return correoVerificado;
+    }
+    public void setCorreoVerificado(Boolean correoVerificado) {
+        this.correoVerificado = correoVerificado;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -102,6 +111,7 @@ public class UsuarioDomainEntity {
         String correo,
         String passwordHash,
         String dni,
+        Boolean correoVerificado,
         String telefono,
         String extensionTelefonica
     ) {
@@ -114,6 +124,7 @@ public class UsuarioDomainEntity {
         usuarioDomainEntity.setCorreo(correo); 
         usuarioDomainEntity.setPasswordHash(passwordHash);
         usuarioDomainEntity.setDni(dni);
+        usuarioDomainEntity.setCorreoVerificado(correoVerificado != null ? correoVerificado : false);
         usuarioDomainEntity.setCreatedAt(nowDateTime);
         usuarioDomainEntity.setUpdatedAt(nowDateTime);
         usuarioDomainEntity.setTelefono(telefono);

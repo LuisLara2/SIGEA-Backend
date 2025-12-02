@@ -69,7 +69,7 @@ public class UsuarioRolRepositoryAdapter implements IUsuarioRolRepository {
 
         usuarioRolEntity.setAsignadoEn(nowLocalDateTime);
 
-        usuarioRolJPARepository.save(usuarioRolEntity);
+        usuarioRolJPARepository.saveAndFlush(usuarioRolEntity);
     }
 
     public void saveOneUserWithAllRolesId(String usuarioId , List<String> listRolesId){

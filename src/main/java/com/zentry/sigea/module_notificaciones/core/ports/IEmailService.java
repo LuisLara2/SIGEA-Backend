@@ -16,4 +16,5 @@ public interface IEmailService {
      * @return true si el envío fue exitoso, false en caso contrario
      */
     boolean enviar(NotificacionDomainEntity notificacion, String destinatario, String nombreDestinatario);
+    boolean enviarCodigoVerificacion(String destinatario , String nombreDestinatario , Integer codigoVerificacion);
 }

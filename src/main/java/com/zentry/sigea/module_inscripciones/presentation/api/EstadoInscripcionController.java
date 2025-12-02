@@ -20,7 +20,6 @@ import com.zentry.sigea.module_inscripciones.services.EstadoInscripcionService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * Controlador REST para gestionar estados de inscripción
