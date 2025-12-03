@@ -1,7 +1,9 @@
 package com.zentry.sigea.module_notificaciones.infrastructure.external;
 
 public class EmailTemplates {
-    public static String notificacionHtml() {
+      /**
+       * Construye el mensaje HTML para notificación de sesión con todos los campos relevantes.
+       */public static String notificacionHtml() {
         return """
         <!DOCTYPE html>
         <html lang=\"es\">
@@ -20,20 +22,22 @@ public class EmailTemplates {
             .brand-bar { background:#0b63f3; color:#fff; padding:22px 32px; }
             .brand-name { font-size:20px; font-weight:800; letter-spacing:0.08em; margin-bottom:6px; }
             .content { padding:30px 40px; color:#111827; }
-            .greeting { font-size:16px; }
+            .greeting { font-size:16px; margin-bottom:12px; }
             .message-box { background:#f9fafb; border-left:4px solid #0b63f3; border-radius:14px; padding:20px;
-                           font-size:14px; color:#1f2937; margin-bottom:16px; }
-            .meta-info { font-size:12px; color:#6b7280; margin-top:10px; }
+                           font-size:15px; color:#1f2937; margin-bottom:20px; }
             .footer { padding:18px 32px 22px; background:#f9fafb; border-top:1px solid #aab8d5ff;
                       text-align:center; font-size:11px; color:#6b7280; }
           </style>
         </head>
+
         <body>
         <div class=\"email-wrapper\">
           <table width=\"100%%\">
             <tr>
               <td align=\"center\">
                 <table class=\"email-container\">
+
+                  <!-- Encabezado institucional -->
                   <tr>
                     <td class=\"header\">
                       <table width=\"100%%\">
@@ -53,42 +57,37 @@ public class EmailTemplates {
                       </table>
                     </td>
                   </tr>
+
+                  <!-- Barra azul -->
                   <tr>
                     <td class=\"brand-bar\">
                       <div class=\"brand-name\">SIGEA</div>
                       <p>Sistema Integral de Gestión de Eventos Académicos</p>
                     </td>
                   </tr>
+
+                  <!-- Contenido -->
                   <tr>
                     <td class=\"content\">
                       <p class=\"greeting\"><strong>Hola %s,</strong></p>
-                      <table width=\"100%%\" cellpadding=\"0\" cellspacing=\"0\" style=\"margin-bottom:16px; border-collapse:separate;\">
-                        <tr>
-                          <td width=\"6\" style=\"background:#0b63f3;\">&nbsp;</td>
-                          <td style=\"background:#f9fafb; padding:20px; font-size:14px; color:#1f2937;\">
-                            <p style=\"margin:0;\">%s</p>
-                          </td>
-                        </tr>
-                      </table>
-                      <div class=\"meta-info\">
-                        <span><strong>Tipo:</strong> %s</span>
-                        <span><strong>Fecha:</strong> %s</span>
+
+                      <!-- MENSAJE PERSONALIZADO (ACTIVIDAD O SESIÓN) -->
+                      <div class=\"message-box\">
+                        %s
                       </div>
+
                     </td>
                   </tr>
+
+                  <!-- Footer -->
                   <tr>
                     <td class=\"footer\">
-                      <p style=\"margin:4px 0;\">
-                        Facultad de Ingeniería en Informática y Sistemas – Universidad Nacional Agraria de la Selva
-                      </p>
-                      <p style=\"margin:4px 0;\">
-                        Carretera Central Km 1.21 – Tingo María, Perú
-                      </p>
-                      <p style=\"margin:4px 0;\">
-                        © 2025 SIGEA · Todos los derechos reservados
-                      </p>
+                      <p style=\"margin:4px 0;\">Facultad de Ingeniería en Informática y Sistemas – Universidad Nacional Agraria de la Selva</p>
+                      <p style=\"margin:4px 0;\">Carretera Central Km 1.21 – Tingo María, Perú</p>
+                      <p style=\"margin:4px 0;\">© 2025 SIGEA · Todos los derechos reservados</p>
                     </td>
                   </tr>
+
                 </table>
               </td>
             </tr>

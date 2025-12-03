@@ -16,6 +16,37 @@ import java.util.Map;
 
 @Service
 public class EmailServiceImpl implements IEmailService {
+    @Override
+    public boolean enviarCodigoVerificacion(String correo, String nombres, Integer codigo) {
+        if (!emailEnabled) {
+            logger.warn("Emails deshabilitados — no enviado.");
+            return false;
+        }
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setFrom(emailFrom, nombreRemitente);
+            helper.setTo(correo);
+            helper.setSubject("Código de Verificación - SIGEA");
+
+            String html = String.format(
+                EmailTemplates.codigoVerificacionHtml(),
+                "https://res.cloudinary.com/ddqasvhfw/image/upload/v1764533099/LogoUnas_xxwueu.webp",
+                "https://res.cloudinary.com/ddqasvhfw/image/upload/v1764533099/LogoExtensionUnas_xo0srw.webp",
+                nombres,
+                codigo
+            );
+
+            helper.setText(html, true);
+            mailSender.send(message);
+            return true;
+
+        } catch (Exception e) {
+            logger.error("Error enviando código de verificación: {}", e.getMessage(), e);
+            return false;
+        }
+    }
 
     private static final Logger logger = LoggerFactory.getLogger(EmailServiceImpl.class);
 
@@ -50,15 +81,38 @@ public class EmailServiceImpl implements IEmailService {
             helper.setTo(destinatario);
             helper.setSubject(obtenerAsunto(notificacion));
 
-            String fechaRaw = notificacion.getFechaEnvio() != null
-                ? notificacion.getFechaEnvio().toString()
-                : "";
 
-            String html = construirContenidoHtml(
-                notificacion.getMensaje(),
+            // Obtener todos los campos relevantes de la sesión desde notificacion
+
+            String titulo = notificacion.getMensaje();
+            String ponente = "";
+            String modalidad = "";
+            String lugar = "";
+            String fecha = notificacion.getFechaEnvio() != null ? notificacion.getFechaEnvio().toLocalDate().toString() : "";
+            String horaInicio = notificacion.getFechaEnvio() != null ? notificacion.getFechaEnvio().toLocalTime().toString() : "";
+            String horaFin = "";
+            String descripcion = "";
+
+
+
+            String logoUnas = "https://res.cloudinary.com/ddqasvhfw/image/upload/v1764533099/LogoUnas_xxwueu.webp";
+            String logoExtension = "https://res.cloudinary.com/ddqasvhfw/image/upload/v1764533099/LogoExtensionUnas_xo0srw.webp";
+            String html = String.format(
+                EmailTemplates.notificacionHtml(),
+                logoUnas,
+                logoExtension,
                 nombreDestinatario,
-                notificacion.getTipoNotificacion() != null ? notificacion.getTipoNotificacion().getEtiqueta() : "Notificación",
-                fechaRaw
+                titulo,
+                ponente,
+                modalidad,
+                lugar,
+                fecha,
+                horaInicio,
+                horaFin,
+                "-",
+                descripcion,
+                "Sesión Académica",
+                fecha
             );
 
             helper.setText(html, true);
@@ -85,66 +139,6 @@ public class EmailServiceImpl implements IEmailService {
         };
     }
 
-    private String construirContenidoHtml(String mensaje, String nombreDestinatario, String tipo, String fecha) {
-        String logoUnas = "https://res.cloudinary.com/ddqasvhfw/image/upload/v1764533099/LogoUnas_xxwueu.webp";
-        String logoExtension = "https://res.cloudinary.com/ddqasvhfw/image/upload/v1764533099/LogoExtensionUnas_xo0srw.webp";
-        String nombreFinal = (nombreDestinatario != null && !nombreDestinatario.trim().isEmpty()) ? nombreDestinatario : "Usuario";
-        String fechaFormateada = "";
-        try {
-            if (fecha != null && !fecha.isEmpty()) {
-                java.time.LocalDateTime fechaObj = java.time.LocalDateTime.parse(fecha);
-                java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-                fechaFormateada = fechaObj.format(formatter);
-            }
-        } catch (Exception e) {
-            fechaFormateada = fecha != null ? fecha : "";
-        }
-        return String.format(
-            EmailTemplates.notificacionHtml(),
-            logoUnas,
-            logoExtension,
-            nombreFinal,
-            mensaje != null ? mensaje : "",
-            tipo != null ? tipo : "",
-            fechaFormateada
-        );
-    }
-
-    @Override
-    public boolean enviarCodigoVerificacion(String destinatario, String nombreDestinatario, Integer codigoVerificacion) {
-        if (!emailEnabled) {
-            logger.warn("Emails deshabilitados — no enviado.");
-            return false;
-        }
-        try {
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-
-            helper.setFrom(emailFrom, nombreRemitente);
-            helper.setTo(destinatario);
-            helper.setSubject("SIGEA - Código de Verificación");
-
-            String html = construirHtmlCodigoVerificacion(nombreDestinatario, codigoVerificacion);
-            helper.setText(html, true);
-
-            mailSender.send(message);
-            return true;
-        } catch (Exception e) {
-            logger.error("Error enviando código de verificación: {}", e.getMessage(), e);
-            return false;
-        }
-    }
-
-    private String construirHtmlCodigoVerificacion(String nombreDestinatario, Integer codigoVerificacion) {
-        String logoUnas = "https://res.cloudinary.com/ddqasvhfw/image/upload/v1764533099/LogoUnas_xxwueu.webp";
-        String logoExtension = "https://res.cloudinary.com/ddqasvhfw/image/upload/v1764533099/LogoExtensionUnas_xo0srw.webp";
-        String nombreFinal = (nombreDestinatario != null && !nombreDestinatario.trim().isEmpty()) ? nombreDestinatario : "Usuario";
-        return String.format(
-            EmailTemplates.codigoVerificacionHtml(),
-            logoUnas,
-            logoExtension,
-            nombreFinal,
-            String.format("%06d", codigoVerificacion != null ? codigoVerificacion : 0)
-        );
-    }
 }
+
+    // ...existing code...
