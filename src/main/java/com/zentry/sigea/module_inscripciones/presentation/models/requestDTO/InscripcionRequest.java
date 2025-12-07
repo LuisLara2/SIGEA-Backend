@@ -15,13 +15,12 @@ public class InscripcionRequest {
 
     @NotBlank(message = "Debe especificar el estado de la inscripción.")
     private String estadoId;
-
-    @NotBlank(message = "Debe especificar el ID del usuario.")
-    private String usuarioId;
-
+    
     @NotBlank(message = "Debe especificar el ID de la actividad.")
     private String actividadId;
-
+    
+    @NotBlank(message = "Debe especificar el ID del usuario.")
+    private String usuarioId;
     // Constructor vacío para Jackson
     public InscripcionRequest() {}
 

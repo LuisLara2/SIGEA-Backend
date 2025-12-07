@@ -11,7 +11,10 @@ import com.zentry.sigea.module_actividad.infrastructure.database.entities.Activi
 import com.zentry.sigea.module_actividad.infrastructure.repository.ActividadJPARepository;
 import com.zentry.sigea.module_inscripciones.core.entities.InscripcionDomainEntity;
 import com.zentry.sigea.module_inscripciones.core.repositories.IInscripcionRepository;
+import com.zentry.sigea.module_inscripciones.infrastructure.database.entities.EstadoInscripcionEntity;
+import com.zentry.sigea.module_inscripciones.infrastructure.database.entities.InscripcionEntity;
 import com.zentry.sigea.module_inscripciones.infrastructure.database.mappers.InscripcionMapper;
+import com.zentry.sigea.module_inscripciones.infrastructure.repository.EstadoInscripcionJPARepository;
 import com.zentry.sigea.module_inscripciones.infrastructure.repository.InscripcionJPARepository;
 import com.zentry.sigea.module_usuarios.infrastructure.database.entities.UsuarioEntity;
 import com.zentry.sigea.module_usuarios.infrastructure.repositories.UsuarioJPARepository;
@@ -22,15 +25,18 @@ public class InscripcionRepositoryAdapter implements IInscripcionRepository {
     private final InscripcionJPARepository inscripcionJPARepository;
     private final UsuarioJPARepository usuarioJPARepository;
     private final ActividadJPARepository actividadJPARepository;
+    private final EstadoInscripcionJPARepository estadoInscripcionJPARepository;
 
     public InscripcionRepositoryAdapter(
         InscripcionJPARepository inscripcionJPARepository,
         UsuarioJPARepository usuarioJPARepository,
-        ActividadJPARepository actividadJPARepository
+        ActividadJPARepository actividadJPARepository,
+        EstadoInscripcionJPARepository estadoInscripcionJPARepository
     ) {
         this.inscripcionJPARepository = inscripcionJPARepository;
         this.usuarioJPARepository = usuarioJPARepository;
         this.actividadJPARepository = actividadJPARepository;
+        this.estadoInscripcionJPARepository = estadoInscripcionJPARepository;
     }
 
     public boolean save(InscripcionDomainEntity inscripcionDomainEntity) {
@@ -43,17 +49,21 @@ public class InscripcionRepositoryAdapter implements IInscripcionRepository {
                 UUID.fromString(inscripcionDomainEntity.getActividadId())
             ).orElse(null);
 
-            if (usuarioEntity == null || actividadEntity == null) {
+            EstadoInscripcionEntity estadoInscripcionEntity = estadoInscripcionJPARepository.findById(
+                UUID.fromString(inscripcionDomainEntity.getEstadoInscripcionDomainEntity().getId())
+            ).orElse(null);
+
+            if (usuarioEntity == null || actividadEntity == null || estadoInscripcionEntity == null) {
                 return false;
             }
 
-            inscripcionJPARepository.save(
-                InscripcionMapper.toEntity(
-                    inscripcionDomainEntity,
-                    usuarioEntity,
-                    actividadEntity
-                )
-            );
+            InscripcionEntity inscripcionEntity = new InscripcionEntity();
+            inscripcionEntity.setFechaInscripcion(inscripcionDomainEntity.getFechaInscripcion());
+            inscripcionEntity.setUsuario(usuarioEntity);
+            inscripcionEntity.setActividad(actividadEntity);
+            inscripcionEntity.setEstadoInscripcion(estadoInscripcionEntity);
+
+            inscripcionJPARepository.save(inscripcionEntity);
 
             return true;
         } catch (Exception e) {

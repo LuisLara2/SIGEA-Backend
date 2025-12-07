@@ -52,12 +52,10 @@ public class InscripcionResponse {
 
     /**
      * Factory method para crear un InscripcionResponse desde una entidad Inscripcion
-     * Nota: Este método requiere que la entidad tenga un ID, pero la entidad de dominio no lo tiene
-     * Se puede obtener del mapper o agregar el ID a la entidad de dominio si es necesario
      */
     public static InscripcionResponse fromEntity(InscripcionDomainEntity inscripcionDomainEntity) {
         return new InscripcionResponse(
-            null, // El ID se puede agregar si es necesario
+            inscripcionDomainEntity.getId(),
             inscripcionDomainEntity.getFechaInscripcion(),
             inscripcionDomainEntity.getUsuarioId(),
             inscripcionDomainEntity.getActividadId(),

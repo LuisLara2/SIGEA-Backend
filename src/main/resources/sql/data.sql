@@ -88,7 +88,7 @@ INSERT INTO usuario (
 VALUES (
     'Participante', 
     'Escaly', 
-    'participante@sigea.unas.edu.pe', 
+    'brennisbenjaminn@gmail.com', 
     crypt('12345678', gen_salt('bf', 10)), 
     '70897889' , 
     TRUE , 
@@ -109,7 +109,7 @@ FROM usuario u
 JOIN rol r ON (
     (u.correo = 'administrador@sigea.unas.edu.pe' AND r.nombre_rol = 'ADMINISTRADOR') OR
     (u.correo = 'organizador@sigea.unas.edu.pe' AND r.nombre_rol = 'ORGANIZADOR') OR
-    (u.correo = 'participante@sigea.unas.edu.pe' AND r.nombre_rol = 'PARTICIPANTE')
+    (u.correo = 'brennisbenjaminn@gmail.com' AND r.nombre_rol = 'PARTICIPANTE')
 )
 WHERE NOT EXISTS (
     SELECT 1 FROM usuario_rol ur
@@ -142,7 +142,44 @@ VALUES
     ('SUSPENDIDO', 'Suspendido')
 ON CONFLICT (codigo) DO NOTHING;
 
--- 6) Insertar actividad de ejemplo (verifica duplicados antes de insertar)
+-- 6) Insertar tipos de notificación
+INSERT INTO tipo_notificacion (codigo, etiqueta)
+VALUES 
+    ('INSCRIPCION', 'Inscripción'),
+    ('COMUNICACION', 'Comunicación'),
+    ('PAGO', 'Pago'),
+    ('CERTIFICADO', 'Certificado'),
+    ('ACTIVIDAD', 'Actividad'),
+    ('RECORDATORIO', 'Recordatorio')
+ON CONFLICT (codigo) DO NOTHING;
+
+-- 7) Insertar estados de inscripción
+INSERT INTO estado_inscripcion (codigo, etiqueta)
+VALUES 
+    ('PENDIENTE', 'Pendiente'),
+    ('CONFIRMADA', 'Confirmada'),
+    ('CANCELADA', 'Cancelada'),
+    ('COMPLETADA', 'Completada')
+ON CONFLICT (codigo) DO NOTHING;
+
+-- 8) Insertar estados de certificado
+INSERT INTO estado_certificado (codigo, etiqueta)
+VALUES 
+    ('EMITIDO', 'Emitido'),
+    ('PENDIENTE_EMISION', 'Pendiente de Emisión'),
+    ('REVOCADO', 'Revocado'),
+    ('SUSPENDIDO', 'Suspendido')
+ON CONFLICT (codigo) DO NOTHING;
+
+-- 8.1) Insertar tipos de certificado
+INSERT INTO tipo_certificado (codigo, descripcion, created_at, updated_at)
+VALUES 
+    ('INDIVIDUAL', 'Certificado individual emitido a una persona específica', NOW(), NOW()),
+    ('GRUPAL', 'Certificado grupal emitido a un grupo de personas', NOW(), NOW()),
+    ('PARTICIPACION', 'Certificado de participación sin requisitos de asistencia', NOW(), NOW())
+ON CONFLICT (codigo) DO NOTHING;
+
+-- 9) Insertar actividad de ejemplo (verifica duplicados antes de insertar)
 INSERT INTO actividad (
     titulo, descripcion, fecha_inicio, fecha_fin, hora_inicio, hora_fin,
     estado_actividad_id, id_usuario, tipo_actividad_id, lugar, 
