@@ -13,6 +13,7 @@ import com.zentry.sigea.module_usuarios.services.EnviarCodigoVerificacionPorEmai
 import com.zentry.sigea.module_usuarios.services.ValidarCodigoEnviadoService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
 @RestController
@@ -38,7 +39,7 @@ public class ValidarCorreoApiRestController {
         tags = {"Validar Correo"}
     )
     public ResponseEntity<GeneralResponseDTO<?>> enviarCodigoVerificacion(
-        @RequestParam(name =  "correo") @NotNull(message = "Debe enviar el correo a verificar.") String correo , 
+        @RequestParam(name =  "correo") @NotNull(message = "Debe enviar el correo a verificar.") @Email(message = "Debe enviar un correo valido") String correo , 
         @RequestParam(name = "nombres") @NotNull(message = "Debe enviar los nombres del usuario") String nombres
     ){
         try {
@@ -68,7 +69,7 @@ public class ValidarCorreoApiRestController {
         tags = {"Validar Correo"}
     )
     public ResponseEntity<GeneralResponseDTO<?>> validarCodigoEnviado(
-        @RequestParam(name = "correo") @NotNull(message = "Debe especificar el correo para validar.") String correo,
+        @RequestParam(name = "correo") @NotNull(message = "Debe especificar el correo para validar.") @Email(message = "Debe enviar un correo valido") String correo,
         @RequestParam(name = "codigo") @NotNull(message = "Debe enviar el codigo de verificacion.") String codigo
     ){
         try {
