@@ -12,6 +12,7 @@ public class UsuarioDomainEntity {
     private String correo;
     private String passwordHash;
     private String dni;
+    private Boolean correoVerificado;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     

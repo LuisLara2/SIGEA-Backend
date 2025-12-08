@@ -172,12 +172,12 @@ VALUES
 ON CONFLICT (codigo) DO NOTHING;
 
 -- 8.1) Insertar tipos de certificado
-INSERT INTO tipo_certificado (codigo, descripcion, created_at, updated_at)
-VALUES 
-    ('INDIVIDUAL', 'Certificado individual emitido a una persona específica', NOW(), NOW()),
-    ('GRUPAL', 'Certificado grupal emitido a un grupo de personas', NOW(), NOW()),
-    ('PARTICIPACION', 'Certificado de participación sin requisitos de asistencia', NOW(), NOW())
-ON CONFLICT (codigo) DO NOTHING;
+-- INSERT INTO tipo_certificado (codigo, descripcion, created_at, updated_at)
+-- VALUES 
+--     ('INDIVIDUAL', 'Certificado individual emitido a una persona específica', NOW(), NOW()),
+--     ('GRUPAL', 'Certificado grupal emitido a un grupo de personas', NOW(), NOW()),
+--     ('PARTICIPACION', 'Certificado de participación sin requisitos de asistencia', NOW(), NOW())
+-- ON CONFLICT (codigo) DO NOTHING;
 
 -- 9) Insertar actividad de ejemplo (verifica duplicados antes de insertar)
 INSERT INTO actividad (
