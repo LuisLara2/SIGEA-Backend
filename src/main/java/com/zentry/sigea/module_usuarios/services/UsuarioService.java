@@ -20,6 +20,17 @@ import java.util.Map;
 
 @Service
 public class UsuarioService {
+    /**
+     * Retorna los IDs de los usuarios que tienen el rol 'Participante'
+     */
+    public List<String> getUsuariosIdsPorRolParticipante() {
+        return usuarioRepository.findAll().stream()
+            .filter(usuario -> usuarioRolRepository.findRolesByUsuarioId(usuario.getId())
+                .stream()
+                .anyMatch(rol -> rol.getNombreRol().equalsIgnoreCase("Participante")))
+            .map(UsuarioDomainEntity::getId)
+            .collect(Collectors.toList());
+    }
 
     private final JwtBlacklistService jwtBlacklistService;
     private final IUsuarioRepository usuarioRepository;

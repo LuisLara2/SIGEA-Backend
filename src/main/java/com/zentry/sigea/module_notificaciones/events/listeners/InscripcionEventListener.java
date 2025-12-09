@@ -42,7 +42,7 @@ public class InscripcionEventListener {
                     event.getUsuarioId(),
                     event.getActividadId(),
                     TIPO_NOTIFICACION_INSCRIPCION,
-                    "✅ ¡Inscripcion confirmada exitosamente!\n\n" +
+                    "¡Inscripcion confirmada exitosamente!\n\n" +
                     "Tu inscripcion ha sido registrada correctamente. " +
                     "Recibiras notificaciones sobre las sesiones y actualizaciones de esta actividad.\n\n" +
                     "¡Te esperamos!",

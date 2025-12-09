@@ -40,7 +40,7 @@ public class TipoNotificacionController {
      * Crear un nuevo tipo de notificación
      * POST /api/v1/tipos-notificacion
      */
-    @PostMapping("/crear")
+    @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
     @Operation(
         summary = "Crear un nuevo tipo de notificación.",

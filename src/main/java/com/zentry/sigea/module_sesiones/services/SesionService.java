@@ -38,6 +38,7 @@ public class SesionService implements ISesionService {
     private final EliminarSesionUseCase eliminarSesionUseCase;
     private final ApplicationEventPublisher eventPublisher;
     private final IInscripcionRepository inscripcionRepository;
+    
 
     public SesionService(
         CrearSesionUseCase crearSesionUseCase,
@@ -77,7 +78,14 @@ public class SesionService implements ISesionService {
                     sesionCreada.getTitulo(),
                     sesionCreada.getFechaSesion(),
                     usuariosInscritos,
-                    LocalDateTime.now()
+                    LocalDateTime.now(),
+                    sesionCreada.getLugarSesion(),
+                    sesionCreada.getPonente(),
+                    sesionCreada.getModalidad() != null ? sesionCreada.getModalidad().name() : null,
+                    sesionCreada.getLinkVirtual(),
+                    sesionCreada.getHoraInicio(),
+                    sesionCreada.getHoraFin(),
+                    sesionCreada.getDescripcion()
                 ));
             }
 

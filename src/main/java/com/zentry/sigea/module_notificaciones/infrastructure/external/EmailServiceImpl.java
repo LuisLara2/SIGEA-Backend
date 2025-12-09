@@ -3,271 +3,142 @@ package com.zentry.sigea.module_notificaciones.infrastructure.external;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import com.zentry.sigea.module_notificaciones.core.entities.NotificacionDomainEntity;
 import com.zentry.sigea.module_notificaciones.core.ports.IEmailService;
-
 import jakarta.mail.internet.MimeMessage;
 
-/**
- * Implementación del servicio de envío de emails
- * Utiliza JavaMailSender de Spring Boot
- */
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class EmailServiceImpl implements IEmailService {
-    
+    @Override
+    public boolean enviarCodigoVerificacion(String correo, String nombres, Integer codigo) {
+        if (!emailEnabled) {
+            logger.warn("Emails deshabilitados — no enviado.");
+            return false;
+        }
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setFrom(emailFrom, nombreRemitente);
+            helper.setTo(correo);
+            helper.setSubject("Código de Verificación - SIGEA");
+
+            String html = String.format(
+                EmailTemplates.codigoVerificacionHtml(),
+                "https://res.cloudinary.com/ddqasvhfw/image/upload/v1764533099/LogoUnas_xxwueu.webp",
+                "https://res.cloudinary.com/ddqasvhfw/image/upload/v1764533099/LogoExtensionUnas_xo0srw.webp",
+                nombres,
+                codigo
+            );
+
+            helper.setText(html, true);
+            mailSender.send(message);
+            return true;
+
+        } catch (Exception e) {
+            logger.error("Error enviando código de verificación: {}", e.getMessage(), e);
+            return false;
+        }
+    }
+
     private static final Logger logger = LoggerFactory.getLogger(EmailServiceImpl.class);
-    
+
     private final JavaMailSender mailSender;
-    
+
     @Value("${notificaciones.email.from:noreply@sigea.com}")
     private String emailFrom;
-    
+
     @Value("${notificaciones.email.enabled:false}")
     private boolean emailEnabled;
-    
+
     @Value("${notificaciones.email.nombre-remitente:SIGEA - Sistema de Gestión}")
     private String nombreRemitente;
-    
+
     public EmailServiceImpl(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
 
     @Override
     public boolean enviar(NotificacionDomainEntity notificacion, String destinatario, String nombreDestinatario) {
-        logger.info("🔵 EmailService.enviar() INICIADO - emailEnabled: {}", emailEnabled);
-        logger.info("🔵 Destinatario: {}, Nombre: {}", destinatario, nombreDestinatario);
-        
+
         if (!emailEnabled) {
-            logger.warn("⚠️ Envío de emails DESHABILITADO en configuración. Email no enviado a: {}", destinatario);
+            logger.warn("Emails deshabilitados — no enviado.");
             return false;
         }
-        
-        if (destinatario == null || destinatario.trim().isEmpty()) {
-            logger.error("❌ Destinatario de email vacío para notificación ID: {}", notificacion.getId());
-            return false;
-        }
-        
+
         try {
-            logger.info("📧 Preparando envío de email a {} para notificación ID: {}", destinatario, notificacion.getId());
-            logger.info("📧 Email FROM configurado: {}", emailFrom);
-            
-            // Crear mensaje HTML para mejor presentación
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-            
-            // Configurar remitente con codificación UTF-8 explícita
+
             helper.setFrom(emailFrom, nombreRemitente);
             helper.setTo(destinatario);
-            
-            // Asunto con codificación UTF-8
-            String asunto = obtenerAsunto(notificacion);
-            helper.setSubject(asunto);
-            
-            // Contenido HTML con codificación UTF-8
-            helper.setText(construirContenidoHtml(notificacion.getMensaje(), nombreDestinatario), true);
-            
-            logger.info("📤 Llamando a mailSender.send()...");
+            helper.setSubject(obtenerAsunto(notificacion));
+
+
+            // Obtener todos los campos relevantes de la sesión desde notificacion
+
+            String titulo = notificacion.getMensaje();
+            String ponente = "";
+            String modalidad = "";
+            String lugar = "";
+            String fecha = notificacion.getFechaEnvio() != null ? notificacion.getFechaEnvio().toLocalDate().toString() : "";
+            String horaInicio = notificacion.getFechaEnvio() != null ? notificacion.getFechaEnvio().toLocalTime().toString() : "";
+            String horaFin = "";
+            String descripcion = "";
+
+
+
+            String logoUnas = "https://res.cloudinary.com/ddqasvhfw/image/upload/v1764533099/LogoUnas_xxwueu.webp";
+            String logoExtension = "https://res.cloudinary.com/ddqasvhfw/image/upload/v1764533099/LogoExtensionUnas_xo0srw.webp";
+            String html = String.format(
+                EmailTemplates.notificacionHtml(),
+                logoUnas,
+                logoExtension,
+                nombreDestinatario,
+                titulo,
+                ponente,
+                modalidad,
+                lugar,
+                fecha,
+                horaInicio,
+                horaFin,
+                "-",
+                descripcion,
+                "Sesión Académica",
+                fecha
+            );
+
+            helper.setText(html, true);
+
             mailSender.send(message);
-            
-            logger.info("✅✅✅ Email enviado EXITOSAMENTE a {} para notificación ID: {}", 
-                destinatario, notificacion.getId());
             return true;
-            
+
         } catch (Exception e) {
-            logger.error("💥💥💥 ERROR CRÍTICO al enviar email a {} para notificación ID {}", 
-                destinatario, notificacion.getId());
-            logger.error("💥 Tipo de excepción: {}", e.getClass().getName());
-            logger.error("💥 Mensaje: {}", e.getMessage());
-            logger.error("💥 Stack trace completo:", e);
+            logger.error("Error enviando correo: {}", e.getMessage(), e);
             return false;
         }
     }
-    
-    /**
-     * Construye el asunto del email basado en el tipo de notificación
-     */
+
     private String obtenerAsunto(NotificacionDomainEntity notificacion) {
-        if (notificacion.getTipoNotificacion() == null) {
-            return "SIGEA - Nueva Notificacion";
-        }
-        
-        String codigo = notificacion.getTipoNotificacion().getCodigo();
-        
-        // Asuntos específicos según el tipo
-        switch (codigo) {
-            case "INSCRIPCION":
-                return "SIGEA - Inscripcion Confirmada";
-            case "COMUNICACION":
-                // Para comunicaciones, extraer si es actividad o sesión del mensaje
-                String mensaje = notificacion.getMensaje();
-                if (mensaje.contains("Nueva actividad:") || mensaje.contains("nueva actividad")) {
-                    return "SIGEA - Nueva Actividad";
-                } else if (mensaje.contains("sesion") || mensaje.contains("Sesion")) {
-                    return "SIGEA - Nueva Sesion Programada";
-                }
-                return "SIGEA - Comunicacion";
-            case "PAGO":
-                return "SIGEA - Pago Recibido";
-            case "CERTIFICADO":
-                return "SIGEA - Tu Certificado esta Listo";
-            default:
-                return "SIGEA - Notificacion";
-        }
-    }
-    
-    /**
-     * Construye el contenido HTML del email
-     */
-    private String construirContenidoHtml(String messageNotificacion, String nombreDestinatario) {
-        StringBuilder html = new StringBuilder();
-        
-        html.append("<!DOCTYPE html>");
-        html.append("<html>");
-        html.append("<head>");
-        html.append("<meta charset='UTF-8'>");
-        html.append("<style>");
-        html.append("body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }");
-        html.append(".container { max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5; }");
-        html.append(".header { background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%); color: white; padding: 30px 20px; text-align: center; border-radius: 8px 8px 0 0; }");
-        html.append(".header h1 { margin: 0; font-size: 24px; }");
-        html.append(".content { background-color: white; padding: 30px; border-radius: 0 0 8px 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }");
-        html.append(".greeting { font-size: 16px; margin-bottom: 20px; color: #333; }");
-        html.append(".message-box { background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0; border-radius: 4px; }");
-        html.append(".message-box p { margin: 0; font-size: 15px; line-height: 1.6; }");
-        html.append(".footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 12px; color: #666; }");
-        html.append(".btn { display: inline-block; padding: 12px 24px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 4px; margin: 20px 0; }");
-        html.append("</style>");
-        html.append("</head>");
-        html.append("<body>");
-        html.append("<div class='container'>");
-        
-        // Header
-        html.append("<div class='header'>");
-        html.append("<h1>SIGEA</h1>");
-        html.append("<p style='margin: 5px 0 0 0; font-size: 14px;'>Sistema de Gestion de Eventos Academicos</p>");
-        html.append("</div>");
-        
-        // Content
-        html.append("<div class='content'>");
-        
-        // Saludo personalizado
-        String saludo = nombreDestinatario != null && !nombreDestinatario.trim().isEmpty() 
-            ? "Hola " + nombreDestinatario 
-            : "Hola";
-        html.append("<p class='greeting'><strong>").append(saludo).append(",</strong></p>");
-        
-        // Mensaje principal (limpio, sin decoraciones extras)
-        html.append("<div class='message-box'>");
-        html.append("<p>").append(messageNotificacion).append("</p>");
-        html.append("</div>");
-        
-        html.append("</div>");
-        
-        // Footer
-        html.append("<div class='footer'>");
-        html.append("<p style='margin: 5px 0;'>Este es un mensaje automatico del sistema SIGEA.</p>");
-        html.append("<p style='margin: 5px 0;'>Por favor no responder a este correo.</p>");
-        html.append("<p style='margin: 15px 0 0 0; color: #999;'>&copy; 2025 SIGEA - Todos los derechos reservados</p>");
-        html.append("</div>");
-        
-        html.append("</div>");
-        html.append("</body>");
-        html.append("</html>");
-        
-        return html.toString();
-    }
-    
-    /**
-     * Método alternativo usando SimpleMailMessage (texto plano)
-     * Útil como fallback si falla el envío HTML
-     */
-    @SuppressWarnings("unused")
-    private void enviarTextoPlano(NotificacionDomainEntity notificacion, 
-                                   String destinatario, 
-                                   String nombreDestinatario) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(emailFrom);
-        message.setTo(destinatario);
-        message.setSubject(obtenerAsunto(notificacion));
-        message.setText(construirContenidoTexto(notificacion, nombreDestinatario));
-        
-        mailSender.send(message);
-    }
-    
-    /**
-     * Construye el contenido en texto plano
-     */
-    private String construirContenidoTexto(NotificacionDomainEntity notificacion, String nombreDestinatario) {
-        StringBuilder texto = new StringBuilder();
-        
-        String saludo = nombreDestinatario != null && !nombreDestinatario.trim().isEmpty() 
-            ? "Hola " + nombreDestinatario + "," 
-            : "Hola,";
-        
-        texto.append(saludo).append("\n\n");
-        
-        if (notificacion.getTipoNotificacion() != null) {
-            texto.append("Tipo: ").append(notificacion.getTipoNotificacion().getEtiqueta()).append("\n\n");
-        }
-        
-        texto.append(notificacion.getMensaje()).append("\n\n");
-        texto.append("Fecha: ").append(notificacion.getFechaEnvio()).append("\n\n");
-        texto.append("---\n");
-        texto.append("SIGEA - Sistema de Gestión de Eventos Académicos\n");
-        texto.append("Este es un mensaje automático, por favor no responder.");
-        
-        return texto.toString();
+        if (notificacion.getTipoNotificacion() == null) 
+            return "SIGEA - Notificación";
+
+        return switch (notificacion.getTipoNotificacion().getCodigo()) {
+            case "INSCRIPCION" -> "SIGEA - Inscripción Confirmada";
+            case "COMUNICACION" -> "SIGEA - Comunicación";
+            case "PAGO" -> "SIGEA - Pago Recibido";
+            case "CERTIFICADO" -> "SIGEA - Certificado Disponible";
+            default -> "SIGEA - Notificación";
+        };
     }
 
-    public boolean enviarCodigoVerificacion(String destinatario , String nombreDestinatario , Integer codigoVerificacion){
-        logger.info("🔵 EmailService.enviar() INICIADO - emailEnabled: {}", emailEnabled);
-        logger.info("🔵 Destinatario: {}, Nombre: {}", destinatario, nombreDestinatario);
-
-        if (!emailEnabled) {
-            logger.warn("⚠️ Envío de emails DESHABILITADO en configuración. Email no enviado a: {}", destinatario);
-            throw new RuntimeException("Envío de emails DESHABILITADO en configuración");
-        }
-        
-        if (destinatario == null || destinatario.trim().isEmpty()) {
-            logger.error("❌ Destinatario de email vacío");
-            throw new RuntimeException("Destinatario de email vacío");
-        }
-        
-        try {
-            logger.info("📧 Preparando envío de email a {}", destinatario);
-            logger.info("📧 Email FROM configurado: {}", emailFrom);
-            
-            // Crear mensaje HTML para mejor presentación
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-            
-            // Configurar remitente con codificación UTF-8 explícita
-            helper.setFrom(emailFrom, nombreRemitente);
-            helper.setTo(destinatario);
-            
-            String mensajeCodigoValidacion = "Hola, Tu código de verificacion es el siguiente (no lo compartas con nadie): " + Integer.toString(codigoVerificacion);
-            // Contenido HTML con codificación UTF-8
-            helper.setText(construirContenidoHtml(mensajeCodigoValidacion , nombreDestinatario), true);
-            
-            logger.info("Llamando a mailSender.send()...");
-            mailSender.send(message);
-            
-            logger.info("✅✅✅ Email de verificacion enviado EXITOSAMENTE a {}: {}", 
-                destinatario);
-            return true;
-            
-        } catch (Exception e) {
-            logger.error("💥💥💥 ERROR CRÍTICO al enviar email de verificacion a {}", 
-                destinatario);
-            logger.error("💥 Tipo de excepción: {}", e.getClass().getName());
-            logger.error("💥 Mensaje: {}", e.getMessage());
-            logger.error("💥 Stack trace completo:", e);
-            throw new RuntimeException("Mensaje de error critico: " + e.getMessage());
-        }
-    }
 }
+
+    // ...existing code...

@@ -10,69 +10,74 @@ import com.zentry.sigea.module_notificaciones.events.domain.SesionCreadaEvent;
 import com.zentry.sigea.module_notificaciones.presentation.models.requestDTO.CrearNotificacionRequest;
 import com.zentry.sigea.module_notificaciones.services.NotificacionService;
 
-import java.time.format.DateTimeFormatter;
-
-/**
- * Listener que escucha eventos de sesiones creadas y genera notificaciones automáticas
- * Principio: Single Responsibility - Solo maneja notificaciones de nuevas sesiones
- */
 @Component
 public class SesionEventListener {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(SesionEventListener.class);
     private static final String TIPO_NOTIFICACION_SESION = "COMUNICACION";
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-    
+
     private final NotificacionService notificacionService;
-    
+    // private final ActividadService actividadService;
+
     public SesionEventListener(NotificacionService notificacionService) {
         this.notificacionService = notificacionService;
     }
-    
-    /**
-     * Escucha el evento de sesión creada y genera notificaciones automáticas
-     * Envía notificación a todos los usuarios inscritos en la actividad
-     * @Async permite que las notificaciones se procesen en segundo plano
-     */
+
     @EventListener
     @Async
     public void onSesionCreada(SesionCreadaEvent event) {
+
         try {
-            logger.info("Evento recibido: Nueva sesion creada '{}' para actividad {} con {} destinatarios", 
-                event.getTitulo(), event.getActividadId(), event.getUsuariosIds().size());
-            
-            String fechaFormateada = event.getFechaSesion().format(FORMATTER);
-            
-            // Enviar notificación a cada usuario inscrito
+            logger.info(
+                "Evento recibido: Nueva sesión '{}' en actividad {} para {} usuarios",
+                event.getTitulo(),
+                event.getActividadId(),
+                event.getUsuariosIds().size()
+            );
+
             for (String usuarioId : event.getUsuariosIds()) {
                 try {
-                    CrearNotificacionRequest notificacionRequest = new CrearNotificacionRequest(
+                    // Solo datos de la sesión, sin título de actividad
+                    String mensaje = String.format(
+                        "<strong>Nueva publicación-</strong> %s<br>"
+                        + "<strong>Descripción:</strong> %s<br>"
+                        + "<strong>Ponente:</strong> %s<br>"
+                        + "<strong>Modalidad:</strong> %s<br>"
+                        + "<strong>Lugar:</strong> %s<br>"
+                        + "<strong>📅Fecha:</strong> %s<br>"
+                        + "<strong>Hora inicio:</strong> %s<br>"
+                        + "<strong>Hora fin:</strong> %s<br>"
+                        + "<strong>Esta es una sesión de una actividad en la que te inscribiste, ¡No te la pierdas!</strong>",
+                        event.getTitulo(),
+                        event.getDescripcion() != null ? event.getDescripcion() : "",
+                        event.getPonente(),
+                        event.getModalidad(),
+                        event.getLugar(),
+                        event.getFechaSesion() != null ? event.getFechaSesion().toLocalDate().toString() : "",
+                        event.getHoraInicio() != null ? event.getHoraInicio().toString() : "",
+                        event.getHoraFin() != null ? event.getHoraFin().toString() : ""
+                    );
+
+                    CrearNotificacionRequest request = new CrearNotificacionRequest(
                         usuarioId,
                         event.getActividadId(),
                         TIPO_NOTIFICACION_SESION,
-                        String.format("📅 Se ha programado una nueva sesion: \"%s\"\n\n" +
-                                     "📍 Fecha y hora: %s\n\n" +
-                                     "Esta sesion forma parte de la actividad en la que estas inscrito. " +
-                                     "Te esperamos!", 
-                            event.getTitulo(), fechaFormateada),
-                        null, // estadoNotificacionId (el service lo asigna)
+                        mensaje,
+                        null,
                         "SISTEMA"
                     );
-                    
-                    String resultado = notificacionService.crearNotificacion(notificacionRequest);
-                    logger.info("Notificacion de nueva sesion enviada a usuario {}: {}", usuarioId, resultado);
-                    
+
+                    String result = notificacionService.crearNotificacion(request);
+                    logger.info("Notificación enviada → Usuario {}: {}", usuarioId, result);
                 } catch (Exception e) {
-                    logger.error("Error al enviar notificacion a usuario {}: {}", usuarioId, e.getMessage());
-                    // Continuar con los demás usuarios aunque falle uno
+                    logger.error("Error enviando notificación al usuario {}: {}", usuarioId, e.getMessage());
                 }
             }
-            
-            logger.info("Notificaciones de sesion procesadas exitosamente para {} usuarios", 
-                event.getUsuariosIds().size());
-            
+
+            logger.info("Notificaciones de sesión enviadas correctamente.");
+
         } catch (Exception e) {
-            logger.error("Error al procesar evento de sesion creada: {}", e.getMessage(), e);
+            logger.error("Error procesando evento SesionCreada: {}", e.getMessage(), e);
         }
     }
 }

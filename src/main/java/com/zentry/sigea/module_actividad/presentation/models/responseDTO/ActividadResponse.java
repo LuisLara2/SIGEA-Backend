@@ -265,7 +265,7 @@ public class ActividadResponse {
     }
 
     public long getDuracionEnDias() {
-        return duracionEnDias;
+        return duracionEnDias != null ? duracionEnDias : 0L;
     }
 
     public void setDuracionEnDias(long duracionEnDias) {

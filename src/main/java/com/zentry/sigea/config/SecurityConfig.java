@@ -57,6 +57,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                             "/api/v*/usuarios/auth/**", 
+                            "/api/v*/usuarios/validar-correo/**", // <-- Permitir validación de correo sin autenticación
                             "/" , 
                             "/v*/api-docs.yaml",
 
