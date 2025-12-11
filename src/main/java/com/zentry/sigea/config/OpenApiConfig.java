@@ -46,7 +46,7 @@ public class OpenApiConfig {
                     .url("http://localhost:" + serverPort)
                     .description("Servidor de desarrollo"),
                 new Server()
-                    .url("https://api.sigea.com")
+                    .url("https://sigeabackend.zentrycorp.dev")
                     .description("Servidor de producción")
             ))
             .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
@@ -160,8 +160,8 @@ public class OpenApiConfig {
                     "/api/v*/actividades/listar" , 
                     "/api/v*/actividades/obtener/**" , 
                     "/api/v*/{any}/health",
-                    "/api/v1/usuarios/participante/registrar",
-                    "/api/v1/usuarios/validar-correo/**"
+                    "/api/v*/usuarios/participante/registrar",
+                    "/api/v*/usuarios/validar-correo/**"
                 )
                 .build();
     }
@@ -171,7 +171,7 @@ public class OpenApiConfig {
         return GroupedOpenApi.builder()
                 .group("Modulo Banners de Actividades")
                 .pathsToMatch(
-                    "/api/v1/actividad/banner/**"
+                    "/api/v*/actividad/banner/**"
                 )
                 .build();
     }

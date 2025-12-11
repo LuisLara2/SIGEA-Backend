@@ -96,7 +96,7 @@ public class SecurityConfig {
         config.setAllowedOriginPatterns(List.of(
             "http://localhost:3000",
             "http://localhost:16001",
-            "https://sigea.zentrycorp.dev"
+            "https://sigeabackend.zentrycorp.dev"
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of(
