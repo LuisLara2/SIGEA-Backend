@@ -54,7 +54,7 @@ public class CrearSesionRequest {
     // Constructors
     public CrearSesionRequest() {}
 
-    public CrearSesionRequest(String actividadId, String titulo, String descripcion, LocalDateTime fecha_sesion, java.time.LocalTime hora_inicio, java.time.LocalTime hora_fin, String ponente, Modalidad modalidad, String lugar_sesion, String link_virtual, String orden) {
+    public CrearSesionRequest(String actividadId, String titulo, String descripcion, LocalDateTime fechaSesion, java.time.LocalTime hora_inicio, java.time.LocalTime hora_fin, String ponente, Modalidad modalidad, String lugar_sesion, String link_virtual, String orden) {
         this.actividadId = actividadId;
         this.titulo = titulo;
         this.descripcion = descripcion;
