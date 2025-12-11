@@ -25,8 +25,8 @@ public class CrearSesionRequest {
     private String descripcion;
 
     @NotNull(message = "La fecha de sesión es obligatoria")
-    @JsonProperty("fecha_sesion") 
-    private LocalDateTime fecha_sesion;
+    @JsonProperty("fecha_sesion")
+    private LocalDateTime fechaSesion;
 
     @NotNull(message = "La hora de inicio es obligatoria")
     @JsonProperty("horaInicio") 
@@ -58,7 +58,7 @@ public class CrearSesionRequest {
         this.actividadId = actividadId;
         this.titulo = titulo;
         this.descripcion = descripcion;
-        this.fecha_sesion = fecha_sesion;
+        this.fechaSesion = fechaSesion;
         this.hora_inicio = hora_inicio;
         this.hora_fin = hora_fin;
         this.ponente = ponente;
@@ -89,10 +89,10 @@ public class CrearSesionRequest {
     }
     
     public LocalDateTime getFechaSesion() {
-        return fecha_sesion;
+        return fechaSesion;
     }
-    public void setFecha_sesion(LocalDateTime fecha_sesion) {
-        this.fecha_sesion = fecha_sesion;
+    public void setFechaSesion(LocalDateTime fechaSesion) {
+        this.fechaSesion = fechaSesion;
     }
 
     public java.time.LocalTime getHoraInicio() {
