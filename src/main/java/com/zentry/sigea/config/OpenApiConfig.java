@@ -25,6 +25,12 @@ public class OpenApiConfig {
     @Value("${server.port:16001}")
     private String serverPort;
 
+    @Value("${sigea.public.backend.domain}")
+    private String sigeaPublicBackendDomain;
+
+    @Value("${sigea.public.backend.repository:https://github.com/PAULTB4/SIGEA-backend.git}")
+    private String sigeaPublicBackendRepository;
+
     @Bean
     public OpenAPI customOpenAPI() {
         final String securitySchemeName = "bearerAuth";
@@ -37,7 +43,7 @@ public class OpenApiConfig {
                     .contact(new Contact()
                         .name("Equipo SIGEA")
                         .email("sigea@zentry.com")
-                        .url("https://github.com/PAULTB4/SIGEA-backend.git"))
+                        .url(sigeaPublicBackendRepository))
                     .license(new License()
                         .name("MIT License")
                         .url("https://opensource.org/licenses/MIT")))
@@ -46,7 +52,7 @@ public class OpenApiConfig {
                     .url("http://localhost:" + serverPort)
                     .description("Servidor de desarrollo"),
                 new Server()
-                    .url("https://sigeabackend.zentrycorp.dev")
+                    .url(sigeaPublicBackendDomain)
                     .description("Servidor de producción")
             ))
             .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))

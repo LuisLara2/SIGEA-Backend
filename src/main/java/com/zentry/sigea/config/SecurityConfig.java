@@ -2,6 +2,7 @@ package com.zentry.sigea.config;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,6 +31,9 @@ public class SecurityConfig {
     
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
+
+    @Value("${sigea.public.backend.domain}")
+    private String sigeaPublicBackendDomain;
 
     public SecurityConfig(
         CustomAuthenticationEntryPoint customAuthenticationEntryPoint,
@@ -96,7 +100,7 @@ public class SecurityConfig {
         config.setAllowedOriginPatterns(List.of(
             "http://localhost:3000",
             "http://localhost:16001",
-            "https://sigeabackend.zentrycorp.dev"
+            sigeaPublicBackendDomain
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of(

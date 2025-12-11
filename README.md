@@ -115,6 +115,10 @@ MAIL_MIME_CHARSET={def: UTF-8}
 
 # Almacenamiento de Medios
 MEDIA_LOCATION={Ubicacion de almacenamiento de medios. def: ./uploads}
+
+# Dominios o Enlaces Publicos
+SIGEA_PUBLIC_BACKEND_DOMAIN={Dominio publico del Proyecto para configuración CORS}
+SIGEA_PUBLIC_BACKEND_REPOSITORY={Enlace al repositorio del proyecto}
 ```
 
 Recuerda reemplazar con tus variables entre los  `{}`  .
