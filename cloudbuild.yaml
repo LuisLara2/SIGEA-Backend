@@ -1,13 +1,13 @@
 steps:
-  # 1. Construir imagen
+  # 1. Construir la imagen
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/sigea-repo/sigea-backend:$SHORT_SHA', '.']
 
-  # 2. Subir a Artifact Registry
+  # 2. Subir la imagen al registro
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/sigea-repo/sigea-backend:$SHORT_SHA']
 
-  # 3. Desplegar en Cloud Run (Servicio DEV)
+  # 3. Desplegar en Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -18,11 +18,13 @@ steps:
       - 'us-central1-docker.pkg.dev/$PROJECT_ID/sigea-repo/sigea-backend:$SHORT_SHA'
       - '--region'
       - 'us-central1'
-      - '--platform'
-      - 'managed'
       - '--allow-unauthenticated'
       - '--set-env-vars'
       - 'SPRING_PROFILES_ACTIVE=dev'
 
 images:
   - 'us-central1-docker.pkg.dev/$PROJECT_ID/sigea-repo/sigea-backend:$SHORT_SHA'
+
+# --- AQUÍ ESTÁ EL ARREGLO ---
+options:
+  logging: CLOUD_LOGGING_ONLY
