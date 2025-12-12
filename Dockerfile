@@ -3,22 +3,15 @@ FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
-# Creamos el .env en recursos para el classpath
+# Truco: Crear .env en recursos
 RUN touch src/main/resources/.env
 RUN mvn clean package -DskipTests
 
-# Etapa 2: Ejecución (CAMBIO AQUÍ: Usamos versión completa, no Alpine)
-FROM eclipse-temurin:17-jre
+# Etapa 2: Ejecución (Volvemos a Alpine, que es más rápido y funcionaba)
+FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
-
-# Creamos el .env en la raíz
+# Truco: Crear .env en raíz
 RUN touch .env
-
-# Instalamos utilidades básicas (opcional pero recomendado para debug)
-RUN apt-get update && apt-get install -y curl
-
 COPY --from=build /app/target/*.jar app.jar
-
-# Puerto estándar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
