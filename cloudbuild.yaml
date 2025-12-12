@@ -1,5 +1,5 @@
 steps:
-  # 1. Construir la imagen (Incluyendo el truco del .env vacío)
+  # 1. Construir la imagen (Creando los .env vacíos para engañar a Java)
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args:
@@ -13,7 +13,7 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/sigea-repo/sigea-backend:$SHORT_SHA']
 
-  # 3. Actualizar Cloud Run (Solo cambiamos la imagen, mantenemos las variables activas)
+  # 3. Actualizar Cloud Run (Solo cambiamos la imagen, MANTENEMOS las variables de Brevo y BD)
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
