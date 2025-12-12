@@ -9,6 +9,7 @@ steps:
         touch src/main/resources/.env && \
         docker build -t us-central1-docker.pkg.dev/$PROJECT_ID/sigea-repo/sigea-backend:$SHORT_SHA .
 
+
   # 2. Subir la imagen al registro
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/sigea-repo/sigea-backend:$SHORT_SHA']
