@@ -29,7 +29,7 @@ public class CrearSesionRequest {
     private String descripcion;
 
     @NotNull(message = "La fecha de sesión es obligatoria")
-    @JsonProperty("fecha_sesion")
+    @JsonProperty("fechaSesion")
     private LocalDateTime fechaSesion;
 
     @NotNull(message = "La hora de inicio es obligatoria")

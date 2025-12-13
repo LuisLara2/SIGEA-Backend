@@ -30,7 +30,7 @@ public class SesionRequest {
     @NotNull(message = "La modalidad es obligatoria")
     private String modalidad;
 
-    @JsonProperty("link_virtual")
+    @JsonProperty("linkVirtual")
     private String linkVirtual;
 
     @JsonProperty("orden")
