@@ -121,11 +121,13 @@ public class InscripcionController {
      * Obtener inscripciones por usuario
      */
     @GetMapping("/obtener/usuario/{usuarioId}")
-    @PreAuthorize("hasRole('ROLE_PARTICIPANTE')")
+    @PreAuthorize("hasAnyRole('ROLE_PARTICIPANTE', 'ROLE_ORGANIZADOR', 'ROLE_ADMINISTRADOR')")
     @Operation(
         summary = "obtener inscripciones por ID de usuario.",
         security = {
-            @SecurityRequirement(name = "participanteJWT")
+            @SecurityRequirement(name = "participanteJWT"),
+            @SecurityRequirement(name = "organizadorJWT"),
+            @SecurityRequirement(name = "administradorJWT")
         },
         tags = {"Obtener"}
     )
