@@ -1,5 +1,6 @@
 package com.zentry.sigea.module_sesiones.core.entities;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -234,16 +235,18 @@ public class SesionDomainEntity {
     /**
      * Reprograma la sesión a una nueva fecha
      */
-    public void reprogramar(LocalDateTime nuevaFecha) {
-        if (nuevaFecha == null) {
-            throw new IllegalArgumentException("La nueva fecha no puede ser nula");
-        }
-        if (nuevaFecha.isBefore(LocalDateTime.now())) {
-            throw new IllegalArgumentException("No se puede reprogramar a una fecha pasada");
-        }
-        
-        this.fecha_sesion = nuevaFecha;
-        this.updatedAt = LocalDateTime.now();
+    public void reprogramar(LocalDateTime nuevaFecha, LocalDate fechaActividadInicio, LocalDate fechaActividadFin) {
+       if (nuevaFecha == null) {
+        throw new IllegalArgumentException("La nueva fecha no puede ser nula");
+    }
+    if (nuevaFecha.isBefore(LocalDateTime.now())) {
+        throw new IllegalArgumentException("No se puede reprogramar a una fecha pasada");
+    }
+    validateFechaWithinActivity(nuevaFecha, fechaActividadInicio, fechaActividadFin);
+    
+    this.fecha_sesion = nuevaFecha;
+    this.updatedAt = LocalDateTime.now();
+
     }
 
     /**
@@ -272,7 +275,31 @@ public class SesionDomainEntity {
         return fecha_sesion.isAfter(ahora) && fecha_sesion.isBefore(limite);
     }
 
+    private static void validateFechaWithinActivity(LocalDateTime fechaSesion, LocalDate fechaActividadInicio, LocalDate fechaActividadFin) {
+    if (fechaActividadInicio == null || fechaActividadFin == null) {
+        throw new IllegalArgumentException("Las fechas de la actividad no pueden ser nulas");
+    }
+    
+    LocalDate fechaSesionDate = fechaSesion.toLocalDate();
+    
+    if (fechaSesionDate.isBefore(fechaActividadInicio) || fechaSesionDate.isAfter(fechaActividadFin)) {
+        throw new IllegalArgumentException(
+            "La fecha de la sesión (" + fechaSesionDate + ") debe estar entre " + 
+            fechaActividadInicio + " y " + fechaActividadFin
+        );
+    }
+}
+
+
     /* VALIDACIONES PRIVADAS */
+
+
+    public boolean isValidWithinActivity(LocalDate fechaActividadInicio, LocalDate fechaActividadFin) {
+    LocalDate fechaSesionDate = fecha_sesion.toLocalDate();
+    // La fecha de sesión debe estar entre el inicio y fin de la actividad
+    return !fechaSesionDate.isBefore(fechaActividadInicio) && 
+           !fechaSesionDate.isAfter(fechaActividadFin);
+        }
 
     private static void validateCreationParams(String actividadId, String titulo, String descripcion, LocalDateTime fecha_sesion, LocalTime hora_inicio, LocalTime hora_fin, String ponente, Modalidad modalidad, String lugar_sesion, String link_virtual, String orden) {
         if (actividadId == null) {
