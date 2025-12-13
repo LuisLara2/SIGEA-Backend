@@ -175,4 +175,15 @@ public class OpenApiConfig {
                 )
                 .build();
     }
+
+
+    @Bean
+    public GroupedOpenApi pagoApi() {
+        return GroupedOpenApi.builder()
+                .group("Modulo Pagos")
+                .pathsToMatch(
+                    "/api/v1/pagos/**"
+                )
+                .build();
+    }
 }
