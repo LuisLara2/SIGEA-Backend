@@ -1,6 +1,7 @@
 package com.zentry.sigea.module_sesiones.infrastructure.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.zentry.sigea.module_sesiones.infrastructure.database.entities.SesionEntity;
@@ -24,6 +25,7 @@ public interface SesionJPARepository extends JpaRepository<SesionEntity, UUID> {
     /**
      * Encuentra todas las sesiones dentro de un rango de fechas.
      */
+    @Query("SELECT s FROM SesionEntity s WHERE s.fechaSesion BETWEEN :inicio AND :fin")
     List<SesionEntity> findByFechaSesionBetween(LocalDateTime inicio, LocalDateTime fin);
 
     /**
