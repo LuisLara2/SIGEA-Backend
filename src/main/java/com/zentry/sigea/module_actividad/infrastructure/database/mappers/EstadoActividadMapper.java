@@ -1,5 +1,7 @@
 package com.zentry.sigea.module_actividad.infrastructure.database.mappers;
 
+import java.util.UUID;
+
 import com.zentry.sigea.module_actividad.core.entities.EstadoActividadDomainEntity;
 import com.zentry.sigea.module_actividad.infrastructure.database.entities.EstadoActividadEntity;
 
@@ -7,6 +9,21 @@ import com.zentry.sigea.module_actividad.infrastructure.database.entities.Estado
  * Mapper para convertir entre EstadoActividad (dominio) y EstadoActividadEntity (JPA)
  */
 public class EstadoActividadMapper {
+    
+    /**
+     * Valida si un string es un UUID válido
+     */
+    private static boolean isValidUUID(String str) {
+        if (str == null || str.isBlank()) {
+            return false;
+        }
+        try {
+            UUID.fromString(str);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
     
     /**
      * Convierte de entidad de dominio a entidad JPA
@@ -18,8 +35,12 @@ public class EstadoActividadMapper {
         
         EstadoActividadEntity estadoActividadEntity = new EstadoActividadEntity();
         
-        if (estadoActividadDomainEntity.getEstadoActividadId() != null) {
-            estadoActividadEntity.setId(java.util.UUID.fromString(estadoActividadDomainEntity.getEstadoActividadId()));
+        String estadoId = estadoActividadDomainEntity.getEstadoActividadId();
+        if (estadoId != null && !estadoId.isBlank()) {
+            if (!isValidUUID(estadoId)) {
+                throw new IllegalArgumentException("El estadoActividadId no es un UUID válido: " + estadoId);
+            }
+            estadoActividadEntity.setId(UUID.fromString(estadoId));
         }
         estadoActividadEntity.setCodigo(estadoActividadDomainEntity.getCodigo());
         estadoActividadEntity.setEtiqueta(estadoActividadDomainEntity.getEtiqueta());
