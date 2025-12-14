@@ -1,5 +1,7 @@
 package com.zentry.sigea.module_actividad.infrastructure.database.mappers;
 
+import java.util.UUID;
+
 import com.zentry.sigea.module_actividad.core.entities.TipoActividadDomainEntity;
 import com.zentry.sigea.module_actividad.infrastructure.database.entities.TipoActividadEntity;
 
@@ -8,6 +10,21 @@ import com.zentry.sigea.module_actividad.infrastructure.database.entities.TipoAc
  */
 
 public class TipoActividadMapper {
+    
+    /**
+     * Valida si un string es un UUID válido
+     */
+    private static boolean isValidUUID(String str) {
+        if (str == null || str.isBlank()) {
+            return false;
+        }
+        try {
+            UUID.fromString(str);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
     
     /**
      * Convierte de entidad JPA a entidad de dominio
@@ -38,8 +55,12 @@ public class TipoActividadMapper {
         
         TipoActividadEntity tipoActividadEntity = new TipoActividadEntity();
         
-        if (tipoActividadDomainEntity.getTipoActividadId() != null) {
-            tipoActividadEntity.setId(java.util.UUID.fromString(tipoActividadDomainEntity.getTipoActividadId()));
+        String tipoId = tipoActividadDomainEntity.getTipoActividadId();
+        if (tipoId != null && !tipoId.isBlank()) {
+            if (!isValidUUID(tipoId)) {
+                throw new IllegalArgumentException("El tipoActividadId no es un UUID válido: " + tipoId);
+            }
+            tipoActividadEntity.setId(UUID.fromString(tipoId));
         }
         tipoActividadEntity.setNombreActividad(tipoActividadDomainEntity.getNombreActividad());
         tipoActividadEntity.setDescripcion(tipoActividadDomainEntity.getDescripcion());

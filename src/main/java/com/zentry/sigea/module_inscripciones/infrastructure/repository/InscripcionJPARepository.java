@@ -54,5 +54,10 @@ public interface InscripcionJPARepository extends JpaRepository<InscripcionEntit
         @Param("usuarioId") UUID usuarioId, 
         @Param("actividadId") UUID actividadId
     );
+
+    /**
+     * Elimina todas las inscripciones de una actividad específica
+     */
+    void deleteByActividadId(UUID actividadId);
 }
 

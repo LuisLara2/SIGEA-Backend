@@ -63,4 +63,9 @@ public interface SesionJPARepository extends JpaRepository<SesionEntity, UUID> {
     List<SesionEntity> findByModalidad(Modalidad modalidad);
 
     List<SesionEntity> findByActividadIdAndModalidad(UUID actividadId, Modalidad modalidad);
+
+    /**
+     * Elimina todas las sesiones de una actividad específica
+     */
+    void deleteByActividadId(UUID actividadId);
 }

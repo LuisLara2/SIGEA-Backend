@@ -152,7 +152,7 @@ public class ActividadController {
             ),
         tags = {"Actualizar"}
     )
-    public ResponseEntity<String> actualizarActividad(@PathVariable String id, @RequestBody ActividadRequest request) {
+    public ResponseEntity<String> actualizarActividad(@PathVariable String id, @RequestBody CrearActividadRequest request) {
         try {
             String actividadActualizada = actividadService.actualizarActividad(id, request);
             return ResponseEntity.ok(actividadActualizada);

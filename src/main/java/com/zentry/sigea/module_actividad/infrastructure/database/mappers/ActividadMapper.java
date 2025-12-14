@@ -1,10 +1,27 @@
 package com.zentry.sigea.module_actividad.infrastructure.database.mappers;
 
+import java.util.UUID;
+
 import com.zentry.sigea.module_actividad.core.entities.ActividadDomainEntity;
 import com.zentry.sigea.module_actividad.infrastructure.database.entities.ActividadEntity;
 import com.zentry.sigea.module_usuarios.infrastructure.database.entities.UsuarioEntity;
 
 public class ActividadMapper {
+
+    /**
+     * Valida si un string es un UUID válido
+     */
+    private static boolean isValidUUID(String str) {
+        if (str == null || str.isBlank()) {
+            return false;
+        }
+        try {
+            UUID.fromString(str);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
 
     public static ActividadEntity toEntity(
         ActividadDomainEntity actividadDomainEntity ,
@@ -12,8 +29,12 @@ public class ActividadMapper {
     ){
         ActividadEntity actividadEntity = new ActividadEntity();
         
-        if (actividadDomainEntity.getActividadId() != null) {
-            actividadEntity.setId(java.util.UUID.fromString(actividadDomainEntity.getActividadId()));
+        String actividadId = actividadDomainEntity.getActividadId();
+        if (actividadId != null && !actividadId.isBlank()) {
+            if (!isValidUUID(actividadId)) {
+                throw new IllegalArgumentException("El actividadId no es un UUID válido: " + actividadId);
+            }
+            actividadEntity.setId(UUID.fromString(actividadId));
         }
         actividadEntity.setTitulo(actividadDomainEntity.getTitulo());
         actividadEntity.setDescripcion(actividadDomainEntity.getDescripcion());

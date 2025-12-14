@@ -180,19 +180,32 @@ public class ActividadDomainEntity {
         return actividadDomainEntity;
     }
 
-    // Métodos de negocio
+    // Métodos de negocio - Actualización parcial (solo actualiza campos no nulos)
     public void updateInfo(
         String titulo, 
         String descripcion, 
         LocalDate fechaInicio, 
-        LocalDate fechaFin, 
-        String lugar
+        LocalDate fechaFin,
+        LocalTime horaInicio,
+        LocalTime horaFin,
+        String lugar,
+        String coOrganizador,
+        String sponsor,
+        String bannerUrl,
+        String numeroYape
     ) {
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        this.fechaInicio = fechaInicio;
-        this.fechaFin = fechaFin;
-        this.lugar = lugar;
+        // Solo actualiza si el valor no es null
+        if (titulo != null) this.titulo = titulo;
+        if (descripcion != null) this.descripcion = descripcion;
+        if (fechaInicio != null) this.fechaInicio = fechaInicio;
+        if (fechaFin != null) this.fechaFin = fechaFin;
+        if (horaInicio != null) this.horaInicio = horaInicio;
+        if (horaFin != null) this.horaFin = horaFin;
+        if (lugar != null) this.lugar = lugar;
+        if (coOrganizador != null) this.coOrganizador = coOrganizador;
+        if (sponsor != null) this.sponsor = sponsor;
+        if (bannerUrl != null) this.bannerUrl = bannerUrl;
+        if (numeroYape != null) this.numeroYape = numeroYape;
         this.updatedAt = LocalDateTime.now();
     }
 
