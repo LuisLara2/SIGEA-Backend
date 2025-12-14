@@ -9,9 +9,11 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Repository;
 
 import com.zentry.sigea.module_usuarios.core.entities.RolDomainEntity;
+import com.zentry.sigea.module_usuarios.core.entities.UsuarioDomainEntity;
 import com.zentry.sigea.module_usuarios.core.repositories.IUsuarioRolRepository;
 import com.zentry.sigea.module_usuarios.infrastructure.database.entities.UsuarioRolEntity;
 import com.zentry.sigea.module_usuarios.infrastructure.database.mappers.RolMapper;
+import com.zentry.sigea.module_usuarios.infrastructure.database.mappers.UsuarioMapper;
 import com.zentry.sigea.module_usuarios.infrastructure.repositories.RolJPARepository;
 import com.zentry.sigea.module_usuarios.infrastructure.repositories.UsuarioJPARepository;
 import com.zentry.sigea.module_usuarios.infrastructure.repositories.UsuarioRolJPARepository;
@@ -97,5 +99,12 @@ public class UsuarioRolRepositoryAdapter implements IUsuarioRolRepository {
         }
 
         usuarioRolJPARepository.saveAll(listUsuarioRolEntities);
+    }
+
+    public List<UsuarioDomainEntity> findAllUsuariosByNombreRol(String nombreRol){
+        return usuarioRolJPARepository.findAllUsuariosByNombreRol(nombreRol)
+            .stream()
+            .map(UsuarioMapper::toDomain)
+            .collect(Collectors.toList());
     }
 }

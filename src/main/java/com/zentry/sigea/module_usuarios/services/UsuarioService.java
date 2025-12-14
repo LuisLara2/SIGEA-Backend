@@ -16,8 +16,6 @@ import com.zentry.sigea.security.JwtUtil;
 
 import io.jsonwebtoken.Claims;
 
-import java.util.Map;
-
 @Service
 public class UsuarioService {
     /**
