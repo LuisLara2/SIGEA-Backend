@@ -62,9 +62,9 @@ public class ActividadMappingConfig {
                 request.getFechaFin(),
                 request.getCoOrganizador(),
                 request.getSponsor(),
-                estado,
+                request.getEstadoId(),
                 request.getOrganizadorId(),
-                tipoActividad,
+                request.getTipoActividadId(),
                 request.getUbicacion()
             );
         }

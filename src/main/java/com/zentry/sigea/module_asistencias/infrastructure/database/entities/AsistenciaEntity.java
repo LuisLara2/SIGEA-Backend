@@ -3,6 +3,9 @@ package com.zentry.sigea.module_asistencias.infrastructure.database.entities;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.zentry.sigea.module_inscripciones.infrastructure.database.entities.InscripcionEntity;
 import com.zentry.sigea.module_sesiones.infrastructure.database.entities.SesionEntity;
 
@@ -42,10 +45,12 @@ public class AsistenciaEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sesion_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private SesionEntity sesion;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "inscripcion_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private InscripcionEntity inscripcion;
 
     @Column(name = "presente", nullable = false)

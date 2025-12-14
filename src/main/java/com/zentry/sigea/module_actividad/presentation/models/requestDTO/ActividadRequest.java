@@ -1,9 +1,7 @@
 package com.zentry.sigea.module_actividad.presentation.models.requestDTO;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * DTO para recibir datos de creación/actualización de actividad desde el frontend
@@ -127,22 +125,6 @@ public class ActividadRequest {
 
     public void setSponsor(String sponsor) {
         this.sponsor = sponsor;
-    }
-
-    public LocalTime getHoraInicio() {
-        return horaInicio;
-    }
-
-    public void setHoraInicio(LocalTime horaInicio) {
-        this.horaInicio = horaInicio;
-    }
-
-    public LocalTime getHoraFin() {
-        return horaFin;
-    }
-
-    public void setHoraFin(LocalTime horaFin) {
-        this.horaFin = horaFin;
     }
 
     public String getBannerUrl() {
