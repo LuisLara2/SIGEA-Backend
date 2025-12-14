@@ -34,7 +34,6 @@ public class ActualizarSesionUseCase {
 
         return sesionRepository.findById(id).map(sesionExistente -> {
             sesionExistente.updateInfo(
-                datosActualizados.getActividadId(),
                 datosActualizados.getTitulo(),
                 datosActualizados.getDescripcion(),
                 datosActualizados.getFechaSesion(),

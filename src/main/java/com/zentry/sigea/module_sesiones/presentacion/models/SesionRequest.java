@@ -12,10 +12,6 @@ import java.time.LocalTime;
 
 public class SesionRequest {
 
-    @JsonProperty("actividadId")
-    @NotBlank(message = "El ID de la actividad es obligatorio")
-    private String actividadId;
-
     @JsonProperty("titulo")
     @NotBlank(message = "El título es obligatorio")
     private String titulo;
@@ -55,14 +51,6 @@ public class SesionRequest {
     private LocalTime horaFin;
 
     // Getters y setters
-    public String getActividadId() {
-        return actividadId;
-    }
-
-    public void setActividadId(String actividadId) {
-        this.actividadId = actividadId;
-    }
-
     public String getTitulo() {
         return titulo;
     }
