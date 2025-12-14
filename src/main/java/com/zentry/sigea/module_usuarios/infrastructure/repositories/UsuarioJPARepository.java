@@ -16,13 +16,7 @@ public interface UsuarioJPARepository extends JpaRepository<UsuarioEntity , UUID
     @Query("SELECT u.id FROM UsuarioEntity u WHERE u.correo = :correo")
     public Optional<UUID> findIdByCorreo(@Param("correo") String correo);
 
-    @Query(
-        """
-            SELECT COUNT(u)
-            FROM UsuarioEntity u
-        """
-    )
-    public Integer countAllUsers();
+    public long count();
 
     @Query(
         """

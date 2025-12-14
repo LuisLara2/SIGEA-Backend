@@ -1,5 +1,6 @@
 package com.zentry.sigea.module_sesiones.infrastructure.database.adapters;
 
+import java.lang.StackWalker.Option;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -183,5 +184,10 @@ public class SesionRepositoryAdapter implements ISesionRepository {
             .stream()
             .map(SesionMapper::toDomain)
             .collect(Collectors.toList());
+    }
+
+    public Optional<SesionDomainEntity> findByOrdenContainingAndActividad_Id(String orden , String actividadId){
+        return sesionJPARepository.findByOrdenContainingAndActividad_Id(orden, UUID.fromString(actividadId))
+            .map(s -> SesionMapper.toDomain(s));
     }
 }

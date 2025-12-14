@@ -9,6 +9,7 @@ public class ObtenerUsuarioMapper {
     ){
         ObtenerUsuarioResponseDTO obtenerUsuarioResponseDTO = new ObtenerUsuarioResponseDTO();
 
+        obtenerUsuarioResponseDTO.setId(usuarioDomainEntity.getId());
         obtenerUsuarioResponseDTO.setNombres(usuarioDomainEntity.getNombres());
         obtenerUsuarioResponseDTO.setApellidos(usuarioDomainEntity.getApellidos());
         obtenerUsuarioResponseDTO.setCorreo(usuarioDomainEntity.getCorreo());

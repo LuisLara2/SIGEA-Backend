@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ObtenerUsuarioResponseDTO {
+    private String id;
     private String nombres;
     private String apellidos;
     private String correo;

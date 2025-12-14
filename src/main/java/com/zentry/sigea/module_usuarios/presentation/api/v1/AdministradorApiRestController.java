@@ -18,12 +18,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zentry.sigea.module_usuarios.presentation.models.mappers.CrearRolMapper;
+import com.zentry.sigea.module_usuarios.presentation.models.mappers.DashboardParticipanteAsistenciasMapper;
 import com.zentry.sigea.module_usuarios.presentation.models.mappers.EnviarEstadisticasUsuariosMapper;
 import com.zentry.sigea.module_usuarios.presentation.models.mappers.ListarRolesMapper;
 import com.zentry.sigea.module_usuarios.presentation.models.mappers.ObtenerUsuarioMapper;
 import com.zentry.sigea.module_usuarios.presentation.models.mappers.RegistrarUsuarioMapper;
 import com.zentry.sigea.module_usuarios.presentation.models.requestDTO.CrearRolRequestDTO;
 import com.zentry.sigea.module_usuarios.presentation.models.requestDTO.RegistrarUsuarioRequestDTO;
+import com.zentry.sigea.module_usuarios.presentation.models.responseDTO.DashboardParticipanteAsistenciasResponseDTO;
 import com.zentry.sigea.module_usuarios.presentation.models.responseDTO.EnviarEstadisticasUsuariosResponseDTO;
 import com.zentry.sigea.module_usuarios.presentation.models.responseDTO.GeneralResponseDTO;
 import com.zentry.sigea.module_usuarios.presentation.models.responseDTO.ListarRolesResponseDTO;
@@ -423,6 +425,40 @@ public class AdministradorApiRestController {
                     true, 
                     "Operacion exitosa", 
                     enviarEstadisticasUsuariosResponseDTO
+                )
+            );
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                new GeneralResponseDTO<>(
+                    false, 
+                    e.getMessage(), 
+                    null
+                )
+            );
+        }
+    }
+
+    @GetMapping("/dashboard/participantes-asistencias")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @Operation(
+        summary = "Dashboard de administrador para mostrar Participantes y Asistencias",
+        security = @SecurityRequirement(
+            name = "administradorJWT"
+            ),
+        tags = {"Dashboard"}
+    )
+    public ResponseEntity<GeneralResponseDTO<?>> dashboardParticipantesAsistencias(){
+        try {
+            List<DashboardParticipanteAsistenciasResponseDTO> responseData = administradorService.dashboardParticipanteAsistencias()
+                .stream()
+                .map(DashboardParticipanteAsistenciasMapper::servicetoResponse)
+                .collect(Collectors.toList());
+
+            return ResponseEntity.status(HttpStatus.OK).body(
+                new GeneralResponseDTO<>(
+                    true, 
+                    "Operacion existosa", 
+                    responseData
                 )
             );
         } catch (Exception e) {

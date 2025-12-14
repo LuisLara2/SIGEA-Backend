@@ -26,4 +26,19 @@ public interface AsistenciaJPARepository extends JpaRepository<AsistenciaEntity,
     public List<UUID> findIdsByInscripcionId(
         @Param("inscripcionId") UUID inscripcionId
     );
+
+    @Query(
+        """
+            SELECT a.presente 
+            FROM AsistenciaEntity a
+            WHERE a.sesionId = :sesionId AND a.inscripcionId = :inscripcionId
+        """
+    )
+    public Boolean findPresenteBySesionIdAndInscripcionId(
+        @Param("sesionId") UUID sesionId,
+        @Param("inscripcionId") UUID inscripcionId
+    );
+
+    // Siempre usa count no size() ya que el ultimo es menos eficiente
+    public long countBySesion_Id(UUID sesionId);
 }

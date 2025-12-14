@@ -11,7 +11,7 @@ public interface IUsuarioRepository {
     public List<UsuarioDomainEntity> findAll();
     public Optional<UsuarioDomainEntity> findByCorreo(String correo);
     public String findIdByCorreo(String correo);
-    public Integer countAllUsers();
+    public long countAllUsers();
     public void update(UsuarioDomainEntity usuarioDomainEntity , Boolean passwordMatches);
     public String findPasswordHashById(String id);
 }

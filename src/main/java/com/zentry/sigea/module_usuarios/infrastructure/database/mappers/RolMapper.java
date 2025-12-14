@@ -16,6 +16,7 @@ public class RolMapper {
     public static RolDomainEntity toDomain(RolEntity rolEntity){
         RolDomainEntity rolDomainEntity = new RolDomainEntity();
 
+        rolDomainEntity.setId(rolEntity.getId().toString());
         rolDomainEntity.setNombreRol(rolEntity.getNombreRol());
         rolDomainEntity.setDescripcion(rolEntity.getDescripcion());
 

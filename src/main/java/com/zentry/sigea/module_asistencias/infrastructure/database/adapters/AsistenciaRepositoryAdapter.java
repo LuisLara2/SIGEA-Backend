@@ -119,4 +119,15 @@ public class AsistenciaRepositoryAdapter implements IAsistenciaRepository {
     public boolean existsById(String id){
         return asistenciaJPARepository.existsById(UUID.fromString(id));
     }
+
+    public Boolean findPresenteBySesionIdAndInscripcionId(String sesionId , String inscripcionId){
+        return asistenciaJPARepository.findPresenteBySesionIdAndInscripcionId(
+            UUID.fromString(sesionId), 
+            UUID.fromString(inscripcionId)
+        );
+    }
+
+    public long countBySesion_Id(String sesionId){
+        return asistenciaJPARepository.countBySesion_Id(UUID.fromString(sesionId));
+    }
 }

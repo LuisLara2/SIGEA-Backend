@@ -52,8 +52,8 @@ public class UsuarioRepositoryAdapter implements IUsuarioRepository {
             .orElse(null);
     }
 
-    public Integer countAllUsers(){
-        return usuarioJPARepository.countAllUsers();
+    public long countAllUsers(){
+        return usuarioJPARepository.count();
     }
 
     public void update(UsuarioDomainEntity usuarioDomainEntity , Boolean passwordMatches){

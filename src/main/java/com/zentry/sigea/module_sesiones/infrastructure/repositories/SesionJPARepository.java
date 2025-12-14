@@ -9,6 +9,7 @@ import com.zentry.sigea.module_sesiones.infrastructure.database.entities.SesionE
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -68,4 +69,6 @@ public interface SesionJPARepository extends JpaRepository<SesionEntity, UUID> {
      * Elimina todas las sesiones de una actividad específica
      */
     void deleteByActividadId(UUID actividadId);
+
+    public Optional<SesionEntity> findByOrdenContainingAndActividad_Id(String orden , UUID actividadId);
 }

@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ListarRolesResponseDTO {
+    private String id;
     private String nombreRol;
     private String descripcion;
     private LocalDateTime updatedAt;

@@ -3,10 +3,18 @@ package com.zentry.sigea.module_usuarios.core.entities;
 import java.time.LocalDateTime;
 
 public class RolDomainEntity {
+    private String id;
     private String nombreRol;
     private String descripcion;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
+
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getNombreRol() {
         return nombreRol;
