@@ -63,13 +63,14 @@ public class SesionController {
     
 
     @GetMapping("/listar")
-    @PreAuthorize("hasRole('ROLE_ORGANIZADOR')")
+    @PreAuthorize("hasRole('ROLE_ORGANIZADOR' , 'ROLE_PARTICIPANTE')")
     @Operation(
         summary = "Listar sesiones",
         description = "Lista todas las sesiones. Permite filtrar por actividad, modalidad, y otros parámetros.",
-        security = @SecurityRequirement(
-            name = "organizadorJWT"
-        ),
+        security = {
+            @SecurityRequirement(name = "organizadorJWT"),
+            @SecurityRequirement(name = "participanteJWT")
+        },
         tags = {"Listar"}
     )
     public ResponseEntity<List<SesionResponse>> listarSesiones(

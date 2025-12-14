@@ -48,7 +48,7 @@ public class OrganizadorApiRestController {
             ),
         tags = {"Home"}
     )
-    public ResponseEntity<GeneralResponseDTO<?>> indexOrganizador(
+    public ResponseEntity<GeneralResponseDTO<Map<String , String>>> indexOrganizador(
         @AuthenticationPrincipal UsuarioAuthInfo usuarioAuthInfo
     ) {
 
@@ -76,7 +76,7 @@ public class OrganizadorApiRestController {
             ),
         tags = {"Registrar"}
     )
-    public ResponseEntity<GeneralResponseDTO<?>> registrarAsistenciaMasiva(
+    public ResponseEntity<GeneralResponseDTO<String>> registrarAsistenciaMasiva(
         @RequestBody RegistrarAsistenciaRequestDTO registrarAsistenciaRequestDTO
     ) {
         try {
@@ -110,7 +110,7 @@ public class OrganizadorApiRestController {
             ),
         tags = {"Dashboard"}
     )
-    public ResponseEntity<GeneralResponseDTO<?>> dashboardParticipantesAsistencias(){
+    public ResponseEntity<GeneralResponseDTO<List<DashboardParticipanteAsistenciasResponseDTO>>> dashboardParticipantesAsistencias(){
         try {
             List<DashboardParticipanteAsistenciasResponseDTO> responseData = organizadorService.dashboardParticipanteAsistencias()
                 .stream()

@@ -71,7 +71,7 @@ public class AdministradorApiRestController {
             ),
         tags = {"Home"}
     )
-    public ResponseEntity<GeneralResponseDTO<?>> indexAdministrador(
+    public ResponseEntity<GeneralResponseDTO<Map<String , String>>> indexAdministrador(
         @AuthenticationPrincipal UsuarioAuthInfo usuarioAuthInfo
     ) {
         Map<String , String> dataForIndexAdministrador = new HashMap<>();
@@ -277,7 +277,7 @@ public class AdministradorApiRestController {
             ),
         tags = {"Listar"}
     )
-    public ResponseEntity<GeneralResponseDTO<?>> listarRoles(){
+    public ResponseEntity<GeneralResponseDTO<List<ListarRolesResponseDTO>>> listarRoles(){
         try {
             List<ListarRolesResponseDTO> listRolPresentationDTOs = administradorService.listarRoles()
                 .stream()
@@ -311,7 +311,7 @@ public class AdministradorApiRestController {
             ),
         tags = {"Actualizar"}
     )
-    public ResponseEntity<GeneralResponseDTO<?>> editarRol(
+    public ResponseEntity<GeneralResponseDTO<String>> editarRol(
         @PathVariable("id") String id , 
         @RequestParam("nombreRol") String nombreRol,
         @RequestParam("descripcion") String descripcion
@@ -350,7 +350,7 @@ public class AdministradorApiRestController {
             ),
         tags = {"Eliminar"}
     )
-    public ResponseEntity<GeneralResponseDTO<?>> eliminarRol(
+    public ResponseEntity<GeneralResponseDTO<String>> eliminarRol(
         @PathVariable("id") String id
     ){
         try {
@@ -383,7 +383,7 @@ public class AdministradorApiRestController {
             ),
         tags = {"Listar"}
     )
-    public ResponseEntity<GeneralResponseDTO<?>> listarUsuarios(){
+    public ResponseEntity<GeneralResponseDTO<List<ObtenerUsuarioResponseDTO>>> listarUsuarios(){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(
                 new GeneralResponseDTO<List<ObtenerUsuarioResponseDTO>>(
@@ -414,7 +414,7 @@ public class AdministradorApiRestController {
             ),
         tags = {"Estadisticas"}
     )
-    public ResponseEntity<GeneralResponseDTO<?>> estadisticasAdministrador(){
+    public ResponseEntity<GeneralResponseDTO<EnviarEstadisticasUsuariosResponseDTO>> estadisticasAdministrador(){
         try {
             EnviarEstadisticasUsuariosResponseDTO enviarEstadisticasUsuariosResponseDTO = EnviarEstadisticasUsuariosMapper.domainToResponse(administradorService.enviarEstadisticasUsuarios());
 
