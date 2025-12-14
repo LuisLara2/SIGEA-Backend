@@ -31,7 +31,7 @@ public interface AsistenciaJPARepository extends JpaRepository<AsistenciaEntity,
         """
             SELECT a.presente 
             FROM AsistenciaEntity a
-            WHERE a.sesionId = :sesionId AND a.inscripcionId = :inscripcionId
+            WHERE a.sesion.id = :sesionId AND a.inscripcion.id = :inscripcionId
         """
     )
     public Boolean findPresenteBySesionIdAndInscripcionId(
