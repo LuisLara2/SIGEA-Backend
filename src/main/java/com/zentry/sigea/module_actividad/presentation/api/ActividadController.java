@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.zentry.sigea.module_actividad.presentation.models.requestDTO.ActividadRequest;
 import com.zentry.sigea.module_actividad.presentation.models.requestDTO.CrearActividadRequest;
 import com.zentry.sigea.module_actividad.presentation.models.responseDTO.ActividadResponse;
 import com.zentry.sigea.module_actividad.services.ActividadService;

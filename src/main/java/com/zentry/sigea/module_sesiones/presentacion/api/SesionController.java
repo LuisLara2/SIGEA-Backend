@@ -63,14 +63,9 @@ public class SesionController {
     
 
     @GetMapping("/listar")
-    @PreAuthorize("hasRole('ROLE_ORGANIZADOR' , 'ROLE_PARTICIPANTE')")
     @Operation(
         summary = "Listar sesiones",
         description = "Lista todas las sesiones. Permite filtrar por actividad, modalidad, y otros parámetros.",
-        security = {
-            @SecurityRequirement(name = "organizadorJWT"),
-            @SecurityRequirement(name = "participanteJWT")
-        },
         tags = {"Listar"}
     )
     public ResponseEntity<List<SesionResponse>> listarSesiones(
@@ -86,12 +81,8 @@ public class SesionController {
     }
 
     @GetMapping("/obtener/{id}")
-    @PreAuthorize("hasRole('ROLE_ORGANIZADOR')")
     @Operation(
         summary = "Obtener una sesion por su ID",
-        security = @SecurityRequirement(
-            name = "organizadorJWT"
-        ),
         tags = {"Obtener"}
     )
     public ResponseEntity<SesionResponse> obtenerSesion(@PathVariable String id) {
