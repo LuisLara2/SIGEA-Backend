@@ -38,12 +38,13 @@ public class EstadoInscripcionController {
      * Crear un nuevo estado de inscripción
      */
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR', 'ROLE_ORGANIZADOR')")
     @Operation(
         summary = "Crear estado de inscripcion",
-        security = @SecurityRequirement(
-            name = "administradorJWT"
-            ),
+        security = {
+            @SecurityRequirement(name = "administradorJWT"),
+            @SecurityRequirement(name = "organizadorJWT")
+        },
         tags = {"Crear"}
     )
     public ResponseEntity<String> crearEstadoInscripcion(
@@ -64,12 +65,13 @@ public class EstadoInscripcionController {
      * Listar todos los estados de inscripción
      */
     @GetMapping("/listar")
-    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR', 'ROLE_ORGANIZADOR')")
     @Operation(
         summary = "Listar estados de inscripcion",
-        security = @SecurityRequirement(
-            name = "administradorJWT"
-            ),
+        security = {
+            @SecurityRequirement(name = "administradorJWT"),
+            @SecurityRequirement(name = "organizadorJWT")
+        },
         tags = {"Listar"}
     )
     public ResponseEntity<List<EstadoInscripcionResponse>> listarEstadosInscripcion() {
@@ -81,12 +83,12 @@ public class EstadoInscripcionController {
      * Obtener un estado de inscripción por ID
      */
     @GetMapping("obtener/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ORGANIZADOR')")
     @Operation(
         summary = "Obtener un estado de inscripcion por su ID.",
-        security = @SecurityRequirement(
-            name = "administradorJWT"
-            ),
+        security = {
+            @SecurityRequirement(name = "organizadorJWT")
+        },
         tags = {"Obtener"}
     )
     public ResponseEntity<EstadoInscripcionResponse> obtenerEstadoInscripcionPorId(
@@ -107,12 +109,13 @@ public class EstadoInscripcionController {
      * Obtener un estado de inscripción por código
      */
     @GetMapping("/obtener/codigo/{codigo}")
-    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR', 'ROLE_ORGANIZADOR')")
     @Operation(
         summary = "Obtener un estado de inscripcion por su codigo.",
-        security = @SecurityRequirement(
-            name = "administradorJWT"
-            ),
+        security = {
+            @SecurityRequirement(name = "administradorJWT"),
+            @SecurityRequirement(name = "organizadorJWT")
+        },
         tags = {"Obtener"}
     )
     public ResponseEntity<EstadoInscripcionResponse> obtenerEstadoInscripcionPorCodigo(
@@ -133,12 +136,13 @@ public class EstadoInscripcionController {
      * Eliminar un estado de inscripción
      */
     @DeleteMapping("eliminar/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR', 'ROLE_ORGANIZADOR')")
     @Operation(
         summary = "Eliminar un estado de inscripcion por su ID.",
-        security = @SecurityRequirement(
-            name = "administradorJWT"
-            ),
+        security = {
+            @SecurityRequirement(name = "administradorJWT"),
+            @SecurityRequirement(name = "organizadorJWT")
+        },
         tags = {"Eliminar"}
     )
     public ResponseEntity<Void> eliminarEstadoInscripcion(@PathVariable String id) {

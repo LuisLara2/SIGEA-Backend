@@ -214,11 +214,13 @@ public class SesionDomainEntity {
 
     /**
      * Actualiza la información de la sesión
+     * Si actividadId es null, mantiene el actividadId existente
      */
-    public void updateInfo(String actividadId, String titulo, String descripcion, LocalDateTime fecha_sesion, LocalTime hora_inicio, LocalTime hora_fin, String ponente, Modalidad modalidad, String lugar_sesion, String link_virtual, String orden) {
-        validateUpdateParams(actividadId, titulo, fecha_sesion, hora_inicio, hora_fin, ponente);
+    public void updateInfo( String titulo, String descripcion, LocalDateTime fecha_sesion, LocalTime hora_inicio, LocalTime hora_fin, String ponente, Modalidad modalidad, String lugar_sesion, String link_virtual, String orden) {
+        // Si no se proporciona actividadId, usar el existente
+
+        validateUpdateParams(titulo, fecha_sesion, hora_inicio, hora_fin, ponente);
         
-        this.actividadId = actividadId;
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.fecha_sesion = fecha_sesion;
@@ -327,10 +329,8 @@ public class SesionDomainEntity {
             throw new IllegalArgumentException("El ID del ponente no puede ser nulo");
         }
     }
-    private static void validateUpdateParams(String actividadId, String titulo, LocalDateTime fecha_sesion, LocalTime hora_inicio, LocalTime hora_fin, String ponente) {
-        if (actividadId == null) {
-            throw new IllegalArgumentException("El ID de actividad no puede ser nulo");
-        }
+    private static void validateUpdateParams( String titulo, LocalDateTime fecha_sesion, LocalTime hora_inicio, LocalTime hora_fin, String ponente) {
+
         if (titulo == null || titulo.trim().isEmpty()) {
             throw new IllegalArgumentException("El título no puede estar vacío");
         }
