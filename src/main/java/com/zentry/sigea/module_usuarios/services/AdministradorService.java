@@ -7,10 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.zentry.sigea.module_usuarios.core.entities.RolDomainEntity;
 import com.zentry.sigea.module_usuarios.core.entities.UsuarioDomainEntity;
-import com.zentry.sigea.module_usuarios.services.serviceDTO.DashboardParticipanteAsistenciasServiceDTO;
 import com.zentry.sigea.module_usuarios.services.serviceDTO.EnviarEstadisticasUsuariosServiceDTO;
 import com.zentry.sigea.module_usuarios.services.usecases.administrador.CrearRolUseCase;
-import com.zentry.sigea.module_usuarios.services.usecases.administrador.DashboardParticipanteAsistenciasUseCase;
 import com.zentry.sigea.module_usuarios.services.usecases.administrador.EditarRolUseCase;
 import com.zentry.sigea.module_usuarios.services.usecases.administrador.EliminarRolUseCase;
 import com.zentry.sigea.module_usuarios.services.usecases.administrador.EnviarEstadisticasUsuariosUseCase;
@@ -28,7 +26,6 @@ public class AdministradorService {
     private final ListarRolesUseCase listarRolesUseCase;
     private final EditarRolUseCase editarRolUseCase;
     private final EliminarRolUseCase eliminarRolUseCase;
-    private final DashboardParticipanteAsistenciasUseCase dashboardParticipanteAsistenciasUseCase;
 
     public AdministradorService(
         RegisterUsuarioUseCase registerUsuarioUseCase , 
@@ -37,8 +34,7 @@ public class AdministradorService {
         EnviarEstadisticasUsuariosUseCase enviarEstadisticasUsuariosUseCase , 
         ListarRolesUseCase listarRolesUseCase,
         EditarRolUseCase editarRolUseCase,
-        EliminarRolUseCase eliminarRolUseCase,
-        DashboardParticipanteAsistenciasUseCase dashboardParticipanteAsistenciasUseCase
+        EliminarRolUseCase eliminarRolUseCase
     ){
         this.registerUsuarioUseCase = registerUsuarioUseCase;
         this.crearRolUseCase = crearRolUseCase;
@@ -47,7 +43,6 @@ public class AdministradorService {
         this.listarRolesUseCase = listarRolesUseCase;
         this.editarRolUseCase = editarRolUseCase;
         this.eliminarRolUseCase = eliminarRolUseCase;
-        this.dashboardParticipanteAsistenciasUseCase = dashboardParticipanteAsistenciasUseCase;
     }
 
     public String registerUsuario(
@@ -89,9 +84,5 @@ public class AdministradorService {
 
     public String eliminarRol(String id){
         return eliminarRolUseCase.execute(id);
-    }
-
-    public List<DashboardParticipanteAsistenciasServiceDTO> dashboardParticipanteAsistencias(){
-        return dashboardParticipanteAsistenciasUseCase.execute();
     }
 }

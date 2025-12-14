@@ -3,8 +3,10 @@ package com.zentry.sigea.module_usuarios.presentation.api.v1;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zentry.sigea.module_usuarios.presentation.models.mappers.DashboardParticipanteAsistenciasMapper;
 import com.zentry.sigea.module_usuarios.presentation.models.mappers.RegistrarAsistenciaMapper;
 import com.zentry.sigea.module_usuarios.presentation.models.requestDTO.RegistrarAsistenciaRequestDTO;
+import com.zentry.sigea.module_usuarios.presentation.models.responseDTO.DashboardParticipanteAsistenciasResponseDTO;
 import com.zentry.sigea.module_usuarios.presentation.models.responseDTO.GeneralResponseDTO;
 import com.zentry.sigea.module_usuarios.services.OrganizadorService;
 import com.zentry.sigea.security.UsuarioAuthInfo;
@@ -13,7 +15,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -95,5 +99,39 @@ public class OrganizadorApiRestController {
                 )
             );
         }        
+    }
+    
+    @GetMapping("/dashboard/participantes-asistencias")
+    @PreAuthorize("hasRole('ROLE_ORGANIZADOR')")
+    @Operation(
+        summary = "Dashboard de administrador para mostrar Participantes y Asistencias",
+        security = @SecurityRequirement(
+            name = "organizadorJWT"
+            ),
+        tags = {"Dashboard"}
+    )
+    public ResponseEntity<GeneralResponseDTO<?>> dashboardParticipantesAsistencias(){
+        try {
+            List<DashboardParticipanteAsistenciasResponseDTO> responseData = organizadorService.dashboardParticipanteAsistencias()
+                .stream()
+                .map(DashboardParticipanteAsistenciasMapper::servicetoResponse)
+                .collect(Collectors.toList());
+
+            return ResponseEntity.status(HttpStatus.OK).body(
+                new GeneralResponseDTO<>(
+                    true, 
+                    "Operacion existosa", 
+                    responseData
+                )
+            );
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                new GeneralResponseDTO<>(
+                    false, 
+                    e.getMessage(), 
+                    null
+                )
+            );
+        }
     }
 }
