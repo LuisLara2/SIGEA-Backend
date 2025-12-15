@@ -70,6 +70,9 @@ public class SecurityConfig {
                             "/api/v*/actividades/obtener/**",
                             "/api/v*/actividad/banner/imagen/**",
 
+                            "/api/v*/tipos-actividad/listar",
+                            "/api/v*/estados-actividad/listar",
+
                             "/api/v*/usuarios/participante/registrar",
                             "/api/v*/usuarios/validar-correo/**",
 
