@@ -1,6 +1,7 @@
 package com.zentry.sigea.module_usuarios.presentation.models.responseDTO;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
@@ -20,5 +21,5 @@ public class ListarUsuariosResponseDTO {
     private String telefono;
     private String extensionTelefonica;
 
-    private List<String> nombresRoles;
+    private List<String> nombresRoles = new ArrayList<>();
 }
