@@ -120,7 +120,8 @@ MEDIA_LOCATION={Ubicacion de almacenamiento de medios. def: ./uploads}
 # Dominios o Enlaces Publicos
 SIGEA_PUBLIC_BACKEND_DOMAIN={Dominio publico del Backend del Proyecto para configuración CORS}
 SIGEA_PUBLIC_FRONTEND_DOMAIN={Dominio publico del Frondent del Proyecto para configuración CORS}
-SIGEA_ALLOWED_ORIGIN_LOCALHOST_PATH={Dominio localhost para configuracion CORS}
+SIGEA_ALLOWED_ORIGIN_BACKEND_LOCALHOST_PATH={Dominio localhost del backend para configuracion CORS}
+SIGEA_ALLOWED_ORIGIN_FRONTEND_LOCALHOST_PATH={Dominio localhost del frontend para configuracion CORS}
 
 SIGEA_PUBLIC_BACKEND_REPOSITORY={Enlace al repositorio del proyecto}
 

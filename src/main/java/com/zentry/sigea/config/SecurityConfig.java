@@ -38,8 +38,10 @@ public class SecurityConfig {
     @Value("${sigea.public.backend.domain}")
     private String sigeaPublicBackendDomain;
 
-    @Value("${sigea.allowed.origin.localhost.path}")
-    private String sigeaAllowedOriginLocalhostPath;
+    @Value("${sigea.allowed.origin.backend.localhost.path}")
+    private String sigeaAllowedOriginBakendLocalhostPath;
+    @Value("${sigea.allowed.origin.frontend.localhost.path}")
+    private String sigeaAllowedOriginFrontendLocalhostPath;
 
     public SecurityConfig(
         CustomAuthenticationEntryPoint customAuthenticationEntryPoint,
@@ -111,7 +113,8 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOriginPatterns(List.of(
-            sigeaAllowedOriginLocalhostPath,
+            sigeaAllowedOriginBakendLocalhostPath,
+            sigeaAllowedOriginFrontendLocalhostPath,
             sigeaPublicBackendDomain,
             sigeaPublicFrontendDomain
         ));
