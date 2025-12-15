@@ -165,9 +165,18 @@ public class OpenApiConfig {
                     "/" , 
                     "/api/v*/actividades/listar" , 
                     "/api/v*/actividades/obtener/**" , 
+                    "/api/v*/actividad/banner/imagen/**",
+
                     "/api/v*/{any}/health",
+
                     "/api/v*/usuarios/participante/registrar",
-                    "/api/v*/usuarios/validar-correo/**"
+                    "/api/v*/usuarios/validar-correo/**",
+
+                    "/api/v*/sesiones/listar",
+                    "/api/v*/sesiones/obtener/**",
+
+                    "/api/v*/tipos-actividad/listar",
+                    "/api/v*/estados-actividad/listar"
                 )
                 .build();
     }
