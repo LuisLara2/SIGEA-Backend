@@ -1,4 +1,4 @@
-package com.zentry.sigea.module_pago.presentation.model.responseDTO;
+package com.zentry.sigea.module_pago.presentation.models.responseDTO;
 
 import java.util.Date;
 

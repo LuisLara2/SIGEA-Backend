@@ -1,24 +1,29 @@
 package com.zentry.sigea.module_pago.infrastucture.database.mappers;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import com.zentry.sigea.module_inscripciones.infrastructure.database.entities.InscripcionEntity;
+import com.zentry.sigea.module_pago.core.entities.EstadoPagoDomainEntity;
+import com.zentry.sigea.module_pago.core.entities.MetodoPagoDomainEntity;
 import com.zentry.sigea.module_pago.core.entities.PagoDomainEntity;
 import com.zentry.sigea.module_pago.infrastucture.database.entities.EstadoPagoEntity;
 import com.zentry.sigea.module_pago.infrastucture.database.entities.MetodoPagoEntity;
 import com.zentry.sigea.module_pago.infrastucture.database.entities.PagoEntity;
+import com.zentry.sigea.module_pago.presentation.models.requestDTO.PagoRequest;
 
 public class PagoMapper {
 
     /*
      * Convierte de dominio → entidad JPA
      */
-    public static PagoEntity toEntity(PagoDomainEntity domain, 
-                                      InscripcionEntity inscripcion,
-                                      MetodoPagoEntity metodoPago,
-                                      EstadoPagoEntity estadoPago) {
+    public static PagoEntity toEntity(PagoDomainEntity domain,
+            InscripcionEntity inscripcion,
+            MetodoPagoEntity metodoPago,
+            EstadoPagoEntity estadoPago) {
 
-        if (domain == null) return null;
+        if (domain == null)
+            return null;
 
         PagoEntity entity = new PagoEntity();
 
@@ -27,14 +32,9 @@ public class PagoMapper {
             entity.setIdPago(UUID.fromString(domain.getIdPago()));
         }
 
-        
-
         entity.setMonto(domain.getMonto());
         entity.setFechaPago(domain.getFechaPago());
-        entity.setReferenciaExt(domain.getReferenciaExterna());
-        entity.setUltimos4(domain.getUltimos4());
-        entity.setBin(domain.getBin());
-        entity.setRawRespuesta(domain.getRawRespuesta());
+        entity.setReferenciaExterna(domain.getReferenciaExt());
 
         // Relaciones correctas
         entity.setInscripcion(inscripcion);
@@ -49,22 +49,53 @@ public class PagoMapper {
      */
     public static PagoDomainEntity toDomain(PagoEntity entity) {
 
-        if (entity == null) return null;
+        if (entity == null)
+            return null;
 
         PagoDomainEntity domain = new PagoDomainEntity();
 
         domain.setIdPago(entity.getIdPago().toString());
         domain.setMonto(entity.getMonto());
+        domain.setMoneda(entity.getMoneda());
         domain.setFechaPago(entity.getFechaPago());
-        domain.setReferenciaExterna(entity.getReferenciaExt());
-        domain.setUltimos4(entity.getUltimos4());
-        domain.setBin(entity.getBin());
-        domain.setRawRespuesta(entity.getRawRespuesta());
+        domain.setReferenciaExt(entity.getReferenciaExterna());
 
-        domain.setIdMetodoPago(entity.getMetodoPago().getIdMetodoPago());
-        domain.setIdEstadoPago(entity.getEstadoPago().getIdEstadoPago());
+        domain.setMetodoId(entity.getMetodoPago().getIdMetodoPago().toString());
+        domain.setEstadoId(entity.getEstadoPago().getIdEstadoPago().toString());
 
-        domain.setInscripcionId(entity.getInscripcion().getId());
+        domain.setInscripcionId(entity.getInscripcion().getId().toString());
+
+        return domain;
+    }
+
+    public static PagoDomainEntity toDomain(PagoRequest request,
+            Optional<MetodoPagoDomainEntity> metodoPagoOpt,
+            Optional<EstadoPagoDomainEntity> estadoPagoOpt) {
+
+        if (request == null)
+            return null;
+
+        MetodoPagoDomainEntity metodo = metodoPagoOpt
+                .orElseThrow(() -> new IllegalArgumentException("Metodo de pago no valido"));
+        EstadoPagoDomainEntity estado = estadoPagoOpt
+                .orElseThrow(() -> new IllegalArgumentException("Estado de pago no valido"));
+
+        PagoDomainEntity domain = new PagoDomainEntity();
+
+        if (request.inscripcionId() != null) {
+            domain.setInscripcionId(request.inscripcionId().toString());
+        }
+
+        if (request.monto() != null) {
+            domain.setMonto(request.monto());
+        }
+
+        domain.setMoneda(request.moneda());
+        domain.setReferenciaExt(request.referenciaExterna());
+
+        // Relaciones
+        domain.setMetodoId(metodo.getIdMetodoPago());
+        domain.setEstadoId(estado.getIdEstadoPago());
 
         return domain;
     }

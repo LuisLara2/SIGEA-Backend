@@ -25,9 +25,9 @@ import lombok.Setter;
 public class PagoEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_pago")
-    private UUID idpago;
+    private UUID idPago;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "inscripcion_id", referencedColumnName = "id_inscripcion")
@@ -55,4 +55,5 @@ public class PagoEntity {
 
     @Column(name = "referencia_ext", length = 120)
     private String referenciaExterna; // ID de pago en Mercado Pago
+
 }

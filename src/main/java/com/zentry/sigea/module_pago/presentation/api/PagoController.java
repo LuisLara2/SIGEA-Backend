@@ -1,20 +1,29 @@
 package com.zentry.sigea.module_pago.presentation.api;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.zentry.sigea.module_pago.presentation.model.requestDTO.ConsultPagoRequest;
-import com.zentry.sigea.module_pago.presentation.model.requestDTO.YapePaymentRequest;
+import com.zentry.sigea.module_pago.core.entities.PagoDomainEntity;
+import com.zentry.sigea.module_pago.presentation.models.requestDTO.ConsultPagoRequest;
+import com.zentry.sigea.module_pago.presentation.models.requestDTO.EstadoPagoRequest;
+import com.zentry.sigea.module_pago.presentation.models.requestDTO.MetodoPagoRequest;
+import com.zentry.sigea.module_pago.presentation.models.requestDTO.PagoRequest;
+import com.zentry.sigea.module_pago.presentation.models.responseDTO.PagoResponse;
 import com.zentry.sigea.module_pago.services.PagoService;
+import com.zentry.sigea.module_pago.services.usecase.estadopago.CrearEstadoPagoUseCase;
+import com.zentry.sigea.module_pago.services.usecase.metodopago.CrearMetodoPagoUseCase;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -38,49 +47,47 @@ public class PagoController {
      */
     @PostMapping("/crear-pago-yape")
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'ORGANIZADOR', 'PARTICIPANTE')")
-    @Operation(summary = "Crear pago con Yape", description = "Procesa un pago usando Yape a través de MercadoPago",
-        security= {
+    @Operation(summary = "Crear pago con Yape", description = "Procesa un pago usando Yape a través de MercadoPago", security = {
             @SecurityRequirement(name = "administradorJWT"),
             @SecurityRequirement(name = "organizadorJWT"),
             @SecurityRequirement(name = "participanteJWT")
 
-        },
-        responses = {
+    }, responses = {
             @ApiResponse(responseCode = "200", description = "Pago creado exitosamente"),
             @ApiResponse(responseCode = "400", description = "Solicitud inválida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
-        }
-    )
-    public Object pagarConYape(@RequestBody YapePaymentRequest request) {
-        return pagoService.pagarConYape(request.getMonto(), request.getDescripcion());
+    }, tags = { "Crear" })
+    public Object pagarConYape(@RequestBody PagoRequest request) {
+        log.info("Iniciando pago con Yape para monto: {}", request.monto());
+        pagoService.guardarPago(request);
+        return pagoService.pagarConYape(request.monto(), request.descripcion());
     }
-    
+
     /**
      * Consulta el estado de un pago
      */
     @PostMapping("/consultar-pago")
     @Operation(summary = "Consultar estado de pago", description = "Obtiene el estado actual de un pago por su ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Estado consultado exitosamente"),
-        @ApiResponse(responseCode = "404", description = "Pago no encontrado"),
-        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+            @ApiResponse(responseCode = "200", description = "Estado consultado exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Pago no encontrado"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     public Object consultarPago(@RequestBody ConsultPagoRequest request) {
         log.info("Consultando pago ID: {}", request.getPaymentId());
-        return pagoService.consultarPago(convertToMap(request));
+        return pagoService.consultarPago(request.getPaymentId());
     }
-
 
     // // Métodos helper para convertir DTOs a Map (temporalmente)
     // private Map<String, Object> convertToMap(YapePaymentRequest request) {
-    //     Map<String, Object> map = new java.util.HashMap<>();
-    //     map.put("descripcion", request.getDescripcion());
-    //     map.put("monto", request.getMonto());
-    //     map.put("token", request.getToken());
-    //     map.put("email", request.getEmail());
-    //     map.put("referencia", request.getReferencia());
-    //     map.put("usuarioId", request.getUsuarioId());
-    //     return map;
+    // Map<String, Object> map = new java.util.HashMap<>();
+    // map.put("descripcion", request.getDescripcion());
+    // map.put("monto", request.getMonto());
+    // map.put("token", request.getToken());
+    // map.put("email", request.getEmail());
+    // map.put("referencia", request.getReferencia());
+    // map.put("usuarioId", request.getUsuarioId());
+    // return map;
     // }
 
     private Map<String, Object> convertToMap(ConsultPagoRequest request) {
@@ -88,4 +95,21 @@ public class PagoController {
         map.put("paymentId", request.getPaymentId());
         return map;
     }
+
+    @GetMapping("/listar-pagos")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'ORGANIZADOR', 'PARTICIPANTE')")
+    @Operation(summary = "Listar pagos", description = "Obtiene todos los pagos", security = {
+            @SecurityRequirement(name = "administradorJWT"),
+            @SecurityRequirement(name = "organizadorJWT"),
+            @SecurityRequirement(name = "participanteJWT")
+    }, tags = "Pagos")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Pagos listados exitosamente"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    public List<PagoResponse> listarPagos() {
+        log.info("Listando todos los pagos");
+        return pagoService.findAll().stream().map(pago -> new PagoResponse(pago)).collect(Collectors.toList());
+    }
+
 }

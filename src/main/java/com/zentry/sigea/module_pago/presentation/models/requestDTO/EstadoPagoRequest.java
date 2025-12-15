@@ -1,4 +1,4 @@
-package com.zentry.sigea.module_pago.presentation.model.requestDTO;
+package com.zentry.sigea.module_pago.presentation.models.requestDTO;
 
 public class EstadoPagoRequest {
     private String descripcion;

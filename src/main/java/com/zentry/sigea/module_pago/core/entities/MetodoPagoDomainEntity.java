@@ -8,6 +8,7 @@ public class MetodoPagoDomainEntity {
     public String getIdMetodoPago() {
         return idMetodoPago;
     }
+
     public void setIdMetodoPago(String idMetodoPago) {
         this.idMetodoPago = idMetodoPago;
     }
@@ -15,6 +16,7 @@ public class MetodoPagoDomainEntity {
     public String getDescripcion() {
         return descripcion;
     }
+
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
@@ -22,8 +24,16 @@ public class MetodoPagoDomainEntity {
     public String getEtiqueta() {
         return etiqueta;
     }
+
     public void setEtiqueta(String etiqueta) {
         this.etiqueta = etiqueta;
     }
-    
+
+    public static MetodoPagoDomainEntity create(String descripcion, String etiqueta) {
+        MetodoPagoDomainEntity metodoPagoDomainEntity = new MetodoPagoDomainEntity();
+        metodoPagoDomainEntity.setDescripcion(descripcion);
+        metodoPagoDomainEntity.setEtiqueta(etiqueta);
+        return metodoPagoDomainEntity;
+    }
+
 }

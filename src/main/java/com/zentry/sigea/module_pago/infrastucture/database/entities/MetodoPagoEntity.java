@@ -16,9 +16,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MetodoPagoEntity {
-    
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_metodo")
     private UUID idMetodoPago;
 
@@ -27,6 +27,4 @@ public class MetodoPagoEntity {
     @Column(name = "etiqueta", nullable = false, length = 100)
     private String etiqueta;
 
-
-    
 }

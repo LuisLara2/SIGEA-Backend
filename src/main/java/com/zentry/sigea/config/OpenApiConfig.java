@@ -29,41 +29,39 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         final String securitySchemeName = "bearerAuth";
 
-    return new OpenAPI()
-            .info(new Info()
-                    .title("SIGEA API")
-                    .description("Sistema Integral de Gestión de Eventos Académicos - API REST")
-                    .version("v1.0.0")
-                    .contact(new Contact()
-                        .name("Equipo SIGEA")
-                        .email("sigea@zentry.com")
-                        .url("https://github.com/PAULTB4/SIGEA-backend.git"))
-                    .license(new License()
-                        .name("MIT License")
-                        .url("https://opensource.org/licenses/MIT")))
-            .servers(List.of(
-                new Server()
-                    .url("http://localhost:" + serverPort)
-                    .description("Servidor de desarrollo"),
-                new Server()
-                    .url("https://api.sigea.com")
-                    .description("Servidor de producción")
-            ))
-            .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
-            .components(new Components()
-                        .addSecuritySchemes("administradorJWT", 
-                            new SecurityScheme().type(SecurityScheme.Type.HTTP)
-                                .scheme("bearer")
-                                .bearerFormat("JWT"))
-                        .addSecuritySchemes("organizadorJWT", 
-                            new SecurityScheme().type(SecurityScheme.Type.HTTP)
-                                .scheme("bearer")
-                                .bearerFormat("JWT"))
-                        .addSecuritySchemes("participanteJWT", 
-                            new SecurityScheme().type(SecurityScheme.Type.HTTP)
-                                .scheme("bearer")
-                                .bearerFormat("JWT"))
-            );
+        return new OpenAPI()
+                .info(new Info()
+                        .title("SIGEA API")
+                        .description("Sistema Integral de Gestión de Eventos Académicos - API REST")
+                        .version("v1.0.0")
+                        .contact(new Contact()
+                                .name("Equipo SIGEA")
+                                .email("sigea@zentry.com")
+                                .url("https://github.com/PAULTB4/SIGEA-backend.git"))
+                        .license(new License()
+                                .name("MIT License")
+                                .url("https://opensource.org/licenses/MIT")))
+                .servers(List.of(
+                        new Server()
+                                .url("http://localhost:" + serverPort)
+                                .description("Servidor de desarrollo"),
+                        new Server()
+                                .url("https://api.sigea.com")
+                                .description("Servidor de producción")))
+                .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
+                .components(new Components()
+                        .addSecuritySchemes("administradorJWT",
+                                new SecurityScheme().type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT"))
+                        .addSecuritySchemes("organizadorJWT",
+                                new SecurityScheme().type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT"))
+                        .addSecuritySchemes("participanteJWT",
+                                new SecurityScheme().type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT")));
     }
 
     @Bean
@@ -74,16 +72,14 @@ public class OpenApiConfig {
                 .build();
     }
 
-
     @Bean
     public GroupedOpenApi actividadesApi() {
         return GroupedOpenApi.builder()
                 .group("Modulo Actividades")
                 .pathsToMatch(
-                    "/api/v*/actividades/**" , 
-                    "/api/v*/estados-actividad/**",
-                    "/api/v*/tipos-actividad/**"
-                )
+                        "/api/v*/actividades/**",
+                        "/api/v*/estados-actividad/**",
+                        "/api/v*/tipos-actividad/**")
                 .build();
     }
 
@@ -92,9 +88,8 @@ public class OpenApiConfig {
         return GroupedOpenApi.builder()
                 .group("Modulo Certificaciones")
                 .pathsToMatch(
-                    "/api/v*/certificaciones/**",
-                    "/api/v*/estado-certificado/**"
-                )
+                        "/api/v*/certificaciones/**",
+                        "/api/v*/estado-certificado/**")
                 .build();
     }
 
@@ -103,9 +98,8 @@ public class OpenApiConfig {
         return GroupedOpenApi.builder()
                 .group("Modulo Informes")
                 .pathsToMatch(
-                    "/api/v*/informes/**" ,
-                    "/api/v*/tipos-informe"
-                )
+                        "/api/v*/informes/**",
+                        "/api/v*/tipos-informe")
                 .build();
     }
 
@@ -114,9 +108,8 @@ public class OpenApiConfig {
         return GroupedOpenApi.builder()
                 .group("Modulo Inscripciones")
                 .pathsToMatch(
-                    "/api/v*/inscripciones/**",
-                    "/api/v*/estados-inscripcion/**"
-                )
+                        "/api/v*/inscripciones/**",
+                        "/api/v*/estados-inscripcion/**")
                 .build();
     }
 
@@ -125,10 +118,9 @@ public class OpenApiConfig {
         return GroupedOpenApi.builder()
                 .group("Modulo Notificaciones")
                 .pathsToMatch(
-                    "/api/v*/notificaciones/**",
-                    "/api/v*/estados-notificacion/**",
-                    "/api/v*/tipos-notificacion/**"
-                )
+                        "/api/v*/notificaciones/**",
+                        "/api/v*/estados-notificacion/**",
+                        "/api/v*/tipos-notificacion/**")
                 .build();
     }
 
@@ -145,8 +137,7 @@ public class OpenApiConfig {
         return GroupedOpenApi.builder()
                 .group("Modulo Usuarios")
                 .pathsToMatch(
-                    "/api/v*/usuarios/**"
-                )
+                        "/api/v*/usuarios/**")
                 .build();
     }
 
@@ -155,14 +146,13 @@ public class OpenApiConfig {
         return GroupedOpenApi.builder()
                 .group("APIs libres")
                 .pathsToMatch(
-                    "/api/v*/usuarios/auth/**",
-                    "/" , 
-                    "/api/v*/actividades/listar" , 
-                    "/api/v*/actividades/obtener/**" , 
-                    "/api/v*/{any}/health",
-                    "/api/v1/usuarios/participante/registrar",
-                    "/api/v1/usuarios/validar-correo/**"
-                )
+                        "/api/v*/usuarios/auth/**",
+                        "/",
+                        "/api/v*/actividades/listar",
+                        "/api/v*/actividades/obtener/**",
+                        "/api/v*/{any}/health",
+                        "/api/v1/usuarios/participante/registrar",
+                        "/api/v1/usuarios/validar-correo/**")
                 .build();
     }
 
@@ -171,19 +161,18 @@ public class OpenApiConfig {
         return GroupedOpenApi.builder()
                 .group("Modulo Banners de Actividades")
                 .pathsToMatch(
-                    "/api/v1/actividad/banner/**"
-                )
+                        "/api/v1/actividad/banner/**")
                 .build();
     }
-
 
     @Bean
     public GroupedOpenApi pagoApi() {
         return GroupedOpenApi.builder()
                 .group("Modulo Pagos")
                 .pathsToMatch(
-                    "/api/v1/pagos/**"
-                )
+                        "/api/v1/pagos/**",
+                        "/api/v1/estado-pago/**",
+                        "/api/v1/metodo-pago/**")
                 .build();
     }
 }

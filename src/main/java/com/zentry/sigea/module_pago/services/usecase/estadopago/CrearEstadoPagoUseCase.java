@@ -1,10 +1,10 @@
-package com.zentry.sigea.module_pago.services.usecase;
+package com.zentry.sigea.module_pago.services.usecase.estadopago;
 
 import org.springframework.stereotype.Component;
 
 import com.zentry.sigea.module_pago.core.entities.EstadoPagoDomainEntity;
 import com.zentry.sigea.module_pago.core.repository.IEstadoPagoRepository;
-import com.zentry.sigea.module_pago.presentation.model.requestDTO.EstadoPagoRequest;
+import com.zentry.sigea.module_pago.presentation.models.requestDTO.EstadoPagoRequest;
 
 @Component
 public class CrearEstadoPagoUseCase {
@@ -15,22 +15,17 @@ public class CrearEstadoPagoUseCase {
         this.estadoPagoRepository = estadoPagoRepository;
     }
 
-    
     public String execute(EstadoPagoRequest request) {
-
 
         // Crear la entidad usando el factory method del dominio
         var nuevoEstadoPago = EstadoPagoDomainEntity.create(
-            request.getDescripcion(),
-            request.getEtiqueta()
-        );
+                request.getDescripcion(),
+                request.getEtiqueta());
 
         // Guardar usando el repositorio
-        return estadoPagoRepository.save(nuevoEstadoPago) ? 
-            "Estado de pago registrado con éxito" : 
-            "Algo salió mal al guardar el estado de pago";
-        
+        return estadoPagoRepository.save(nuevoEstadoPago) ? "Estado de pago registrado con éxito"
+                : "Algo salió mal al guardar el estado de pago";
+
     }
 
-    
 }
