@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,6 +26,7 @@ public class InformeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "actividad_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private ActividadEntity actividad;
 
     @ManyToOne(fetch = FetchType.LAZY)

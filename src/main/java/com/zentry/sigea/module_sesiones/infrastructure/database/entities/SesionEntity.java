@@ -3,6 +3,9 @@ package com.zentry.sigea.module_sesiones.infrastructure.database.entities;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.zentry.sigea.module_actividad.infrastructure.database.entities.ActividadEntity;
 
 import jakarta.persistence.Column;
@@ -45,6 +48,7 @@ public class SesionEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "actividad_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private ActividadEntity actividad;
 
     @Column(name = "titulo", nullable = false, length = 150)

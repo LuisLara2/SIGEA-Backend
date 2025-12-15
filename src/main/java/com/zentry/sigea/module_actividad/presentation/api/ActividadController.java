@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.zentry.sigea.module_actividad.presentation.models.requestDTO.ActividadRequest;
 import com.zentry.sigea.module_actividad.presentation.models.requestDTO.CrearActividadRequest;
 import com.zentry.sigea.module_actividad.presentation.models.responseDTO.ActividadResponse;
 import com.zentry.sigea.module_actividad.services.ActividadService;
@@ -152,7 +151,7 @@ public class ActividadController {
             ),
         tags = {"Actualizar"}
     )
-    public ResponseEntity<String> actualizarActividad(@PathVariable String id, @RequestBody ActividadRequest request) {
+    public ResponseEntity<String> actualizarActividad(@PathVariable String id, @RequestBody CrearActividadRequest request) {
         try {
             String actividadActualizada = actividadService.actualizarActividad(id, request);
             return ResponseEntity.ok(actividadActualizada);

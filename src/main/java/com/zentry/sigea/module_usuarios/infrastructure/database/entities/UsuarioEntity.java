@@ -1,7 +1,5 @@
 package com.zentry.sigea.module_usuarios.infrastructure.database.entities;
 
-import static org.junit.Assert.fail;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 

@@ -144,8 +144,10 @@ public class SesionService implements ISesionService {
 
         SesionEntity.Modalidad modalidad = SesionEntity.Modalidad.valueOf(request.getModalidad().toUpperCase());
 
-        SesionDomainEntity datosActualizados = SesionDomainEntity.create(
-            null,
+        // Crear entidad con los datos actualizados del request
+        SesionDomainEntity datosActualizados = SesionDomainEntity.reconstruct(
+            null, // id - no necesario para actualizar
+            null, // actividadId - se mantiene el existente en updateInfo
             request.getTitulo(),
             request.getDescripcion(),
             request.getFechaSesion(),
@@ -155,7 +157,9 @@ public class SesionService implements ISesionService {
             modalidad,
             request.getLugarSesion(),
             request.getLinkVirtual(),
-            request.getOrden()
+            request.getOrden(),
+            null, // createdAt - no se modifica
+            null  // updatedAt - se actualiza en updateInfo
         );
 
         return actualizarSesionUseCase.execute(id, datosActualizados)

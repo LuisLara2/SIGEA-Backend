@@ -15,4 +15,14 @@ public interface UsuarioJPARepository extends JpaRepository<UsuarioEntity , UUID
 
     @Query("SELECT u.id FROM UsuarioEntity u WHERE u.correo = :correo")
     public Optional<UUID> findIdByCorreo(@Param("correo") String correo);
+
+    public long count();
+
+    @Query(
+        """
+            SELECT u.passwordHash
+            FROM UsuarioEntity u
+            WHERE u.id = :id
+        """)
+    public String findPasswordHashById(@Param("id") UUID id);
 }

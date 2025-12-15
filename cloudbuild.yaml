@@ -1,0 +1,37 @@
+steps:
+  # 1. Construir la imagen Docker
+  # Se utiliza $SHORT_SHA para versionado único por commit
+  - name: 'gcr.io/cloud-builders/docker'
+    args: 
+      - 'build'
+      - '-t'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/sigea-repo/sigea-backend:$SHORT_SHA'
+      - '.'
+
+
+  # 2. Subir la imagen al Artifact Registry (Push)
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/sigea-repo/sigea-backend:$SHORT_SHA']
+
+  # 3. Desplegar en Cloud Run (Deploy)
+  # Actualiza el servicio manteniendo las variables de entorno ya configuradas
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'sigea-backend-dev'
+      - '--image'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/sigea-repo/sigea-backend:$SHORT_SHA'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+
+# Registro de imágenes generadas
+images:
+  - 'us-central1-docker.pkg.dev/$PROJECT_ID/sigea-repo/sigea-backend:$SHORT_SHA'
+
+# Optimización de logs
+options:
+  logging: CLOUD_LOGGING_ONLY

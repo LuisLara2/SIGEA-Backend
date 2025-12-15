@@ -25,43 +25,51 @@ public class OpenApiConfig {
     @Value("${server.port:16001}")
     private String serverPort;
 
+    @Value("${sigea.public.backend.domain}")
+    private String sigeaPublicBackendDomain;
+
+    @Value("${sigea.public.backend.repository:https://github.com/PAULTB4/SIGEA-backend.git}")
+    private String sigeaPublicBackendRepository;
+
     @Bean
     public OpenAPI customOpenAPI() {
         final String securitySchemeName = "bearerAuth";
 
-        return new OpenAPI()
-                .info(new Info()
-                        .title("SIGEA API")
-                        .description("Sistema Integral de Gestión de Eventos Académicos - API REST")
-                        .version("v1.0.0")
-                        .contact(new Contact()
-                                .name("Equipo SIGEA")
-                                .email("sigea@zentry.com")
-                                .url("https://github.com/PAULTB4/SIGEA-backend.git"))
-                        .license(new License()
-                                .name("MIT License")
-                                .url("https://opensource.org/licenses/MIT")))
-                .servers(List.of(
-                        new Server()
-                                .url("http://localhost:" + serverPort)
-                                .description("Servidor de desarrollo"),
-                        new Server()
-                                .url("https://api.sigea.com")
-                                .description("Servidor de producción")))
-                .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
-                .components(new Components()
-                        .addSecuritySchemes("administradorJWT",
-                                new SecurityScheme().type(SecurityScheme.Type.HTTP)
-                                        .scheme("bearer")
-                                        .bearerFormat("JWT"))
-                        .addSecuritySchemes("organizadorJWT",
-                                new SecurityScheme().type(SecurityScheme.Type.HTTP)
-                                        .scheme("bearer")
-                                        .bearerFormat("JWT"))
-                        .addSecuritySchemes("participanteJWT",
-                                new SecurityScheme().type(SecurityScheme.Type.HTTP)
-                                        .scheme("bearer")
-                                        .bearerFormat("JWT")));
+    return new OpenAPI()
+            .info(new Info()
+                    .title("SIGEA API")
+                    .description("Sistema Integral de Gestión de Eventos Académicos - API REST")
+                    .version("v1.0.0")
+                    .contact(new Contact()
+                        .name("Equipo SIGEA")
+                        .email("sigea@zentry.com")
+                        .url(sigeaPublicBackendRepository))
+                    .license(new License()
+                        .name("MIT License")
+                        .url("https://opensource.org/licenses/MIT")))
+            .servers(List.of(
+                new Server()
+                    .url("http://localhost:" + serverPort)
+                    .description("Servidor de desarrollo"),
+                new Server()
+                    .url(sigeaPublicBackendDomain)
+                    .description("Servidor de producción")
+            ))
+            .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
+            .components(new Components()
+                        .addSecuritySchemes("administradorJWT", 
+                            new SecurityScheme().type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT"))
+                        .addSecuritySchemes("organizadorJWT", 
+                            new SecurityScheme().type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT"))
+                        .addSecuritySchemes("participanteJWT", 
+                            new SecurityScheme().type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT"))
+            );
     }
 
     @Bean
@@ -146,13 +154,23 @@ public class OpenApiConfig {
         return GroupedOpenApi.builder()
                 .group("APIs libres")
                 .pathsToMatch(
-                        "/api/v*/usuarios/auth/**",
-                        "/",
-                        "/api/v*/actividades/listar",
-                        "/api/v*/actividades/obtener/**",
-                        "/api/v*/{any}/health",
-                        "/api/v1/usuarios/participante/registrar",
-                        "/api/v1/usuarios/validar-correo/**")
+                    "/api/v*/usuarios/auth/**",
+                    "/" , 
+                    "/api/v*/actividades/listar" , 
+                    "/api/v*/actividades/obtener/**" , 
+                    "/api/v*/actividad/banner/imagen/**",
+
+                    "/api/v*/{any}/health",
+
+                    "/api/v*/usuarios/participante/registrar",
+                    "/api/v*/usuarios/validar-correo/**",
+
+                    "/api/v*/sesiones/listar",
+                    "/api/v*/sesiones/obtener/**",
+
+                    "/api/v*/tipos-actividad/listar",
+                    "/api/v*/estados-actividad/listar"
+                )
                 .build();
     }
 

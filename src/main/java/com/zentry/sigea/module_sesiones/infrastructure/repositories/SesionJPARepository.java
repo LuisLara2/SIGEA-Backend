@@ -1,6 +1,7 @@
 package com.zentry.sigea.module_sesiones.infrastructure.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.zentry.sigea.module_sesiones.infrastructure.database.entities.SesionEntity;
@@ -8,6 +9,7 @@ import com.zentry.sigea.module_sesiones.infrastructure.database.entities.SesionE
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -24,6 +26,7 @@ public interface SesionJPARepository extends JpaRepository<SesionEntity, UUID> {
     /**
      * Encuentra todas las sesiones dentro de un rango de fechas.
      */
+    @Query("SELECT s FROM SesionEntity s WHERE s.fechaSesion BETWEEN :inicio AND :fin")
     List<SesionEntity> findByFechaSesionBetween(LocalDateTime inicio, LocalDateTime fin);
 
     /**
@@ -61,4 +64,11 @@ public interface SesionJPARepository extends JpaRepository<SesionEntity, UUID> {
     List<SesionEntity> findByModalidad(Modalidad modalidad);
 
     List<SesionEntity> findByActividadIdAndModalidad(UUID actividadId, Modalidad modalidad);
+
+    /**
+     * Elimina todas las sesiones de una actividad específica
+     */
+    void deleteByActividadId(UUID actividadId);
+
+    public Optional<SesionEntity> findByOrdenContainingAndActividad_Id(String orden , UUID actividadId);
 }

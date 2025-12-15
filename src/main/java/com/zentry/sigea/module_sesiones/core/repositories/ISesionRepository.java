@@ -3,6 +3,7 @@ package com.zentry.sigea.module_sesiones.core.repositories;
 import com.zentry.sigea.module_sesiones.core.entities.SesionDomainEntity;
 import com.zentry.sigea.module_sesiones.infrastructure.database.entities.SesionEntity.Modalidad;
 
+import java.lang.StackWalker.Option;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -91,4 +92,6 @@ public interface ISesionRepository {
     long countByActividadId(String actividadId);
 
     List<SesionDomainEntity> findByActividadIdAndModalidad(UUID fromString, Modalidad modalidad);
+
+    public Optional<SesionDomainEntity> findByOrdenContainingAndActividad_Id(String orden , String actividadId);
 }

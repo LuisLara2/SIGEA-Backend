@@ -3,6 +3,9 @@ package com.zentry.sigea.module_notificaciones.infrastructure.database.entities;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -35,10 +38,12 @@ public class NotificacionEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private UsuarioEntity usuario;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "actividad_id", nullable = true)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private ActividadEntity actividad;
 
     @ManyToOne(fetch = FetchType.LAZY)

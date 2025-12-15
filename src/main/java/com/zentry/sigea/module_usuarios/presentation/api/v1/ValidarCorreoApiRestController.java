@@ -38,7 +38,7 @@ public class ValidarCorreoApiRestController {
         summary = "Enviar un codigo de verificacion a un correo especifico.",
         tags = {"Validar Correo"}
     )
-    public ResponseEntity<GeneralResponseDTO<?>> enviarCodigoVerificacion(
+    public ResponseEntity<GeneralResponseDTO<String>> enviarCodigoVerificacion(
         @RequestParam(name =  "correo") @NotNull(message = "Debe enviar el correo a verificar.") @Email(message = "Debe enviar un correo valido") String correo , 
         @RequestParam(name = "nombres") @NotNull(message = "Debe enviar los nombres del usuario") String nombres
     ){
@@ -68,7 +68,7 @@ public class ValidarCorreoApiRestController {
         summary = "Enviar un codigo de verificacion para validarlo.",
         tags = {"Validar Correo"}
     )
-    public ResponseEntity<GeneralResponseDTO<?>> validarCodigoEnviado(
+    public ResponseEntity<GeneralResponseDTO<String>> validarCodigoEnviado(
         @RequestParam(name = "correo") @NotNull(message = "Debe especificar el correo para validar.") @Email(message = "Debe enviar un correo valido") String correo,
         @RequestParam(name = "codigo") @NotNull(message = "Debe enviar el codigo de verificacion.") String codigo
     ){

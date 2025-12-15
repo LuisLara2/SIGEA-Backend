@@ -2,11 +2,9 @@ package com.zentry.sigea.module_actividad.presentation.models.requestDTO;
 
 import java.time.LocalDate;
 
-import com.zentry.sigea.module_actividad.core.entities.EstadoActividadDomainEntity;
-import com.zentry.sigea.module_actividad.core.entities.TipoActividadDomainEntity;
 
 /**
- * DTO para recibir datos de creación de actividad desde el frontend
+ * DTO para recibir datos de creación/actualización de actividad desde el frontend
  */
 public class ActividadRequest {
     private String titulo;
@@ -15,10 +13,12 @@ public class ActividadRequest {
     private LocalDate fechaFin;
     private String coOrganizador;
     private String sponsor;
-    private EstadoActividadDomainEntity estado;
+    private String estadoId;  // UUID del estado como String
     private String organizadorId;
-    private TipoActividadDomainEntity tipoActividad;
+    private String tipoActividadId;  // UUID del tipo de actividad como String
     private String ubicacion;
+    private String bannerUrl;
+    private String numeroYape;
 
     // Constructor vacío para Jackson
     public ActividadRequest() {}
@@ -30,18 +30,20 @@ public class ActividadRequest {
         LocalDate fechaFin, 
         String coOrganizador,
         String sponsor,
-        EstadoActividadDomainEntity estado, 
+        String estadoId, 
         String organizadorId, 
-        TipoActividadDomainEntity tipoActividad, 
+        String tipoActividadId, 
         String ubicacion
     ) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
-        this.estado = estado;
+        this.coOrganizador = coOrganizador;
+        this.sponsor = sponsor;
+        this.estadoId = estadoId;
         this.organizadorId = organizadorId;
-        this.tipoActividad = tipoActividad;
+        this.tipoActividadId = tipoActividadId;
         this.ubicacion = ubicacion;
     }
 
@@ -78,12 +80,12 @@ public class ActividadRequest {
         this.fechaFin = fechaFin;
     }
 
-    public EstadoActividadDomainEntity getEstado() {
-        return estado;
+    public String getEstadoId() {
+        return estadoId;
     }
 
-    public void setEstado(EstadoActividadDomainEntity estado) {
-        this.estado = estado;
+    public void setEstadoId(String estadoId) {
+        this.estadoId = estadoId;
     }
 
     public String getOrganizadorId() {
@@ -93,12 +95,12 @@ public class ActividadRequest {
         this.organizadorId = organizadorId;
     }
 
-    public TipoActividadDomainEntity getTipoActividad() {
-        return tipoActividad;
+    public String getTipoActividadId() {
+        return tipoActividadId;
     }
 
-    public void setTipoActividad(TipoActividadDomainEntity tipoActividad) {
-        this.tipoActividad = tipoActividad;
+    public void setTipoActividadId(String tipoActividadId) {
+        this.tipoActividadId = tipoActividadId;
     }
 
     public String getUbicacion() {
@@ -123,5 +125,21 @@ public class ActividadRequest {
 
     public void setSponsor(String sponsor) {
         this.sponsor = sponsor;
+    }
+
+    public String getBannerUrl() {
+        return bannerUrl;
+    }
+
+    public void setBannerUrl(String bannerUrl) {
+        this.bannerUrl = bannerUrl;
+    }
+
+    public String getNumeroYape() {
+        return numeroYape;
+    }
+
+    public void setNumeroYape(String numeroYape) {
+        this.numeroYape = numeroYape;
     }
 }

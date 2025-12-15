@@ -1,7 +1,5 @@
 package com.zentry.sigea.module_usuarios.core.entities;
 
-import static org.junit.Assert.fail;
-
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 

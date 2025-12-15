@@ -103,7 +103,7 @@ public class ActividadService implements IActividad {
 
     @Override
     @Transactional
-    public String actualizarActividad(String id, ActividadRequest request) {
+    public String actualizarActividad(String id, CrearActividadRequest request) {
         ActividadDomainEntity actividad = actualizarActividadUseCase.execute(id, request);
         if (actividad == null) {
             throw new IllegalArgumentException("Actividad no encontrada con ID: " + id);

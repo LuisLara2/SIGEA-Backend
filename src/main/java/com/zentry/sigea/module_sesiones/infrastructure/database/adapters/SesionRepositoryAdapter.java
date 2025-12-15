@@ -1,5 +1,6 @@
 package com.zentry.sigea.module_sesiones.infrastructure.database.adapters;
 
+import java.lang.StackWalker.Option;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +46,7 @@ public class SesionRepositoryAdapter implements ISesionRepository {
             .orElseThrow(() -> new IllegalArgumentException(
                 "No se encontró actividad con ID: " + sesion.getActividadId()
             ));
-
+        
         var sesionEntity = SesionMapper.toEntity(sesion, actividadEntity);
         var savedEntity = sesionJPARepository.save(sesionEntity);
     
@@ -83,8 +84,32 @@ public class SesionRepositoryAdapter implements ISesionRepository {
 
     @Override
     public List<SesionDomainEntity> findByFechaRange(LocalDateTime inicio, LocalDateTime fin) {
+        if (inicio == null || fin == null) {
+            throw new IllegalArgumentException("Las fechas de inicio y fin no pueden ser nulas.");
+        }
+        if (inicio.isAfter(fin)) {
+            throw new IllegalArgumentException("La fecha de inicio no puede ser posterior a la fecha de fin.");
+        }
+        
         return sesionJPARepository.findByFechaSesionBetween(inicio, fin)
             .stream()
+            .filter(sesionEntity -> {
+                // Validar que la sesión esté dentro del rango de fechas de su actividad
+                Optional<ActividadEntity> actividadOpt = sesionEntity.getActividad() != null
+                    ? Optional.of(sesionEntity.getActividad())
+                    : Optional.empty();
+                    
+                if (actividadOpt.isPresent()) {
+                    ActividadEntity actividad = actividadOpt.get();
+                    // Convertir LocalDate a LocalDateTime para comparación
+                    LocalDateTime fechaInicioActividad = actividad.getFechaInicio().atStartOfDay();
+                    LocalDateTime fechaFinActividad = actividad.getFechaFin().atTime(23, 59, 59);
+                    
+                    return !sesionEntity.getFechaSesion().isBefore(fechaInicioActividad) &&
+                           !sesionEntity.getFechaSesion().isAfter(fechaFinActividad);
+                }
+                return false;
+            })
             .map(SesionMapper::toDomain)
             .collect(Collectors.toList());
     }
@@ -159,5 +184,10 @@ public class SesionRepositoryAdapter implements ISesionRepository {
             .stream()
             .map(SesionMapper::toDomain)
             .collect(Collectors.toList());
+    }
+
+    public Optional<SesionDomainEntity> findByOrdenContainingAndActividad_Id(String orden , String actividadId){
+        return sesionJPARepository.findByOrdenContainingAndActividad_Id(orden, UUID.fromString(actividadId))
+            .map(s -> SesionMapper.toDomain(s));
     }
 }

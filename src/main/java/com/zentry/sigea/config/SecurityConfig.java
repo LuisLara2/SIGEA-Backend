@@ -2,6 +2,7 @@ package com.zentry.sigea.config;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,6 +32,9 @@ public class SecurityConfig {
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
+    @Value("${sigea.public.backend.domain}")
+    private String sigeaPublicBackendDomain;
+
     public SecurityConfig(
         CustomAuthenticationEntryPoint customAuthenticationEntryPoint,
         CustomAccessDeniedHandler customAccessDeniedHandler
@@ -57,17 +61,24 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                             "/api/v*/usuarios/auth/**", 
-                            "/api/v*/usuarios/validar-correo/**", // <-- Permitir validación de correo sin autenticación
                             "/" , 
                             "/v*/api-docs.yaml",
 
                             // Permitir el acceso libre para ver las actividades en la pagina principal
                             "/api/v*/actividades/listar",
                             "/api/v*/actividades/obtener/**",
-                            "/api/v*/{any}/health",
-                            "/api/v*/usuarios/participante/registrar",
                             "/api/v*/actividad/banner/imagen/**",
-                            "/api/v*/usuarios/validar-correo/**"
+
+                            "/api/v*/tipos-actividad/listar",
+                            "/api/v*/estados-actividad/listar",
+
+                            "/api/v*/usuarios/participante/registrar",
+                            "/api/v*/usuarios/validar-correo/**", // <-- Permitir validación de correo sin autenticación
+
+                            "/api/v*/sesiones/listar",
+                            "/api/v*/sesiones/obtener/**",
+
+                            "/api/v*/{any}/health"
                         ).permitAll()
                         .requestMatchers(
                             "/swagger-ui/**", 
@@ -96,7 +107,8 @@ public class SecurityConfig {
         config.setAllowedOriginPatterns(List.of(
             "http://localhost:3000",
             "http://localhost:16001",
-            "https://sigea.zentrycorp.dev"
+            "https://sigea.zentrycorp.dev",
+            sigeaPublicBackendDomain
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of(

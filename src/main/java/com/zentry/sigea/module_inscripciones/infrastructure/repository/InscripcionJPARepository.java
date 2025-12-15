@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.hibernate.id.uuid.UuidGenerator;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -54,5 +53,10 @@ public interface InscripcionJPARepository extends JpaRepository<InscripcionEntit
         @Param("usuarioId") UUID usuarioId, 
         @Param("actividadId") UUID actividadId
     );
+
+    /**
+     * Elimina todas las inscripciones de una actividad específica
+     */
+    void deleteByActividadId(UUID actividadId);
 }
 

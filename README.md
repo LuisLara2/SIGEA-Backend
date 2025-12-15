@@ -62,6 +62,7 @@ Dentro debes especificar lo siguiente:
 # Miscelaneous Variables
 APPLICATION_NAME=sigea
 SERVER_PORT={Puerto del servidor. def: 16001}
+SPRING_PROFILES_ACTIVE=local # Cambiar a prod cuando este desplegado
 
 # Hibernate Variables
 HIBERNATE_DDL_AUTO={update / create-drop}
@@ -115,6 +116,15 @@ MAIL_MIME_CHARSET={def: UTF-8}
 
 # Almacenamiento de Medios
 MEDIA_LOCATION={Ubicacion de almacenamiento de medios. def: ./uploads}
+
+# Dominios o Enlaces Publicos
+SIGEA_PUBLIC_BACKEND_DOMAIN={Dominio publico del Proyecto para configuración CORS}
+SIGEA_PUBLIC_BACKEND_REPOSITORY={Enlace al repositorio del proyecto}
+
+# Configuracion GCP recomendada para trabajar en local
+SPRING_CLOUD_GCP_SQL_ENABLED=false
+SPRING_CLOUD_GCP_PUBSUB_ENABLED=false
+SPRING_CLOUD_GCP_CORE_ENABLED=false
 ```
 
 Recuerda reemplazar con tus variables entre los  `{}`  .

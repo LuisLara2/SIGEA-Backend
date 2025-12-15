@@ -11,4 +11,6 @@ public interface IRolRepository {
     public Optional<RolDomainEntity> findById(String id);
     public Optional<RolDomainEntity> findByNombreRol(String nombreRol);
     public String findIdByNombreRol(String nombreRol);
+    public void update(String id , RolDomainEntity rolDomainEntity);
+    public void deleteById(String id);
 }

@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.zentry.sigea.module_usuarios.infrastructure.database.embedded.UsuarioRolId;
+import com.zentry.sigea.module_usuarios.infrastructure.database.entities.UsuarioEntity;
 import com.zentry.sigea.module_usuarios.infrastructure.database.entities.UsuarioRolEntity;
 
 public interface UsuarioRolJPARepository extends JpaRepository<UsuarioRolEntity , UsuarioRolId>{
@@ -33,4 +34,15 @@ public interface UsuarioRolJPARepository extends JpaRepository<UsuarioRolEntity 
     // Buscar UsuarioRol por usuario ID y nombre del rol
     @Query("SELECT ur FROM UsuarioRolEntity ur WHERE ur.id.idUsuario = :idUsuario AND ur.rol.nombreRol = :nombreRol")
     Optional<UsuarioRolEntity> findByUsuarioIdAndRolNombre(@Param("idUsuario") UUID idUsuario, @Param("nombreRol") String nombreRol);
+
+
+    @Query(
+        """
+            SELECT ur.usuario
+            FROM UsuarioRolEntity ur
+            JOIN ur.rol r
+            WHERE r.nombreRol = :nombreRol
+        """
+    )
+    public List<UsuarioEntity> findAllUsuariosByNombreRol(@Param("nombreRol") String nombreRol);
 }

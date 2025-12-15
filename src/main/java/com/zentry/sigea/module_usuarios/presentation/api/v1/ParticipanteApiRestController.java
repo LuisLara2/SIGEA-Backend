@@ -67,7 +67,7 @@ public class ParticipanteApiRestController {
             ),
         tags = {"Home"}
     )
-    public ResponseEntity<GeneralResponseDTO<?>> indexParticipante(
+    public ResponseEntity<GeneralResponseDTO<Map<String , String>>> indexParticipante(
         @AuthenticationPrincipal UsuarioAuthInfo usuarioAuthInfo
     ) {
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -92,7 +92,7 @@ public class ParticipanteApiRestController {
             ),
         tags = {"Registrar"}
     )
-    public ResponseEntity<GeneralResponseDTO<?>> registrarInscripcion(@RequestBody CrearInscripcionRequest crearInscripcionRequest) {
+    public ResponseEntity<GeneralResponseDTO<String>> registrarInscripcion(@RequestBody CrearInscripcionRequest crearInscripcionRequest) {
         try {
             inscripcionService.crearInscripcion(
                 CrearInscripcionMapper.requestToService(crearInscripcionRequest)
