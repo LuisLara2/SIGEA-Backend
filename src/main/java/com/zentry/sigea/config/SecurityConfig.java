@@ -32,8 +32,14 @@ public class SecurityConfig {
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
+    @Value("${sigea.public.frontend.domain}")
+    private String sigeaPublicFrontendDomain;
+
     @Value("${sigea.public.backend.domain}")
     private String sigeaPublicBackendDomain;
+
+    @Value("${sigea.allowed.origin.localhost.path}")
+    private String sigeaAllowedOriginLocalhostPath;
 
     public SecurityConfig(
         CustomAuthenticationEntryPoint customAuthenticationEntryPoint,
@@ -105,10 +111,9 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOriginPatterns(List.of(
-            "http://localhost:3000",
-            "http://localhost:16001",
-            "https://sigea.zentrycorp.dev",
-            sigeaPublicBackendDomain
+            sigeaAllowedOriginLocalhostPath,
+            sigeaPublicBackendDomain,
+            sigeaPublicFrontendDomain
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of(
