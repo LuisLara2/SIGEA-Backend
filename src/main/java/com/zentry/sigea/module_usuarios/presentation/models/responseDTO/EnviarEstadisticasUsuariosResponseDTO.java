@@ -9,11 +9,11 @@ import lombok.Setter;
 @Setter
 public class EnviarEstadisticasUsuariosResponseDTO {
     private Integer totalRegisteredUsers;
-    private List<ObtenerUsuarioResponseDTO> listUsuarios;
+    private List<EnviarEstadisticasUsuariosItemResponseDTO> listUsuarios;
 
     private Integer totalUsuariosOrganizador;
-    private List<ObtenerUsuarioResponseDTO> listUsuariosOrganizador;
+    private List<EnviarEstadisticasUsuariosItemResponseDTO> listUsuariosOrganizador;
 
     private Integer totalUsuariosParticipante;
-    private List<ObtenerUsuarioResponseDTO> listUsuariosParticipante;
+    private List<EnviarEstadisticasUsuariosItemResponseDTO> listUsuariosParticipante;
 }

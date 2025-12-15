@@ -1,13 +1,14 @@
 package com.zentry.sigea.module_usuarios.presentation.models.responseDTO;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class ObtenerUsuarioResponseDTO {
+public class ListarUsuariosResponseDTO {
     private String id;
     private String nombres;
     private String apellidos;
@@ -18,4 +19,6 @@ public class ObtenerUsuarioResponseDTO {
     private LocalDateTime updatedAt;
     private String telefono;
     private String extensionTelefonica;
+
+    private List<String> nombresRoles;
 }
