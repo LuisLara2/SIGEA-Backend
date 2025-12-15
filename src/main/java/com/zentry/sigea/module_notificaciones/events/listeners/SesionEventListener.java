@@ -38,7 +38,7 @@ public class SesionEventListener {
             for (String usuarioId : event.getUsuariosIds()) {
                 try {
 
-                    // Mensaje en texto plano, formato profesional y legible
+                    // Mensaje en texto plano, formato profesional y legible (guardar todo en la BD)
                     String mensaje = String.format(
                         "Nueva publicación: %s\n\n" +
                         ", Descripción:\n%s\n\n" +
@@ -48,7 +48,7 @@ public class SesionEventListener {
                         ", Fecha: %s\n" +
                         ", Hora inicio: %s\n" +
                         ", Hora fin: %s\n\n" +
-                        "IMPORTANTE:\nEsta es una sesión de una actividad en la que te inscribiste, ¡No te la pierdas!",
+                        "--IMPORTANTE:\n(Esta es una sesión de una actividad en la que te inscribiste), ¡No te la pierdas!",
                         event.getTitulo(),
                         event.getDescripcion() != null ? event.getDescripcion() : "",
                         event.getPonente(),
@@ -70,8 +70,8 @@ public class SesionEventListener {
                     String result = notificacionService.crearNotificacion(request);
                     logger.info("Notificación enviada → Usuario {}: {}", usuarioId, result);
 
-                    // Si tienes un método para enviar email, pásale mensajeEmail:
-                    // notificacionService.enviarEmail(usuarioId, mensajeEmail);
+                    // Si tienes un método para enviar email, pásale mensaje (ya tiene todo)
+                    // notificacionService.enviarEmail(usuarioId, mensaje);
 
                 } catch (Exception e) {
                     logger.error("Error enviando notificación al usuario {}: {}", usuarioId, e.getMessage());
