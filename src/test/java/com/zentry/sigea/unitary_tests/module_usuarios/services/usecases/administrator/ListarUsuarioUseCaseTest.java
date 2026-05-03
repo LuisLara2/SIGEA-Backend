@@ -1,4 +1,4 @@
-package com.zentry.sigea.module_usuarios.services.usecases.administrator;
+package com.zentry.sigea.unitary_tests.module_usuarios.services.usecases.administrator;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
