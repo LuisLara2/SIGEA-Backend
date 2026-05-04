@@ -86,5 +86,7 @@ public class UsuarioRepositoryAdapter implements IUsuarioRepository {
 
     public void deleteById(String id){
         usuarioJPARepository.deleteById(UUID.fromString(id));
+
+        usuarioJPARepository.flush();
     }
 }
