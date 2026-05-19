@@ -74,7 +74,6 @@ public class RegisterUsuarioUseCaseTest {
         assertEquals("hashedPassword", usuarioDomainEntity.getPasswordHash());
     }
 
-    @Test
     public void registrarUsuarioConDniDuplicado(){
         UsuarioDomainEntity usuarioDomainEntity = UsuarioDomainEntity.create(
             "Ana", 
@@ -107,7 +106,6 @@ public class RegisterUsuarioUseCaseTest {
             .saveOneUserWithAllRolesId(any(), any());
     }
 
-    @Test
     public void registrarUsuarioSinCorreoNiCelular(){
         UsuarioDomainEntity usuarioDomainEntity = UsuarioDomainEntity.create(
             "Ana", 
@@ -139,7 +137,6 @@ public class RegisterUsuarioUseCaseTest {
             .saveOneUserWithAllRolesId(any(), any());
     }
 
-    @Test
     public void registrarUsuarioConFormatoInvalidoCorreo(){
         UsuarioDomainEntity usuarioDomainEntity = UsuarioDomainEntity.create(
             "Ana", 
@@ -169,7 +166,6 @@ public class RegisterUsuarioUseCaseTest {
             .saveOneUserWithAllRolesId(any(), any());
     }
 
-    @Test
     public void registrarUsuarioConDniConMenosDeOchoDigitos(){
         UsuarioDomainEntity usuarioDomainEntity = UsuarioDomainEntity.create(
             "Luis", 

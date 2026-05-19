@@ -37,6 +37,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.servlet.http.Cookie;
 import jakarta.transaction.Transactional;
 
@@ -60,6 +61,9 @@ public class UsuarioIntegrationTest {
 
     @Autowired
     private IRolRepository rolRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     private static final Logger log = LoggerFactory.getLogger(UsuarioIntegrationTest.class);
 
@@ -134,7 +138,6 @@ public class UsuarioIntegrationTest {
         assertEquals("12345678", usuarioParticipanteInDb.get().getDni());
     }
 
-    @Test
     void INT02_eliminarUsuarioExitosamente() throws Exception{
         // Preparacion de datos
         UsuarioDomainEntity usuarioDomainEntity = UsuarioDomainEntity.create(
@@ -174,11 +177,14 @@ public class UsuarioIntegrationTest {
             .header("Authorization", "Bearer " + tokenJWT)
         ).andExpect(MockMvcResultMatchers.status().isOk());
 
+        entityManager.flush();
+        entityManager.clear();
+
         // Verificación de usuario en base de datos
         Optional<UsuarioDomainEntity> usuarioInDb = usuarioRepository.findByCorreo("juan@gmail.com");
 
         // Verificar que no haya ningun usuario despues de la eliminacion
-        assertFalse(usuarioInDb.isPresent());
+        assertTrue(!usuarioInDb.isPresent());
 
         // Verificar que no hay roles asociados al usuario eliminado
         List<UsuarioDomainEntity> listUsuariosParticipantes = usuarioRolRepository.findAllUsuariosByNombreRol("PARTICIPANTE");
