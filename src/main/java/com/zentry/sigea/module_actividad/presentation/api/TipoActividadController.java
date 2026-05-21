@@ -1,0 +1,120 @@
+package com.zentry.sigea.module_actividad.presentation.api;
+
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.zentry.sigea.module_actividad.core.entities.TipoActividadDomainEntity;
+import com.zentry.sigea.module_actividad.presentation.models.requestDTO.TipoActividadRequest;
+import com.zentry.sigea.module_actividad.presentation.models.responseDTO.TipoActividadResponse;
+import com.zentry.sigea.module_actividad.services.TipoActividadService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
+
+
+@RestController
+@RequestMapping("/api/v1/tipos-actividad")
+@CrossOrigin(origins = "*")
+public class TipoActividadController {
+
+    private final TipoActividadService tipoActividadService;
+
+    public TipoActividadController(TipoActividadService tipoActividadService) {
+        this.tipoActividadService = tipoActividadService;
+    }
+
+    /**
+     * Crear un nuevo tipo de actividad
+     */
+    @PostMapping("/create")
+    @PreAuthorize("hasRole('ROLE_ORGANIZADOR')")
+    @Operation(
+        summary = "Crear un tipo de actividad.",
+        security = @SecurityRequirement(
+            name = "organizadorJWT"
+            ),
+        tags = {"Crear"}
+    )
+    public ResponseEntity<String>  createTipoActividad(@RequestBody TipoActividadRequest request) 
+    {
+        // Lógica para crear el tipo de actividad
+
+        try {
+
+            String responseMessage = tipoActividadService.crearTipoActividad(request);
+            return ResponseEntity.ok(responseMessage);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
+    /*
+     * Listar todos los tipos de actividad
+    */
+    @GetMapping("/listar")
+    @Operation(
+        summary = "Listar los tipos de actividad.",
+        tags = {"Listar"}
+    )
+    public ResponseEntity<List<TipoActividadResponse>> listarTiposActividad() {
+        List<TipoActividadDomainEntity> tiposActividad = tipoActividadService.listarTiposActividad();
+        List<TipoActividadResponse> response = tiposActividad.stream()
+            .map(TipoActividadResponse::fromEntity)
+            .toList();
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/eliminar/{id}")
+    @PreAuthorize("hasRole('ROLE_ORGANIZADOR')")
+    @Operation(
+        summary = "Eliminar tipo de actividad por su ID.",
+        security = @SecurityRequirement(
+            name = "organizadorJWT"
+            ),
+        tags = {"Eliminar"}
+    )
+    public ResponseEntity<Void> eliminarTipoActividad(@PathVariable String id) {
+        try {
+            tipoActividadService.eliminarTipoActividad(id);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
+
+    @PutMapping("/actualizar/{id}")
+    @PreAuthorize("hasRole('ROLE_ORGANIZADOR')")
+    @Operation(
+        summary = "Actualizar un tipo de actividad.",
+        security = @SecurityRequirement(
+            name = "organizadorJWT"
+            ),
+        tags = {"Actualizar"}
+    )
+    public ResponseEntity<TipoActividadResponse> actualizarTipoActividad(@PathVariable String id, @RequestBody TipoActividadRequest request) {
+        try {
+            TipoActividadDomainEntity tipoActualizado = tipoActividadService.actualizarTipoActividad(id, request);
+            TipoActividadResponse response = TipoActividadResponse.fromEntity(tipoActualizado);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
+}
